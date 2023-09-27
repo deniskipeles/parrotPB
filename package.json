@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite dev --port 3000 --open",
     "build": "vite build",
@@ -16,8 +16,7 @@
     "dompurify": "^2.4.3",
     "highlight.js": "^11.8.0",
     "marked": "^4.2.12",
-    "pocketbase": "^0.18.0",
-    "ui": "*"
+    "pocketbase": "^0.18.0"
   },
   "devDependencies": {
     "@skeletonlabs/skeleton": "^2.1.0",
