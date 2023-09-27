@@ -11,29 +11,7 @@ export const menuNavLinkList: Array<Record<string, Array<{ title: string; list: 
 				{ href: '/docs/get-started', label: 'Get Started', keywords: 'start, install, cli, tailwind, themes, stylesheets' },
 				{ href: '/docs/quickstart', label: 'Quickstart', keywords: 'start, setup, tutorial, guide' }
 			]
-		},
-		{
-			title: 'Essentials',
-			list: [
-				{ href: '/docs/themes', label: 'Themes', keywords: 'theme, customize, fonts, gradient, background' },
-				{ href: '/docs/colors', label: 'Colors', keywords: 'theme, colors, swatches' },
-				{ href: '/docs/styling', label: 'Styling', keywords: 'styles, styling, props, classes, class, css' },
-				{ href: '/docs/tokens', label: 'Design Tokens', keywords: 'theme, color, pairing, css, utility' },
-				{ href: '/docs/variants', label: 'Variants', keywords: 'variant, variants, presets, backgrounds, classes' },
-				{
-					href: '/docs/transitions',
-					label: 'Transitions',
-					keywords: 'transition, transitions, blur, fade, fly, slide, scale, draw, crossfade, prefers, reduced, motion'
-				}
-			]
-		},
-		{
-			title: 'Resources',
-			list: [
-				{ href: '/docs/generator', label: 'Theme Generator', keywords: 'create, custom, style, css, design' },
-				{ href: '/docs/purgecss', label: 'PurgeCSS', keywords: 'purgecss, vite, tree, shaking, bundle, optimize' },
-				{ href: '/docs/contributing', label: 'Contributing', keywords: 'branch, pr' }
-			]
+		},]
 		}
 	]},
 ]
@@ -45,21 +23,6 @@ export const menuNavLinks: Record<string, Array<{ title: string; list: List }>> 
 				{ href: '/docs/introduction', label: 'Introduction', keywords: 'svelte, sirens, license, release' },
 				{ href: '/docs/get-started', label: 'Get Started', keywords: 'start, install, cli, tailwind, themes, stylesheets' },
 				{ href: '/docs/quickstart', label: 'Quickstart', keywords: 'start, setup, tutorial, guide' }
-			]
-		},
-		{
-			title: 'Essentials',
-			list: [
-				{ href: '/docs/themes', label: 'Themes', keywords: 'theme, customize, fonts, gradient, background' },
-				{ href: '/docs/colors', label: 'Colors', keywords: 'theme, colors, swatches' },
-				{ href: '/docs/styling', label: 'Styling', keywords: 'styles, styling, props, classes, class, css' },
-				{ href: '/docs/tokens', label: 'Design Tokens', keywords: 'theme, color, pairing, css, utility' },
-				{ href: '/docs/variants', label: 'Variants', keywords: 'variant, variants, presets, backgrounds, classes' },
-				{
-					href: '/docs/transitions',
-					label: 'Transitions',
-					keywords: 'transition, transitions, blur, fade, fly, slide, scale, draw, crossfade, prefers, reduced, motion'
-				}
 			]
 		},
 		{
@@ -86,21 +49,6 @@ export const menuNavLinks: Record<string, Array<{ title: string; list: List }>> 
 					label: 'Forms',
 					keywords: 'plugin, label, input, select, checkbox, radio, date, color, picker, slider, range, file'
 				}
-			]
-		},
-		{
-			title: 'Elements',
-			list: [
-				{ href: '/elements/alerts', label: 'Alerts', keywords: 'message, notification' },
-				{ href: '/elements/badges', label: 'Badges', keywords: 'sup, sub, overlay, favorite, icon' },
-				{ href: '/elements/breadcrumbs', label: 'Breadcrumbs', keywords: 'nav, navigation, separator, hierarchy' },
-				{ href: '/elements/buttons', label: 'Buttons', keywords: 'click, anchor, icon, preload' },
-				{ href: '/elements/cards', label: 'Cards', keywords: 'header, footer, background, cell, region' },
-				{ href: '/elements/chips', label: 'Chips', keywords: 'action, select, selection, filter, filtering, interactive' },
-				{ href: '/elements/lists', label: 'Lists', keywords: 'unordered, ordered, description, nav, navigation, ul, ol, li, dd, dt' },
-				{ href: '/elements/logo-clouds', label: 'Logo Clouds', keywords: 'logo, brand, branding, links' },
-				{ href: '/elements/placeholders', label: 'Placeholders', keywords: 'skeleton, spacer, text, image, avatar, animate, animate' },
-				{ href: '/elements/tables', label: 'Tables', keywords: 'data, entry' }
 			]
 		},
 		{
