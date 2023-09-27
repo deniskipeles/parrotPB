@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { MyCounterButton } from 'ui';
 
 	import { Avatar, Table, tableMapperValues, type TableSource } from '@skeletonlabs/skeleton';
     import { LayoutPage } from '$lib/components';
@@ -32,7 +31,6 @@ const tableSimple: TableSource = {
 	
 	
 	<h1>Web</h1>
-	<MyCounterButton />
 	
 	<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 	<h2>table</h2>
