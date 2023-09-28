@@ -1,5 +1,5 @@
 
-import { create_links, fetchLinks } from '$lib/pocketbase';
+import { create_links, create_sub_links, fetchLinks } from '$lib/pocketbase';
 import type { Actions } from './$types';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -29,10 +29,19 @@ export const actions: Actions = {
     return { theme };
   },
 
-  createSublinks: async ({ request, locals }) => {
+  createLinks: async ({ request, locals }) => {
     const formData = await request.formData();
 
     const res = await create_links(formData);
+    console.log(JSON.stringify(res))
+    const links = await fetchLinks();
+    locals.links = links
+    return { ...res, links };
+  },
+  createSublinks: async ({ request, locals }) => {
+    const formData = await request.formData();
+
+    const res = await create_sub_links(formData);
     // console.log(res)
     const links = await fetchLinks();
     locals.links = links

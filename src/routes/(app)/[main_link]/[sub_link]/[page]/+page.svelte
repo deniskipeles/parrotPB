@@ -117,12 +117,12 @@
           <button
             class="btn variant-filled"
             on:click={onPrevPage}
-            disabled={1 == Number(data?.meta?.page ?? 1)}>&larr; Prev</button
+            disabled={1 == Number(data?.meta?.page ?? 1) || data.meta.page == 0 }>&larr; Prev</button
           >
           <button
             class="btn variant-filled"
             on:click={onNextPage}
-            disabled={data.meta?.totalPages == Number($page.params?.page ?? 1)}>Next &rarr;</button
+            disabled={data.meta?.totalPages == Number($page.params?.page ?? 1)||data.meta.totalPages==0}>Next &rarr;</button
           >
         </div>
       </footer>

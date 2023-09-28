@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.5.3",
+    "@google-ai/generativelanguage": "^1.1.0",
+    "axios": "^1.5.1",
     "dompurify": "^2.4.3",
+    "google-auth-library": "^9.0.0",
     "highlight.js": "^11.8.0",
     "marked": "^4.2.12",
     "pocketbase": "^0.18.0"

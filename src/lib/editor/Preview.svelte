@@ -58,31 +58,3 @@
 <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
   {@html addClassToAllTags(marked.parse(markdown))}
 </article>
-
-<style>
-  /* Style the <ol> element */
-  ol {
-    list-style-type: none; /* Remove default numbering */
-    counter-reset: my-counter; /* Initialize a custom counter */
-  }
-
-  /* Style the <li> elements within the <ol> */
-  ol li::before {
-    content: counter(my-counter); /* Display the custom counter content */
-    counter-increment: my-counter; /* Increment the custom counter */
-    margin-right: 0.5em; /* Add spacing between the counter and content */
-  }
-
-  /* Style the <ul> element */
-  ul {
-    list-style-type: none; /* Remove default bullets */
-  }
-
-  /* Style the <li> elements within the <ul> */
-  ul li::before {
-    content: '\2022'; /* Use a bullet character (•) as a marker */
-    /*color: #ff0000; /* Change the marker color to red (you can customize this) */
-    font-size: 1.2em; /* Adjust the marker size */
-    margin-right: 0.5em; /* Add spacing between the marker and content */
-  }
-</style>

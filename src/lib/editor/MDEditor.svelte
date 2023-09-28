@@ -1,11 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
-  import { InputChip, SlideToggle, type DrawerSettings } from '@skeletonlabs/skeleton';
+  import {
+    InputChip,
+    SlideToggle,
+    ProgressRadial
+  } from '@skeletonlabs/skeleton';
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import Preview from './Preview.svelte';
+  import { writable } from 'svelte/store';
 
   let markdown = '';
 
@@ -35,22 +40,66 @@
     });
   });
 
-  // import { getDrawerStore } from '@skeletonlabs/skeleton';
+  const prompting = writable(false);
+  const saving = writable(false);
 
-  // const drawerStore = getDrawerStore();
-
-  // const drawerSettings: DrawerSettings = {
-  //   id: 'example-2',
-  //   meta: { foo: 'bar', fizz: 'buzz', age: 40 }
-  // };
-  // drawerStore.open(drawerSettings);
+  let prompt = '';
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+  function onSubmit() {
+    prompting.set(true);
+    fetch('/api/ai', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ prompt })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response data here
+        // console.log(data);
+        // console.log(data[0].candidates[0].output);
+        console.log('++ai content');
+        markdown = data[0]?.candidates[0]?.output ?? markdown;
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error:', error);
+      });
+    prompting.set(false);
+  }
 </script>
+
+<form on:submit|preventDefault={onSubmit}>
+  <span>Prompt the palm AI</span>
+  <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+    <div class="input-group-shim" />
+    <textarea
+      class="textarea"
+      name="prompt"
+      bind:value={prompt}
+      rows="4"
+      maxlength="3000"
+      minlength="10"
+      required
+      placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+    />
+    {#if $prompting}
+      <button class="btn variant-filled" type="button">
+        <ProgressRadial width="w-8" stroke={150} />prompting...
+      </button>
+    {:else}
+      <button class="btn variant-filled" type="submit">Send</button>
+    {/if}
+  </div>
+</form>
 
 <form
   class="form m-4 space-y-6 card"
   method="post"
   action="/api/article"
   use:enhance={async ({ cancel, formData }) => {
+    saving.set(true);
     cancel();
 
     formData.delete('tags');
@@ -62,6 +111,7 @@
       method: 'POST',
       body: formData
     }).then(async (res) => await res.json());
+    saving.set(false);
     // console.log(res);
     if (!res?.error) {
       goto(`/${$page?.params?.main_link}/${$page?.params?.sub_link}/1/${res?.record?.id}`);
@@ -136,14 +186,20 @@
   {/if}
 
   <div class="items-center">
-    <button
-      class="btn variant-filled center w-full"
-      type="submit"
-      title="Create article. Ensure you fill all the fields in this form."
-    >
-      <span class="span">Create article</span>
+    {#if $saving}
+      <button class="btn variant-filled center w-full" type="submit">
+        <ProgressRadial stroke={150} width="w-6" />Saving...
+      </button>
+    {:else}
+      <button
+        class="btn variant-filled center w-full"
+        type="submit"
+        title="Create article. Ensure you fill all the fields in this form."
+      >
+        <span class="span">Create article</span>
 
-      <i class="fa-solid fa-file-pen" />
-    </button>
+        <i class="fa-solid fa-file-pen" />
+      </button>
+    {/if}
   </div>
 </form>

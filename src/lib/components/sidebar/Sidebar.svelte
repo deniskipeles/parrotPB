@@ -42,15 +42,18 @@
     return 'fa fa-cogs';
   }
 
-  let loading = false;
+  let loading_links = false;
   let error: any = null;
-  const createSublinks: SubmitFunction = () => {
-    loading = true;
+  const createSublinks: SubmitFunction = async ({ formData }) => {
+    let href = (await formData.get('label')) as string;
+    href = await href.trim().split('/').join('-').split(' ').join('-').toLowerCase();
+    await formData.append('href', `/${href}`);
+    loading_links = true;
     return async ({ result, formData }) => {
       const link = formData.get('parent_link_value') as string;
 
       await applyAction(result);
-      loading = false;
+      loading_links = false;
       if ($page.form?.error) {
         error = $page.form?.error;
       } else {
@@ -61,16 +64,27 @@
     };
   };
 
-  let loading_links = false;
-  const createLinks: SubmitFunction = () => {
+  let loading = false;
+  const createLinks: SubmitFunction = async ({ formData }) => {
     loading = true;
-    return async ({ result }) => {
-      //   await applyAction(result);
+    // let link = (await formData.get('link')) as string;
+    // link = await link.trim().split('/').join('-').split(' ').join('-').toLowerCase();
+    // await formData.append('link', `/${link}`);
+
+    return async ({ result, formData }) => {
+      await formData.get('link');
+      await applyAction(result);
+      invalidateAll();
       loading = false;
     };
   };
- 
+
   let list = ['svelte', 'sveltekit', 'nodejs'];
+  let link_ = ''
+  function inputLink() {
+    link_ = link_?.replace('/','')
+    link_ = `/${link_.trimStart().split('/').join('-').split(' ').join('-').toLowerCase()}`
+  }
 </script>
 
 <div
@@ -127,7 +141,7 @@
             <div>
               <label class="label">
                 <span>Link</span>
-                <input class="input pl-2" name="link" type="text" placeholder="/docs" />
+                <input class="input pl-2" bind:value={link_} on:input={inputLink} name="link" type="text" placeholder="/docs" />
               </label>
             </div>
             <div>
@@ -135,7 +149,7 @@
                 <span>Font Awesome</span>
                 <input
                   class="input pl-2"
-                  name="font_awesome_icon"
+                  name="icon_font_awesome"
                   value="fa fa-plus"
                   type="text"
                   placeholder="fa fa-home"
@@ -155,7 +169,7 @@
             </div>
             <hr class="!my-4" />
             <div class="p-4 space-y-2 items-center">
-              {#if loading_links}
+              {#if loading}
                 <!-- content here -->
                 <ProgressRadial stroke={100} width="w-10" />
               {:else}
@@ -173,66 +187,72 @@
       {#each submenu ?? [] as segment, i}
         <!-- Title -->
         <p class="font-bold pl-4 text-2xl">{segment.title}</p>
-        <div class="relative hidden lg:block">
+        <div class="">
           <!-- trigger -->
           <button
             class="btn hover:variant-soft-primary"
             use:popup={{
               event: 'click',
               target: `formAddLinks-${segment.id}`,
-              closeQuery: 'a[href]'
+              closeQuery: `a[href]-${i}`
             }}
           >
-            <span>ADD CATEGORY</span>
+            <i class="fa fa-plus text-lg md:!hidden" />
+            <span class="hidden md:inline-block">ADD CATEGORY</span>
             <i class="fa-solid fa-caret-down opacity-50" />
           </button>
           <!-- popup -->
-          <form
-            action="/?/createSublinks"
-            method="POST"
-            use:enhance={createSublinks}
-            class="card p-4 w-60 shadow-xl z-10"
-            data-popup={`formAddLinks-${segment.id}`}
-          >
-            <nav class="list-nav">
-              <input type="hidden" name="parent_link" value={segment?.id} />
-              <input type="hidden" name="parent_link_value" value={segment?.link} />
-              <ul>
-                <li>
-                  <label class="label">
-                    <span>Label</span>
-                    <input class="input pl-2" name="label" type="text" placeholder="My Link" />
-                  </label>
-                </li>
-                <li>
-                  <label class="label">
-                    <span>Link</span>
-                    <input class="input pl-2" name="href" type="text" placeholder="/my-link" />
-                  </label>
-                </li>
-                <li>
-                  <!-- svelte-ignore a11y-label-has-associated-control -->
-                  <label class="label">
-                    <span>Keywords</span>
-                    <InputChip bind:value={list} name="keywords" placeholder="Enter any value..." />
-                  </label>
-                </li>
-                <hr class="!my-4" />
-                <li class="p-4 space-y-2 items-center">
-                  {#if loading}
-                    <!-- content here -->
-                    <ProgressRadial stroke={100} width="w-10" />
-                  {:else}
-                    <!-- else content here -->
-                    <button class="variant-filled-secondary">
-                      <i class={`fa fa-plus text-2xl`} aria-hidden="true" /> ADD Category
-                    </button>
-                  {/if}
-                </li>
-              </ul>
-            </nav>
-            <!-- <div class="arrow bg-surface-100-800-token" /> -->
-          </form>
+          <div data-popup={`formAddLinks-${segment.id}`}>
+            <form
+              action="/?/createSublinks"
+              method="POST"
+              use:enhance={createSublinks}
+              class="card p-4 w-60 shadow-xl z-10"
+            >
+              <nav class="list-nav">
+                <input type="hidden" name="parent_link" value={segment?.id} />
+                <input type="hidden" name="parent_link_value" value={segment?.link} />
+                <ul>
+                  <li>
+                    <label class="label">
+                      <span>Label</span>
+                      <input class="input pl-2" name="label" type="text" placeholder="My Link" />
+                    </label>
+                  </li>
+                  <!-- <li>
+                    <label class="label">
+                      <span>Link</span>
+                      <input class="input pl-2" name="href" type="text" placeholder="/my-link" />
+                    </label>
+                  </li> -->
+                  <li>
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label class="label">
+                      <span>Keywords</span>
+                      <InputChip
+                        bind:value={list}
+                        name="keywords"
+                        placeholder="Enter any value..."
+                      />
+                    </label>
+                  </li>
+                  <hr class="!my-4" />
+                  <li class="p-4 space-y-2 items-center">
+                    {#if loading_links}
+                      <!-- content here -->
+                      <ProgressRadial stroke={100} width="w-10" />
+                    {:else}
+                      <!-- else content here -->
+                      <button class="variant-filled-secondary">
+                        <i class={`fa fa-plus text-2xl`} aria-hidden="true" /> ADD Category
+                      </button>
+                    {/if}
+                  </li>
+                </ul>
+              </nav>
+              <!-- <div class="arrow bg-surface-100-800-token" /> -->
+            </form>
+          </div>
         </div>
         <!-- Nav List -->
         <nav class="list-nav">
@@ -241,7 +261,7 @@
               <li on:keypress on:click={drawerStore.close}>
                 <a
                   href={segment?.link + href}
-                  class={listboxItemActive(segment?.link + href+'/')}
+                  class={listboxItemActive(segment?.link + href + '/')}
                   data-sveltekit-preload-data="hover"
                 >
                   <span class="flex-auto">{@html label}</span>
