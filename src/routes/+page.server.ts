@@ -33,7 +33,7 @@ export const actions: Actions = {
     const formData = await request.formData();
 
     const res = await create_links(formData);
-    console.log(JSON.stringify(res))
+    // console.log(JSON.stringify(res))
     const links = await fetchLinks();
     locals.links = links
     return { ...res, links };
