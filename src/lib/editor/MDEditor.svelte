@@ -57,16 +57,15 @@
       .then((response) => response.json())
       .then((data) => {
         // Handle the response data here
-        // console.log(data);
-        // console.log(data[0].candidates[0].output);
+        prompting.set(false);
         console.log('++ai content');
         markdown = data[0]?.candidates[0]?.output ?? markdown;
       })
       .catch((error) => {
         // Handle any errors here
         console.error('Error:', error);
+        prompting.set(false);
       });
-    prompting.set(false);
   }
 </script>
 
@@ -79,7 +78,6 @@
       name="prompt"
       bind:value={prompt}
       rows="4"
-      maxlength="3000"
       minlength="10"
       required
       placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
@@ -134,7 +132,7 @@
 
   <label class="label">
     <span>Article Cover Image</span>
-    <input type="file" name="cover_image" class="input w-1/2" placeholder="Cover Image" required />
+    <input type="file" accept="image/*" name="cover_image" class="input w-1/2" placeholder="Cover Image" required />
   </label>
 
   <label class="label">
