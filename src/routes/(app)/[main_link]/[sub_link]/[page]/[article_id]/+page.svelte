@@ -12,8 +12,7 @@
   export let data: PageData;
 
   // Blog Utils
-  import { blogDateFormatter } from '../blog-service';
-  import { getPbImageUrl } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl } from '$lib/utils';
   import { page } from '$app/stores';
 
   // Local
@@ -31,7 +30,7 @@
 
 <!-- Breadcrumbs -->
 <ol class="breadcrumb m-4 capitalize">
-  <li class="crumb"><a class="anchor" href="/blog">home</a></li>
+  <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}

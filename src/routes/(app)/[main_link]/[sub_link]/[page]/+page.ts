@@ -1,8 +1,6 @@
 import { pb } from '$lib/pocketbase';
 import { serializeNonPOJOs } from '$lib/utils';
-import type { RecordModel } from 'pocketbase';
 import type { RouteParams } from '../$types';
-import { getBlogList } from './blog-service';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, url, parent }) {
@@ -11,13 +9,13 @@ export async function load({ params, url, parent }) {
     // fetch a paginated records list
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const category_id = getCategory({ data: parentData }, params);
-	const filter = `category_id = "${category_id}"`
+    const filter = `category_id = "${category_id}"`;
     const resultList = await pb
       .collection('view_articles_list')
       .getList(Number(params.page ?? 1), perPage, {
-        filter,
+        filter
       });
-	//   && category_id = ${category_id}
+    //   && category_id = ${category_id}
     return { meta: resultList };
   } catch (error) {
     return { error: serializeNonPOJOs(error) };

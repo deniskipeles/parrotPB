@@ -7,22 +7,20 @@
   const toastStore = getToastStore();
 
   // Blog Utils
-  import { getBlogList, blogDateFormatter } from './blog-service';
   import { page } from '$app/stores';
   import { LayoutPage } from '$lib/components';
   import { goto } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
-  import { getPbImageUrl, setSearchParams } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, setSearchParams } from '$lib/utils';
 
-  function onPrevPage(): void {
-    const perPage = $page.url.searchParams.get('perPage') || 30
-    goto(`/${$page.params?.main_link}/${$page.params?.main_link}/${(data?.meta?.page ?? 1) - 1}?perPage=${perPage}`);
-  }
-
-  function onNextPage(): void {
-    const perPage = $page.url.searchParams.get('perPage') || 30
-    goto(`/${$page.params?.main_link}/${$page.params?.main_link}/${(data?.meta?.page ?? 1) + 1}?perPage=${perPage}`);
-  }
+  const perPage = $page.url.searchParams.get('perPage') || 30;
+  // function onPrevPage(): void {
+  //   const perPage = $page.url.searchParams.get('perPage') || 30
+  //   goto(``);
+  // }
+  // function onNextPage(): void {
+  //   goto();
+  // }
 
   function copyRSSToClipboard(): void {
     navigator.clipboard.writeText('https://www.skeleton.dev/blog/rss/');
@@ -36,15 +34,15 @@
   }
 </script>
 
-<ol class="breadcrumb">
-  <li class="crumb"><a class="anchor" href="/">Home</a></li>
-  <li class="crumb-separator" aria-hidden>/</li>
-  <li class="crumb capitalize">
+<ol class="breadcrumb m-4 capitalize">
+  <li class="crumb"><a class="anchor" href="/">home</a></li>
+  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
+  <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
       >{$page.params?.sub_link?.replace('/', '')?.split('-')?.join(' ')?.split('_')?.join(' ')}</a
     >
   </li>
-  <li class="crumb-separator" aria-hidden>/</li>
+  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
     Page {$page.params?.page}
   </li>
@@ -59,12 +57,11 @@
       >Create Article</button
     >
     <div class="page-container-wide page-padding">
-      <header class="flex justify-between items-center">
+      <!-- <header class="flex justify-between items-center">
         <div class="space-y-4">
           <h2 class="h2">The Skeleton Blog</h2>
           <p>Keep up with the latest news, tutorials, and releases for Skeleton.</p>
         </div>
-        <!-- RSS Icon -->
         <button
           class="btn-icon btn-icon-sm !bg-orange-500"
           on:click={copyRSSToClipboard}
@@ -72,7 +69,7 @@
         >
           <i class="fa-solid fa-square-rss text-xl" />
         </button>
-      </header>
+      </header> -->
       <hr />
       <!-- Blog List -->
       <section class="blog-list space-y-8">
@@ -114,16 +111,36 @@
           <small class="opacity-50">Page {data.meta?.page} of {data.meta?.totalPages}</small>
         </div>
         <div class="flex items-center space-x-4">
-          <button
-            class="btn variant-filled"
-            on:click={onPrevPage}
-            disabled={1 == Number(data?.meta?.page ?? 1) || data.meta.page == 0 }>&larr; Prev</button
+          <a
+            href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${
+              (data?.meta?.page ?? 1) - 1
+            }?perPage=${perPage}`}
           >
-          <button
-            class="btn variant-filled"
-            on:click={onNextPage}
-            disabled={data.meta?.totalPages == Number($page.params?.page ?? 1)||data.meta.totalPages==0}>Next &rarr;</button
+            <button
+              class="btn variant-filled"
+              disabled={1 == Number(data?.meta?.page ?? 1) || data.meta.page == 0}
+            >
+              &larr; Prev
+            </button>
+          </a>
+
+          <a
+            href={!(
+              data.meta?.totalPages == Number($page.params?.page ?? 1) || data.meta.totalPages == 0
+            )
+              ? `/${$page.params?.main_link}/${$page.params?.sub_link}/${
+                  (data?.meta?.page ?? 1) + 1
+                }?perPage=${perPage}`
+              : '#'}
           >
+            <button
+              class="btn variant-filled"
+              disabled={data.meta?.totalPages == Number($page.params?.page ?? data?.meta?.page ?? 1) ||
+                data.meta.totalPages == 0}
+            >
+              Next &rarr;
+            </button>
+          </a>
         </div>
       </footer>
     </div>
