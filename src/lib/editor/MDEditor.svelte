@@ -1,11 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
-  import {
-    InputChip,
-    SlideToggle,
-    ProgressRadial
-  } from '@skeletonlabs/skeleton';
+  import { InputChip, SlideToggle, ProgressRadial } from '@skeletonlabs/skeleton';
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
@@ -69,10 +65,19 @@
   }
 </script>
 
-<form on:submit|preventDefault={onSubmit}>
+<form class="m-4" on:submit|preventDefault={onSubmit}>
   <span>Prompt the palm AI</span>
   <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-    <div class="input-group-shim" />
+    <div>
+      {#if $prompting}
+        <button class="btn variant-filled" type="button">
+          <ProgressRadial width="w-8" stroke={150} />prompting...
+        </button>
+      {:else}
+        <button class="btn variant-filled" type="submit">Send</button>
+      {/if}
+    </div>
+    <!-- <div class="input-group-shim" /> -->
     <textarea
       class="textarea"
       name="prompt"
@@ -82,13 +87,6 @@
       required
       placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
     />
-    {#if $prompting}
-      <button class="btn variant-filled" type="button">
-        <ProgressRadial width="w-8" stroke={150} />prompting...
-      </button>
-    {:else}
-      <button class="btn variant-filled" type="submit">Send</button>
-    {/if}
   </div>
 </form>
 
@@ -132,7 +130,14 @@
 
   <label class="label">
     <span>Article Cover Image</span>
-    <input type="file" accept="image/*" name="cover_image" class="input w-1/2" placeholder="Cover Image" required />
+    <input
+      type="file"
+      accept="image/*"
+      name="cover_image"
+      class="input w-1/2"
+      placeholder="Cover Image"
+      required
+    />
   </label>
 
   <label class="label">
