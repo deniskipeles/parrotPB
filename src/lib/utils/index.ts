@@ -10,7 +10,7 @@ export const getPbImageUrl = (doc: any, img: string | null, dim: string | undefi
   return logo;
 };
 
-export function groupByKey(inputJSON: any, key: string) {
+export function groupByKey(inputJSON: any[], key: string) {
   const groupedJSON: any = {};
 
   // Iterate through the items in the input JSON

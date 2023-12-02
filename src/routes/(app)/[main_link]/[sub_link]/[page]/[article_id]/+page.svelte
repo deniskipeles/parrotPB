@@ -178,7 +178,7 @@
 
       <header class="card p-4 m-4 justify-between items-center">
         <div class="space-y-4">
-          <h2 class="h2">Reccomendations</h2>
+          <h1 class="h1">Reccomendations</h1>
           <p>
             You may be interested in this articles. After reading <strong
               >{data?.article?.title}</strong

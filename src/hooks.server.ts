@@ -5,12 +5,16 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.pb = pb;
   // load the store data from the request cookie string
 
-  event = await getCookie(event);
-  
-  await event.locals.pb.authStore.loadFromCookie((await event.request.headers.get('cookie')) || '');
-
-  event.locals.links = await fetchLinks();
-  event.locals.company = await loadCompany();
+  try {
+    event.locals.links = await fetchLinks();
+    event.locals.company = await loadCompany();
+    event = await getCookie(event);
+    await event.locals.pb.authStore.loadFromCookie(
+      (await event.request.headers.get('cookie')) || ''
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   let theme = '';
   const cookieTheme = event.cookies.get('theme');
