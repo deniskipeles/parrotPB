@@ -1,4 +1,5 @@
 import { create_links, create_sub_links, fetchLinks } from '$lib/pocketbase';
+import { getSubText } from '$lib/utils';
 import type { Actions } from './$types';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -10,9 +11,12 @@ export const load = async ({ locals, url }) => {
     const page = Number(url.searchParams.get('page') ?? 1);
     const resultList = await pb.collection('view_articles_list').getList(Number(page), perPage, {
       sort: '-created',
-      fields: `*:excerpt(${200},${true})`
+      // fields: `*:excerpt(${200},${true})`
     });
-    //   && category_id = ${category_id}
+    resultList['items'] = resultList.items.map((i) => {
+      i.content = getSubText(40, i.content);
+      return i;
+    });
     return { ...rest, meta: resultList };
   } catch (error) {
     console.error(`Error in load function for : ${error}`);

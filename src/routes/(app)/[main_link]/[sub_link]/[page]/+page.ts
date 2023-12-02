@@ -16,6 +16,7 @@ export async function load({ params, url, parent }) {
         filter,
         fields: `*:excerpt(${200},${true})`
       });
+    
     const _page = () => {
       const items = resultList.items.map((item) => {
         return {
@@ -27,6 +28,10 @@ export async function load({ params, url, parent }) {
       const description = items.map((i) => i.decription).join('  ');
       return { title, description };
     };
+    resultList.items = resultList.items.map((i) => {
+      i.content = getSubText(30, i.content);
+      return i;
+    });
     return { meta: resultList, _page:_page() };
   } catch (error) {
     return { error: serializeNonPOJOs(error) };

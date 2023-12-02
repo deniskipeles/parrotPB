@@ -36,7 +36,8 @@
             <div class="space-y-4">
               <time class="block">{blogDateFormatter(post.updated)}</time>
               <h2 class="h2">{post.title}</h2>
-              <p>{mdToText(post.content)}</p>
+              <!-- <p>{mdToText(post.content)}</p> -->
+              <p>{@html post.content}</p>
               <div class="flex items-center space-x-4">
                 {#each post.tags as tag}
                   <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>
