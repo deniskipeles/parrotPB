@@ -14,6 +14,7 @@ declare namespace App {
 		links: JSON;
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
+		company: import('pocketbase').RecordModel;
 	}
 
 	// interface Error {}

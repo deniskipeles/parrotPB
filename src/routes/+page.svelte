@@ -4,7 +4,7 @@
   import { page } from '$app/stores';
   import { LayoutPage } from '$lib/components';
   import Error from '$lib/components/Error.svelte';
-  import { blogDateFormatter, getPbImageUrl } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, mdToText } from '$lib/utils';
   import type { PageData } from './$types';
 
   const perPage = $page.url.searchParams.get('perPage') || 30;
@@ -28,7 +28,7 @@
             {#if post.cover_image}
               <img
                 class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
-                src={getPbImageUrl(post, post.cover_image, undefined)}
+                src={getPbImageUrl(post, post.cover_image, '720x480')}
                 alt="thumbnail"
               />
             {/if}
@@ -36,7 +36,7 @@
             <div class="space-y-4">
               <time class="block">{blogDateFormatter(post.updated)}</time>
               <h2 class="h2">{post.title}</h2>
-              <p>{post.excerpt}</p>
+              <p>{mdToText(post.content)}</p>
               <div class="flex items-center space-x-4">
                 {#each post.tags as tag}
                   <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>

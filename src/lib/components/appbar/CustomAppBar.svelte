@@ -85,16 +85,19 @@
 <!-- NOTE: using stopPropagation to override Chrome for Windows search shortcut -->
 <svelte:window on:keydown|stopPropagation={onWindowKeydown} />
 
+<!-- svelte-ignore a11y-missing-attribute -->
 <AppBar shadow="shadow-2xl" slotTrail="!space-x-2">
   <svelte:fragment slot="lead">
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-0">
       <!-- Hamburger Menu -->
       <button on:click={drawerOpen} class="btn-icon btn-icon-sm lg:!hidden">
         <i class="fa-solid fa-bars text-xl" />
       </button>
       <!-- Logo -->
-      <a class="lg:!ml-0 w-[32px] lg:w-auto overflow-hidden" href="/" title="Go to Homepage">
-        <LogoFull />
+      <a class="lg:!ml-0 w-[32px] lg:w-auto overflow-hidden flex" href="/" title="Go to Homepage">
+        <img class="w-12 h-12" src='/favicon.svg' /> 
+        <!-- <LogoFull/> -->
+        <!-- <span class="text-lg font-bold"> {$page.data.company?.name}</span> -->
       </a>
     </div>
   </svelte:fragment>

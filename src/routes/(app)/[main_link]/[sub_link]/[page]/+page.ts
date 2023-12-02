@@ -1,5 +1,5 @@
 import { pb } from '$lib/pocketbase';
-import { serializeNonPOJOs } from '$lib/utils';
+import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import type { RouteParams } from '../$types';
 
 /** @type {import('./$types').PageLoad} */
@@ -13,10 +13,21 @@ export async function load({ params, url, parent }) {
     const resultList = await pb
       .collection('view_articles_list')
       .getList(Number(params.page ?? 1), perPage, {
-        filter
+        filter,
+        fields: `*:excerpt(${200},${true})`
       });
-    //   && category_id = ${category_id}
-    return { meta: resultList };
+    const _page = () => {
+      const items = resultList.items.map((item) => {
+        return {
+          title: getSubText(3, item?.title)?.replaceAll('&amp;', '&'),
+          decription: getSubText(5, item?.content)?.replaceAll('&amp;', '&')
+        };
+      });
+      const title = items.map((i) => i.title).join(' ');
+      const description = items.map((i) => i.decription).join('  ');
+      return { title, description };
+    };
+    return { meta: resultList, _page:_page() };
   } catch (error) {
     return { error: serializeNonPOJOs(error) };
   }

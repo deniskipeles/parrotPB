@@ -26,6 +26,7 @@
   import hljs from 'highlight.js';
   import 'highlight.js/styles/github-dark.css';
   import { storeHighlightJs } from '@skeletonlabs/skeleton';
+  import { getSubText } from '$lib/utils';
 
   storeHighlightJs.set(hljs);
 
@@ -69,7 +70,14 @@
   // $: slotSidebarLeft = matchPathWhitelist($page.url.pathname) ? 'w-0' : 'bg-surface-50-900-token lg:w-auto';
   $: slotSidebarLeft = 'bg-surface-50-900-token lg:w-auto';
   $: allyPageSmoothScroll = !$prefersReducedMotionStore ? 'scroll-smooth' : '';
+
+  export let data;
 </script>
+
+<svelte:head>
+  <title>{data?.company?.data?.title}</title>
+  <meta name="description" content={getSubText(100, data?.company?.data?.description)} />
+</svelte:head>
 
 <!-- Overlays -->
 <Modal components={modalComponentRegistry} />

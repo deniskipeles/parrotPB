@@ -9,7 +9,8 @@ export const load = async ({ locals, url }) => {
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const page = Number(url.searchParams.get('page') ?? 1);
     const resultList = await pb.collection('view_articles_list').getList(Number(page), perPage, {
-      sort: '-created'
+      sort: '-created',
+      fields: `*:excerpt(${200},${true})`
     });
     //   && category_id = ${category_id}
     return { ...rest, meta: resultList };
