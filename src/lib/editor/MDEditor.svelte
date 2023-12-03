@@ -140,7 +140,7 @@
     />
   </label>
 
-  <label class="label">
+  <!-- <label class="label">
     <span>Excerpt</span>
     <textarea
       class="textarea"
@@ -148,7 +148,7 @@
       rows="3"
       placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
     />
-  </label>
+  </label> -->
 
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="label">
