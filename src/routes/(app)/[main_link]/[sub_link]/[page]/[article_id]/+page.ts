@@ -24,7 +24,7 @@ export async function load({ params }) {
       })
     ).items;
     recommended = recommended.map((i) => {
-      i.content = getSubText(100, i.content);
+      i.content = getSubText(60, i.content);
       return i;
     });
     article = serializeNonPOJOs(article)
