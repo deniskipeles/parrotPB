@@ -22,6 +22,9 @@
   // Local
   const toastStore = getToastStore();
   const change = () => {
+    // injectNumbering();
+    injectBullets();
+    imgJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
       const btn = document.createElement('button');
@@ -60,9 +63,7 @@
     /*document.querySelectorAll('ol').forEach((elem) => {
       elem.classList.add('list');
     });*/
-    // injectNumbering();
-    injectBullets();
-    imgJsInjection()
+    
   };
 
   // Function to inject bullets into the unordered list
