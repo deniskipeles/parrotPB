@@ -57,11 +57,11 @@
       hljs.highlightElement(elem);
     });
     // ordered list
-    document.querySelectorAll('ol').forEach((elem) => {
+    /*document.querySelectorAll('ol').forEach((elem) => {
       elem.classList.add('list');
-    });
+    });*/
     injectNumbering();
-    // injectBullets();
+    injectBullets();
     imgJsInjection()
   };
 
@@ -70,7 +70,7 @@
     const ulElements = document.querySelectorAll('article ul'); // Select all unordered lists
     ulElements.forEach((ul) => {
       if (!ul.classList.contains('list')) {
-        ul.classList.add('list');
+        // ul.classList.add('list');
         // Iterate through the list items and add bullets
         const lis = ul.querySelectorAll('li');
         lis.forEach((li) => {
@@ -86,7 +86,7 @@
     if (olElements.length) {
       olElements.forEach((ol) => {
         if (!ol.classList.contains('list')) {
-          ol.classList.add('list');
+          // ol.classList.add('list');
           // Iterate through the list items and add numbering
           const lis = ol.querySelectorAll('li');
           lis.forEach((li, index) => {
