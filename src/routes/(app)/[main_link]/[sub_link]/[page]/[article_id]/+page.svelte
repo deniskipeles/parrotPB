@@ -44,7 +44,7 @@
         const { id, collectionId, collectionName, created, updated, expand, ...article } =
           data.article;
         const formData = setObjectFormData(article);
-        await pb.collection(collectionId).update(id, formData);
+        await pb.collection(collectionId).update(id, article);
         edit = false;
         invalidateAll();
       } catch (error) {
