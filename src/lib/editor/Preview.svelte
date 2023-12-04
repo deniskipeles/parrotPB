@@ -60,7 +60,7 @@
     /*document.querySelectorAll('ol').forEach((elem) => {
       elem.classList.add('list');
     });*/
-    injectNumbering();
+    // injectNumbering();
     injectBullets();
     imgJsInjection()
   };
