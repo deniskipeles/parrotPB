@@ -61,7 +61,7 @@
       elem.classList.add('list');
     });
     injectNumbering();
-    injectBullets();
+    // injectBullets();
     imgJsInjection()
   };
 
