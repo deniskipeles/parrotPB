@@ -69,8 +69,8 @@
   function injectBullets() {
     const ulElements = document.querySelectorAll('article ul'); // Select all unordered lists
     ulElements.forEach((ul) => {
-      if (!ul.classList.contains('list')) {
-        // ul.classList.add('list');
+      if (!ul.classList.contains('list1')) {
+        ul.classList.add('list1');
         // Iterate through the list items and add bullets
         const lis = ul.querySelectorAll('li');
         lis.forEach((li) => {
@@ -85,8 +85,8 @@
     const olElements = document.querySelectorAll('article ol'); // Select the ordered list
     if (olElements.length) {
       olElements.forEach((ol) => {
-        if (!ol.classList.contains('list')) {
-          // ol.classList.add('list');
+        if (!ol.classList.contains('list1')) {
+          ol.classList.add('list1');
           // Iterate through the list items and add numbering
           const lis = ol.querySelectorAll('li');
           lis.forEach((li, index) => {
