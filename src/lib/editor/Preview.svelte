@@ -9,7 +9,7 @@
 
   function addClassToAllTags(htmlString: string) {
     // Define a regular expression to match HTML tags except for <code>
-    const tagRegex = /<(?!code)(?!ol)(?!li)([a-zA-Z0-9-]+)([^>]*)>/g;
+    const tagRegex = /<(?!code)([a-zA-Z0-9-]+)([^>]*)>/g;
     // Replace each matched tag with the tag and a class attribute
     const updatedHtmlString = htmlString.replace(tagRegex, '<$1 class="$1"$2>');
 
@@ -23,7 +23,7 @@
   const toastStore = getToastStore();
   const change = () => {
     // injectNumbering();
-    injectBullets();
+    // injectBullets();
     imgJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
