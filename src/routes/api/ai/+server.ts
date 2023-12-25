@@ -6,7 +6,8 @@ import { GoogleAuth } from 'google-auth-library';
 import { PUBLIC_PALM_KEY } from '$env/static/public';
 const API_KEY = PUBLIC_PALM_KEY ?? '';
 
-const MODEL_NAME = 'models/text-bison-001';
+// const MODEL_NAME = 'models/text-bison-001';
+const MODEL_NAME = 'models/gemini-pro';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
