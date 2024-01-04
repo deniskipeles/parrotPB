@@ -85,7 +85,7 @@ export async function PUT({ request }) {
         if (typeof d == 'string' && d.length > 1) {
           await pb
             .collection('ai_queries')
-            .create({ url: data.url, prompt: data.prompt, type: data.type, ai: d });
+            .create({ url: data.url, prompt: data.prompt, type: data.type, data: d });
         }
       }
 
