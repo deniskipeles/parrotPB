@@ -19,12 +19,13 @@ export async function load({ params }) {
     const tags_filter = tags.map((i) => `tags ?~ "${i}"`)?.join(' || ');
     let recommended = (
       await pb.collection('view_articles_list').getList(1, 5, {
-        filter: `(${tags_filter}) && id != "${article?.id}"`
+        filter: `(${tags_filter}) && id != "${article?.id}"`,
+        sort: '-created',
         // "fields":`*:excerpt(${400},${true})`
       })
     ).items;
     recommended = recommended.map((i) => {
-      i.content = getSubText(60, i.content);
+      i.content = getSubText(50, i.content);
       return i;
     });
     article = serializeNonPOJOs(article)

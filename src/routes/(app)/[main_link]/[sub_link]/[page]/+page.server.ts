@@ -12,7 +12,8 @@ export async function load({ params, url, parent }) {
     const resultList = await pb
       .collection('view_articles_list')
       .getList(Number(params.page ?? 1), perPage, {
-        filter
+        filter,
+        sort: '-created',
         // fields: `*:excerpt(${200},${true})`
       });
 
@@ -24,8 +25,8 @@ export async function load({ params, url, parent }) {
     const _page = () => {
       const items = resultList.items.map((item) => {
         return {
-          title: getSubText(3, item?.title)?.replaceAll('&amp;', '&'),
-          decription: getSubText(5, item?.content)?.replaceAll('&amp;', '&')
+          title: getSubText(4, item?.title)?.replaceAll('&amp;', '&'),
+          decription: getSubText(10, item?.content)?.replaceAll('&amp;', '&')
         };
       });
       const title = items.map((i) => i.title).join(' ');

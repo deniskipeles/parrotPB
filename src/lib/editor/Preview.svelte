@@ -9,7 +9,7 @@
 
   function addClassToAllTags(htmlString: string) {
     // Define a regular expression to match HTML tags except for <code>
-    const tagRegex = /<(?!code)(?!ol)(?!li)([a-zA-Z0-9-]+)([^>]*)>/g;
+    const tagRegex = /<(?!code)([a-zA-Z0-9-]+)([^>]*)>/g;
     // Replace each matched tag with the tag and a class attribute
     const updatedHtmlString = htmlString.replace(tagRegex, '<$1 class="$1"$2>');
 
@@ -22,6 +22,9 @@
   // Local
   const toastStore = getToastStore();
   const change = () => {
+    // injectNumbering();
+    // injectBullets();
+    imgJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
       const btn = document.createElement('button');
@@ -57,20 +60,18 @@
       hljs.highlightElement(elem);
     });
     // ordered list
-    document.querySelectorAll('ol').forEach((elem) => {
+    /*document.querySelectorAll('ol').forEach((elem) => {
       elem.classList.add('list');
-    });
-    injectNumbering();
-    injectBullets();
-    imgJsInjection()
+    });*/
+    
   };
 
   // Function to inject bullets into the unordered list
   function injectBullets() {
     const ulElements = document.querySelectorAll('article ul'); // Select all unordered lists
     ulElements.forEach((ul) => {
-      if (!ul.classList.contains('list')) {
-        ul.classList.add('list');
+      if (!ul.classList.contains('list1')) {
+        ul.classList.add('list1');
         // Iterate through the list items and add bullets
         const lis = ul.querySelectorAll('li');
         lis.forEach((li) => {
@@ -85,8 +86,8 @@
     const olElements = document.querySelectorAll('article ol'); // Select the ordered list
     if (olElements.length) {
       olElements.forEach((ol) => {
-        if (!ol.classList.contains('list')) {
-          ol.classList.add('list');
+        if (!ol.classList.contains('list1')) {
+          ol.classList.add('list1');
           // Iterate through the list items and add numbering
           const lis = ol.querySelectorAll('li');
           lis.forEach((li, index) => {
