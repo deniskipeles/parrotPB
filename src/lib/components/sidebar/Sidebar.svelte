@@ -13,13 +13,13 @@
   const drawerStore = getDrawerStore();
 
   // Lifecycle
-  page.subscribe((page) => {
+  page.subscribe((page_) => {
     // ex: /basePath/...
-    if (page.url.pathname == '/') currentRailCategory = '/';
-    let basePath: string = page.url.pathname.split('/')[1];
+    if (page_.url.pathname == '/') currentRailCategory = '/';
+    let basePath: string = page_.url.pathname.split('/')[1];
     if (!basePath) return;
 
-    for (const key in $page.data?.links) {
+    for (const key in $page.data?.links ?? []) {
       let k = key;
       if ([key?.split('/').join('') + ''].includes(basePath)) {
         currentRailCategory = k;
@@ -80,16 +80,18 @@
   };
 
   let list = ['svelte', 'sveltekit', 'nodejs'];
-  let link_ = ''
+  let link_ = '';
   function inputLink() {
-    link_ = link_?.replace('/','')
-    link_ = `/${link_.trimStart().split('/').join('-').split(' ').join('-').toLowerCase()}`
+    link_ = link_?.replace('/', '');
+    link_ = `/${link_.trimStart().split('/').join('-').split(' ').join('-').toLowerCase()}`;
   }
 </script>
 
 <div
-  class="grid grid-cols-[auto_1fr] h-full bg-surface-50-900-token border-r border-surface-500/30 {currentRailCategory == '/' ? '' : $$props.class ??
-    ''}"
+  class="grid grid-cols-[auto_1fr] h-full bg-surface-50-900-token border-r border-surface-500/30 {currentRailCategory ==
+  '/'
+    ? ''
+    : $$props.class ?? ''}"
 >
   <!-- App Rail -->
   <AppRail background="bg-transparent" border="border-r border-surface-500/30">
@@ -141,7 +143,14 @@
             <div>
               <label class="label">
                 <span>Link</span>
-                <input class="input pl-2" bind:value={link_} on:input={inputLink} name="link" type="text" placeholder="/docs" />
+                <input
+                  class="input pl-2"
+                  bind:value={link_}
+                  on:input={inputLink}
+                  name="link"
+                  type="text"
+                  placeholder="/docs"
+                />
               </label>
             </div>
             <div>
