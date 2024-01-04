@@ -31,7 +31,7 @@ type InputPrompt = {
   key: string | null;
   url: string;
   type: string;
-  more: unknown;
+  info: unknown;
 };
 
 /** @type {import('./$types').RequestHandler} */
