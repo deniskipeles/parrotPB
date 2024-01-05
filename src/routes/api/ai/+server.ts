@@ -32,51 +32,54 @@ export async function GET({ url }) {
     if (!data.key && !data.url) {
       return json({
         success: false,
+        data,
         error: new Error(
           'Please provide the ai key from ktechs.\n Or obtain one to resolve this issue.'
         )
       });
     }
 
-    if (data.key || data.url) {
-      const record = await pb
-        .collection(data.type)
-        .getFirstListItem(`key="${data.key}"|| urls~"${data.url}"`, {})
-        .then(async (value) => value);
-      if (!record) {
-        return json({
-          success: false,
-          error: new Error('Please register with ktechs as a client to obtain an ai key.')
-        });
-      }
-      if (new Date(record?.expiry_date).getTime < new Date(Date.now()).getTime) {
-        return json({
-          success: false,
-          error: new Error(
-            'Failed to prompted ai. \nPlease renew your ai subscription with ktechs.\n Or obtain one to resolve this issue.'
-          )
-        });
-      }
-    }
+    // if (data.key || data.url) {
+    //   const record = await pb
+    //     .collection(data.type)
+    //     .getFirstListItem(`key="${data.key}"|| urls~"${data.url}"`, {})
+    //     .then(async (value) => value);
+    //   if (!record) {
+    //     return json({
+    //       success: false,
+    //       error: new Error('Please register with ktechs as a client to obtain an ai key.')
+    //     });
+    //   }
+    //   if (new Date(record?.expiry_date).getTime < new Date(Date.now()).getTime) {
+    //     return json({
+    //       success: false,
+    //       error: new Error(
+    //         'Failed to prompted ai. \nPlease renew your ai subscription with ktechs.\n Or obtain one to resolve this issue.'
+    //       )
+    //     });
+    //   }
+    // }
+    // if (data?.prompt) {
+    //   const prompt = data.prompt;
+    //   const res = await ai(prompt);
+    //   try {
+    //     if (typeof res == 'string' && res.length > 1) {
+    //       await pb
+    //         .collection('ai_queries')
+    //         .create({ url: data.url, prompt: data.prompt, type: data.type, data: res });
+    //     }
+    //   } catch (error) {
+    //     // eslint-disable-next-line no-ex-assign
+    //     error = '';
+    //   }
     if (data?.prompt) {
-      const prompt = data.prompt;
-      const res = await ai(prompt);
-      try {
-        if (typeof res == 'string' && res.length > 1) {
-          await pb
-            .collection('ai_queries')
-            .create({ url: data.url, prompt: data.prompt, type: data.type, data: res });
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-ex-assign
-        error = '';
-      }
-
-      return json(res);
+      const res = await ai(data?.prompt);
+      return json({ res, data });
     }
+    // }
     return json('no prompt prvided');
   } catch (error: unknown) {
-    return json({ success: false, error: serializeNonPOJOs(error) });
+    return json({ success: false, error: serializeNonPOJOs(error), data: searchParams });
   }
 }
 
