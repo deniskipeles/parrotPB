@@ -5,9 +5,14 @@ import { GoogleAuth } from 'google-auth-library';
 
 import { PUBLIC_PALM_KEY } from '$env/static/public';
 import { pb } from '$lib/pocketbase';
-import type { google } from '@google-ai/generativelanguage/build/protos/protos';
+// import type { google } from '@google-ai/generativelanguage/build/protos/protos';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 const API_KEY = PUBLIC_PALM_KEY ?? '';
+
+
+export async function GET() {
+	return json({"get":"this is ai endpoint"});
+}
 
 const MODEL_NAME = 'models/text-bison-001';
 // const MODEL_NAME = 'models/gemini-pro';
@@ -92,6 +97,7 @@ export async function PUT({ request }) {
 
       return json(res);
     }
+    return json('no prompt prvided');
   } catch (error: unknown) {
     return json({ success: false, error: serializeNonPOJOs(error) });
   }
