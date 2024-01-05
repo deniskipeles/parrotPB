@@ -55,7 +55,7 @@
         // Handle the response data here
         prompting.set(false);
         console.log('++ai content');
-        markdown = data[0]?.candidates[0]?.output ?? markdown;
+        markdown = data;
       })
       .catch((error) => {
         // Handle any errors here
@@ -83,7 +83,7 @@
       name="prompt"
       bind:value={prompt}
       rows="4"
-      minlength="10"
+      minlength="2"
       required
       placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
     />
