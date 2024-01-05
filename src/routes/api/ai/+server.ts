@@ -9,9 +9,24 @@ import { pb } from '$lib/pocketbase';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 const API_KEY = PUBLIC_PALM_KEY ?? '';
 
+export async function GET({ url }) {
+  const searchParams = url.searchParams;
 
-export async function GET() {
-	return json({"get":"this is ai endpoint"});
+  // Create an empty object to store the parameters
+  const queryParams: any = {};
+
+  // Loop through the search parameters and populate the object
+  searchParams.forEach((value, key) => {
+    // Convert values to JSON if needed (e.g., handle numbers, booleans)
+    try {
+      queryParams[key] = JSON.parse(value);
+    } catch (error) {
+      // If parsing fails, assign the raw string value
+      queryParams[key] = value;
+    }
+  });
+
+  return json({ get: 'this is ai endpoint', data: queryParams });
 }
 
 const MODEL_NAME = 'models/text-bison-001';
