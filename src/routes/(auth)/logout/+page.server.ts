@@ -3,8 +3,7 @@ import { redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
 export const actions: Actions = {
-  default: async ({ locals,cookies }) => {
-    cookies.delete('pb_auth1',{path:'/'})
+  default: async ({ locals }) => {
     locals.pb.authStore.clear()
     locals.user = null
     currentUser.set(null)

@@ -13,7 +13,7 @@ export async function load({ locals: { user } }) {
 }
 
 export const actions: Actions = {
-  default: async ({ locals: { pb }, cookies, request, url }) => {
+  default: async ({ locals: { pb }, request, url }) => {
     const formData = await request.formData();
     const auth_table = formData.get('auth_table') as string;
 
@@ -24,14 +24,7 @@ export const actions: Actions = {
 
     try {
       const authData = await pb.collection(auth_table).authWithPassword(data.email, data.password);
-      cookies.set(
-        'pb_auth1',
-        decodeURIComponent(pb.authStore.exportToCookie()?.replace('pb_auth=', '')),
-        {
-          path: '/'
-        }
-      );
-
+      
       currentUser.set(authData.record);
     } catch (e: any) {
       return { incorrect: true, error: serializeNonPOJOs(e) };

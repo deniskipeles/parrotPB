@@ -291,7 +291,7 @@
     <section class="hidden sm:inline-flex space-x-1">
       <a
         class="btn-icon hover:variant-soft-primary"
-        href="https://github.com/skeletonlabs/skeleton"
+        href="https://github.com/deniskipeles"
         target="_blank"
         rel="noreferrer"
       >

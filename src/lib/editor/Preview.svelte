@@ -25,6 +25,7 @@
     // injectNumbering();
     // injectBullets();
     imgJsInjection()
+    tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
       const btn = document.createElement('button');
@@ -111,6 +112,20 @@
         img.classList.add("w-auto");
         img.classList.add("rounded-container-token");
         img.classList.add("shadow-xl");
+      })
+    }
+  }
+  function tableJsInjection() {
+    const tableElements = document.querySelectorAll<HTMLTableElement>('article table'); // Select the ordered list
+    if (tableElements.length) {
+      tableElements.forEach((table) => {
+        const divTag = document.createElement('div');
+        divTag.classList.add("table-container");
+        table.classList.add("table");
+        table.classList.add("rounded-container-token");
+        table.classList.add("table-hover");
+        divTag.append(table.cloneNode(true))
+        table.parentNode?.replaceChild(divTag,table)
       })
     }
   }

@@ -1,5 +1,6 @@
 import { create_links, create_sub_links, fetchLinks } from '$lib/pocketbase';
 import { getSubText } from '$lib/utils';
+import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -18,9 +19,8 @@ export const load = async ({ locals, url }) => {
       return i;
     });
     return { ...rest, meta: resultList };
-  } catch (error) {
-    console.error(`Error in load function for : ${error}`);
-    return {};
+  } catch (err) {
+    error(404, { message: `${err}` });
   }
 };
 
