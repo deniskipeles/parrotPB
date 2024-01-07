@@ -1,5 +1,5 @@
 import { fetchLinks, loadCompany, pb } from '$lib/pocketbase';
-import { error, type Handle, } from '@sveltejs/kit';
+import { error, type Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
@@ -29,7 +29,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (cookieTheme) {
     theme = cookieTheme;
   } else {
-    event.cookies.set('theme', 'skeleton');
+    event.cookies.set('theme', 'skeleton', { path: '/', httpOnly: false });
   }
 
   const response = await resolve(event, {
