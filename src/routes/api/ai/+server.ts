@@ -118,9 +118,7 @@ export async function PUT({ request }) {
     if (!data.key && !data.url) {
       return json({
         success: false,
-        error: new Error(
-          'Please provide the ai key from ktechs.\n Or obtain one to resolve this issue.'
-        )
+        error: 'Please provide the ai key from ktechs.\n Or obtain one to resolve this issue.'
       });
     }
 
@@ -132,41 +130,49 @@ export async function PUT({ request }) {
       if (!record) {
         return json({
           success: false,
-          error: new Error('Please register with ktechs as a client to obtain an ai key.')
+          error: 'Please register with ktechs as a client to obtain an ai key.'
         });
       }
-      if (new Date(record?.expiry_date).getTime < new Date(Date.now()).getTime) {
+      if (
+        record &&
+        new Date(record?.expiry_date).getTime < new Date(Date.now()).getTime &&
+        record.number_of_queries > 500
+      ) {
         return json({
           success: false,
-          error: new Error(
-            'Failed to prompted ai. \nPlease renew your ai subscription with ktechs.\n Or obtain one to resolve this issue.'
-          )
+          error:
+            'Failed to prompted ai. \nPlease renew your ai subscription with ktechs.\n Or subscribe to one to resolve this issue.'
         });
       }
     }
     if (data?.prompt) {
-      const prompt = `${await data.prompt}`;
+      const prompt = `${data.prompt}`;
 
-      // const res: [
-      //   google.ai.generativelanguage.v1beta2.IGenerateTextResponse,
-      //   google.ai.generativelanguage.v1beta2.IGenerateTextRequest | undefined,
-      //   Record<string, never> | undefined
-      // ] = await ai(prompt);
       const res = await ai(prompt);
+      if (!res) {
+        return json({ success: false, error: 'no response from ai try again.' });
+      }
       try {
         if (typeof res == 'string' && res.length > 1) {
           await pb
             .collection('ai_queries')
-            .create({ url: data.url, prompt: data.prompt, type: data.type, data: res });
+            .create({
+              url: data.url,
+              prompt: data.prompt,
+              server_url: data.server_url,
+              request_id: data.request_id,
+              type: data.type,
+              data: res
+            });
         }
       } catch (error) {
         // eslint-disable-next-line no-ex-assign
         error = '';
       }
 
-      return json(res);
+      return json({ success: true, data: res });
     }
-    return json('no prompt prvided');
+    return json({ success: false, error: 'no prompt provided' });
   } catch (error: unknown) {
     return json({ success: false, error: serializeNonPOJOs(error) });
   }
