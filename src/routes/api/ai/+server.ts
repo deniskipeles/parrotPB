@@ -5,7 +5,6 @@ import { PUBLIC_PALM_KEY } from '$env/static/public';
 import { pb } from '$lib/pocketbase';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
   const searchParams = url.searchParams;
@@ -27,16 +26,18 @@ export async function GET({ url }) {
     if (!data.key && !data.url) {
       return json({
         success: false,
-        error: 'Please provide the AI key from ktechs or obtain one to resolve this issue.',
+        error: 'Please provide the AI key from ktechs or obtain one to resolve this issue.'
       });
     }
 
     if (data.key || data.url) {
-      const record = await pb.collection(data.type).getFirstListItem(`key="${data.key}"|| urls~="${data.url}"`, {});
+      const record =
+        (await pb.collection(data.type).getFirstListItem(`key="${data.key}"`)) ??
+        (await pb.collection(data.type).getFirstListItem(`urls~="${data.url}"`));
       if (!record) {
         return json({
           success: false,
-          error: 'Please register with ktechs as a client to obtain an AI key.',
+          error: 'Please register with ktechs as a client to obtain an AI key.'
         });
       }
 
@@ -47,41 +48,15 @@ export async function GET({ url }) {
         return json({
           queryParams,
           success: true,
-          data: PUBLIC_PALM_KEY,
+          data: PUBLIC_PALM_KEY
         });
       } else {
         return json({
           queryParams,
           success: true,
-          data: 'Failed to prompt AI.\nPlease renew your AI subscription with ktechs or subscribe to one to resolve this issue.',
+          data: 'Failed to prompt AI.\nPlease renew your AI subscription with ktechs or subscribe to one to resolve this issue.'
         });
       }
-    }
-
-    if (data?.prompt) {
-      const prompt = `${data.prompt}`;
-      const res = await ai(prompt);
-
-      if (!res) {
-        return json({ success: false, error: 'No response from AI. Try again.' });
-      }
-
-      try {
-        if (typeof res === 'string' && res.length > 1) {
-          await pb.collection('ai_queries').create({
-            url: data.url,
-            prompt: data.prompt,
-            server_url: data.server_url,
-            request_id: data.request_id,
-            type: data.type,
-            data: res,
-          });
-        }
-      } catch (_) {
-        // Ignore the error
-      }
-
-      return json({ success: true, data: res });
     }
 
     return json({ success: false, error: 'No prompt provided.' });
