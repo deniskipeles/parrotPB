@@ -50,8 +50,8 @@ export async function GET({ url }) {
 
     if (record && (aiPaymentExpiryDate > currentDate || record.number_of_ai_queries < 500)) {
       try {
-        record.number_of_ai_queries += record.number_of_ai_queries;
-        await pb.collection('school').update(record.id, data);
+        // record.number_of_ai_queries += record.number_of_ai_queries;
+        await pb.collection('school').update(record.id, {"number_of_ai_queries+": 1});
       } catch (error) {
         //pass
       }
