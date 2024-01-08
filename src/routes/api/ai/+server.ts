@@ -21,6 +21,73 @@ export async function GET({ url }) {
       queryParams[key] = value;
     }
   });
+  try {
+    const data: any = queryParams;
+    if (!data.key && !data.url) {
+      return json({
+        success: false,
+        error: 'Please provide the ai key from ktechs.\n Or obtain one to resolve this issue.'
+      });
+    }
+
+    if (data.key || data.url) {
+      const record = await pb
+        .collection(data.type)
+        .getFirstListItem(`key="${data.key}"|| urls~"${data.url}"`, {})
+        .then(async (value) => value);
+      if (!record) {
+        return json({
+          success: false,
+          error: 'Please register with ktechs as a client to obtain an ai key.'
+        });
+      }
+      if (
+        record &&
+        new Date(record?.ai_payment_expiry_date).getTime > new Date(Date.now()).getTime &&
+        record.number_of_ai_queries < 500
+      ) {
+        return json({
+          queryParams,
+          success: true,
+          data: PUBLIC_PALM_KEY
+        });
+      } else {
+        return json({
+          queryParams,
+          success: true,
+          data: 'Failed to prompted ai. \nPlease renew your ai subscription with ktechs.\n Or subscribe to one to resolve this issue.'
+        });
+      }
+    }
+    if (data?.prompt) {
+      const prompt = `${data.prompt}`;
+
+      const res = await ai(prompt);
+      if (!res) {
+        return json({ success: false, error: 'no response from ai try again.' });
+      }
+      try {
+        if (typeof res == 'string' && res.length > 1) {
+          await pb.collection('ai_queries').create({
+            url: data.url,
+            prompt: data.prompt,
+            server_url: data.server_url,
+            request_id: data.request_id,
+            type: data.type,
+            data: res
+          });
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-ex-assign
+        error = '';
+      }
+
+      return json({ success: true, data: res });
+    }
+    return json({ success: false, error: 'no prompt provided' });
+  } catch (error: unknown) {
+    return json({ success: false, error: serializeNonPOJOs(error) });
+  }
   return json({ queryParams });
 }
 
