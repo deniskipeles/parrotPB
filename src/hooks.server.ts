@@ -32,6 +32,20 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.cookies.set('theme', 'skeleton', { path: '/', httpOnly: false });
   }
 
+  // Apply CORS header for API routes
+  if (event.url.pathname.startsWith('/api/ai')) {
+    // Required for CORS to work
+    if(event.request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          'Access-Control-Allow-Methods': 'GET, OPTIONS',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+        }
+      });
+    }
+  }
+
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => html.replace('data-theme=""', `data-theme="${theme}"`)
   });
@@ -39,5 +53,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     'set-cookie',
     event.locals.pb.authStore.exportToCookie({ httpOnly: false })
   );
+
+  if (event.url.pathname.startsWith('/api/ai')) {
+      response.headers.append('Access-Control-Allow-Origin', `*`);
+  }
   return response;
 };
