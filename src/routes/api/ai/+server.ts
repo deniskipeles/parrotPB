@@ -44,7 +44,7 @@ export async function GET({ url }) {
       const aiPaymentExpiryDate = new Date(record?.ai_payment_expiry_date).getTime();
       const currentDate = new Date().getTime();
 
-      if (record && aiPaymentExpiryDate > currentDate && record.number_of_ai_queries < 500) {
+      if (record && (aiPaymentExpiryDate > currentDate || record.number_of_ai_queries < 500)) {
         return json({
           queryParams,
           success: true,
