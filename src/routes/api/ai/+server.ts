@@ -49,6 +49,12 @@ export async function GET({ url }) {
     const currentDate = new Date().getTime();
 
     if (record && (aiPaymentExpiryDate > currentDate || record.number_of_ai_queries < 500)) {
+      try {
+        record.number_of_ai_queries += record.number_of_ai_queries;
+        await pb.collection('school').update(record.id, data);
+      } catch (error) {
+        //pass
+      }
       return json({
         queryParams,
         success: true,
