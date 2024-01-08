@@ -21,48 +21,49 @@ export async function GET({ url }) {
     }
   });
 
-  try {
-    const data = queryParams;
-    if (!data.key && !data.url) {
+  const data = queryParams;
+  if (!data.key && !data.url) {
+    return json({
+      success: false,
+      error: 'Please provide the AI key from ktechs or obtain one to resolve this issue.'
+    });
+  }
+
+  if (data.key || data.url) {
+    let record: any;
+    try {
+      record =
+        (await pb.collection(data.type).getFirstListItem(`key="${data.key}"`)) ??
+        (await pb.collection(data.type).getFirstListItem(`urls~="${data.url}"`));
+    } catch (error) {
+      //  ignore this
+    }
+    if (!record) {
       return json({
         success: false,
-        error: 'Please provide the AI key from ktechs or obtain one to resolve this issue.'
+        error: 'Please register with ktechs as a client to obtain an AI key.'
       });
     }
 
-    if (data.key || data.url) {
-      const record =
-        (await pb.collection(data.type).getFirstListItem(`key="${data.key}"`)) ??
-        (await pb.collection(data.type).getFirstListItem(`urls~="${data.url}"`));
-      if (!record) {
-        return json({
-          success: false,
-          error: 'Please register with ktechs as a client to obtain an AI key.'
-        });
-      }
+    const aiPaymentExpiryDate = new Date(record?.ai_payment_expiry_date).getTime();
+    const currentDate = new Date().getTime();
 
-      const aiPaymentExpiryDate = new Date(record?.ai_payment_expiry_date).getTime();
-      const currentDate = new Date().getTime();
-
-      if (record && (aiPaymentExpiryDate > currentDate || record.number_of_ai_queries < 500)) {
-        return json({
-          queryParams,
-          success: true,
-          data: PUBLIC_PALM_KEY
-        });
-      } else {
-        return json({
-          queryParams,
-          success: true,
-          data: 'Failed to prompt AI.\nPlease renew your AI subscription with ktechs or subscribe to one to resolve this issue.'
-        });
-      }
+    if (record && (aiPaymentExpiryDate > currentDate || record.number_of_ai_queries < 500)) {
+      return json({
+        queryParams,
+        success: true,
+        data: PUBLIC_PALM_KEY
+      });
+    } else {
+      return json({
+        queryParams,
+        success: true,
+        data: 'Failed to prompt AI.\nPlease renew your AI subscription with ktechs or subscribe to one to resolve this issue.'
+      });
     }
-
-    return json({ success: false, error: 'No prompt provided.' });
-  } catch (error) {
-    return json({ success: false, error: serializeNonPOJOs(error) });
   }
+
+  return json({ success: false, error: 'No prompt provided.' });
 }
 
 const MODEL_NAME = 'gemini-pro';
@@ -80,14 +81,6 @@ export async function POST({ request }) {
     }
   }
 }
-
-type Input = {
-  prompt: string;
-  key: string | null;
-  url: string;
-  type: string;
-  info: unknown;
-};
 
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }) {
