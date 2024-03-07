@@ -170,7 +170,7 @@ function getYouTubeId(url) {
 {#if data?.article?.url}
 <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
   <iframe class="w-full aspect-video"
-    src={`https://m.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
+    src={`https://www.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
