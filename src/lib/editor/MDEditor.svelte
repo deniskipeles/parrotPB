@@ -149,7 +149,6 @@
       name="cover_image"
       class="input w-1/2"
       placeholder="Cover Image"
-      required
     />
   </label>
 
