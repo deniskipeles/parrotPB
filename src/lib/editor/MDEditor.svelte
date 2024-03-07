@@ -25,6 +25,7 @@
   let preview = false;
   let list: string[] = ['foo', 'bar'];
   let titleValue: string = '';
+  let url: string = '';
 
   let obj_id: any = null;
   page.subscribe((page) => {
@@ -124,6 +125,18 @@
       placeholder="New article title here..."
       maxlength="150"
       required
+      data-input-field
+    />
+  </label>
+
+  <label class="label">
+    <span>Url</span>
+    <input
+      type="url"
+      name="url"
+      bind:value={url}
+      class="input w-full"
+      placeholder="https://m.youtube.com/watch?v=zR2X9g6Lvck"
       data-input-field
     />
   </label>
