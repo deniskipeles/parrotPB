@@ -1,4 +1,4 @@
-import { fetchLinks, loadCompany, pb } from '$lib/pocketbase';
+import { fetchLinks, loadCompany, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -17,6 +17,10 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.pb = pb;
   event.locals.user = structuredClone(pb.authStore.model);
   try {
+    // this are page builders and are necessary else it return an error page
+		event.locals.tables = await listTablesRecords();
+		event.locals.roots = await listRootsRecords();
+		
     // load the store data from the request cookie string
     event.locals.links = await fetchLinks();
     event.locals.company = await loadCompany();
