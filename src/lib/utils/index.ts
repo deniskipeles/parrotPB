@@ -5,6 +5,26 @@ export const serializeNonPOJOs = (obj: any) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
+export function getRelatedCollections(collection, collections) {
+  const relatedCollections = [];
+
+  for (const otherCollection of collections) {
+    if (otherCollection.id === collection.id) {
+      continue; // Skip the collection itself
+    }
+
+    const relationFields = otherCollection.schema.filter(field => field.type === 'relation');
+
+    for (const field of relationFields) {
+      if (field.options.collectionId === collection.id) {
+        relatedCollections.push(`${otherCollection.name}_via_${field.name}`);
+      }
+    }
+  }
+
+  return relatedCollections;
+}
+
 export const getPbImageUrl = (doc: any, img: string | null, dim: string | undefined) => {
   const logo = (img ? pb.files.getUrl(doc, img, { thumb: dim ?? '100x100' }) : null) ?? null;
   return logo;
