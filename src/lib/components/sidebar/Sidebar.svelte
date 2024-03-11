@@ -107,12 +107,12 @@
       >
       <span class="capitalize">Home</span>
     </AppRailTile>
-    {#each Object.entries($page.data?.links ?? {}) as [key, value]}
-      <AppRailTile bind:group={currentRailCategory} name={key} value={key}>
+    {#each $page.data?.links ?? [] as record}
+      <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.label}>
         <svelte:fragment slot="lead"
-          ><i class={`${getIcon(value)} text-2xl`} aria-hidden="true" /></svelte:fragment
+          ><i class={`fa ${record?.icon_font_awesome ?? getIcon(record)} text-2xl`} aria-hidden="true" /></svelte:fragment
         >
-        <span class="capitalize">{key?.split('/').join(' ')}</span>
+        <span class="capitalize">{record?.label}</span>
       </AppRailTile>
       <hr class="opacity-30" />
     {/each}
