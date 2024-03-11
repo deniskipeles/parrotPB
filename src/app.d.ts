@@ -15,6 +15,8 @@ declare namespace App {
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
 		company: import('pocketbase').RecordModel;
+		tables: import('pocketbase').RecordModel[];
+		roots: import('pocketbase').RecordModel[];
 	}
 
 	// interface Error {}
