@@ -173,7 +173,7 @@
                   <!-- trigger -->
                   <button
                     class="li capitalize hover:variant-soft-primary w-full text-right"
-                    use:popup={{ event: 'hover', target: key, closeQuery: 'a[href]' }}
+                    use:popup={{ event: 'hover', target: value?.id, closeQuery: 'a[href]' }}
                   >
                     <i class={`fa ${value?.icon_font_awesome} opacity-50`} />
                     <span>{value?.label?.split('/')?.join(' ')}</span>
@@ -183,7 +183,7 @@
                     <nav class="list-nav">
                       <ul>
                         {#each value?.expand?.sub_menu_via_main_menu_id ?? [] as sub_value}
-                          {#each sub_value?.sub_menu_list_via_sub_menu_id ?? [] as list_value}
+                          {#each sub_value?.expand?.sub_menu_list_via_sub_menu_id ?? [] as list_value}
                             <!-- content here -->
                             <li>
                               <a href={`/${value?.id}/${sub_value?.id}/${list_value?.id}`}>
