@@ -110,7 +110,7 @@
     {#each $page.data?.links ?? [] as record}
       <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.label}>
         <svelte:fragment slot="lead"
-          ><i class={`fa ${record?.icon_font_awesome ?? getIcon(record)} text-2xl`} aria-hidden="true" /></svelte:fragment
+          ><i class={`fa ${record?.icon_font_awesome} text-2xl`} aria-hidden="true" /></svelte:fragment
         >
         <span class="capitalize">{record?.label}</span>
       </AppRailTile>
@@ -120,7 +120,7 @@
       <svelte:fragment slot="lead"
         ><i class={`fa fa-plus text-2xl`} aria-hidden="true" /></svelte:fragment
       >
-      <span class="capitalize">add {JSON.stringify($page?.data?.links)}</span>
+      <span class="capitalize">add</span>
     </AppRailTile>
   </AppRail>
   <!-- Nav Links -->
