@@ -108,7 +108,7 @@
       <span class="capitalize">Home</span>
     </AppRailTile>
     {#each $page.data?.links ?? [] as record}
-      <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.label}>
+      <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.id}>
         <svelte:fragment slot="lead"
           ><i class={`fa ${record?.icon_font_awesome} text-2xl`} aria-hidden="true" /></svelte:fragment
         >
@@ -193,7 +193,7 @@
         <!-- <div class="arrow bg-surface-100-800-token" /> -->
       </form>
     {:else}
-      {#each submenu ?? [] as segment, i}
+      {#each submenu?.expand?.sub_menu_via_main_menu_id ?? [] as segment, i}
         <!-- Title -->
         <p class="font-bold pl-4 text-2xl">{segment.title}</p>
         <div class="">
@@ -266,15 +266,15 @@
         <!-- Nav List -->
         <nav class="list-nav">
           <ul>
-            {#each segment?.list ?? [] as { href, label, badge }}
+            {#each segment?.expand?.sub_menu_list_via_sub_menu_id ?? [] as { id, label, description }}
               <li on:keypress on:click={drawerStore.close}>
                 <a
-                  href={segment?.link + href}
-                  class={listboxItemActive(segment?.link + href + '/')}
+                  href={segment?.id}
+                  class={listboxItemActive(segment?.id + '/')}
                   data-sveltekit-preload-data="hover"
                 >
                   <span class="flex-auto">{@html label}</span>
-                  {#if badge}<span class="badge variant-filled-secondary">{badge}</span>{/if}
+                  {#if description}<span class="badge variant-filled-secondary">{description}</span>{/if}
                 </a>
               </li>
             {/each}
