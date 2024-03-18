@@ -29,10 +29,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const mainMenu = collections.find(collection => collection.name === 'main_menu');
 	const relatedCollections = getRelatedCollections(mainMenu, collections);
     	
-	event.locals.links = await pb.collection('main_menu').getFullList({
-      		sort: '-created',
-		expand: 'sub_menu_via_main_menu_id.sub_menu_list_via_sub_menu_id' //+relatedCollections?.join(','),
-    	});
+	event.locals.links = await fetchLinks()
+		
     	event.locals.company = await loadCompany();
   } catch (err) {
     error(404, { message: `${err}` });
