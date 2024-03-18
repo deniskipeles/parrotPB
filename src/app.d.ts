@@ -11,7 +11,7 @@ declare namespace App {
 	// interface PageData {}
 	interface Locals {
 		userid: string;
-		links: JSON;
+		links: import('pocketbase').RecordModel[];
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
 		company: import('pocketbase').RecordModel;
