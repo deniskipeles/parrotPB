@@ -166,29 +166,29 @@
       <div class="card p-4 w-60 shadow-xl" data-popup="features">
         <nav class="list-nav">
           <ul>
-            {#each $page.data?.links ?? [] as value}
+            {#each $page.data?.links ?? [] as main_value}
               <!-- content here -->
               <li>
                 <div class="relative hidden lg:block">
                   <!-- trigger -->
                   <button
                     class="li capitalize hover:variant-soft-primary w-full text-right"
-                    use:popup={{ event: 'hover', target: value?.id, closeQuery: 'a[href]' }}
+                    use:popup={{ event: 'hover', target: main_value?.id, closeQuery: 'a[href]' }}
                   >
-                    <i class={`fa ${value?.icon_font_awesome} opacity-50`} />
-                    <span>{value?.label?.split('/')?.join(' ')}</span>
+                    <i class={`fa ${main_value?.icon_font_awesome} opacity-50`} />
+                    <span>{main_value?.label?.split('/')?.join(' ')}</span>
                   </button>
                   <!-- popup -->
-                  <div class="card z-10 p-4 w-60 shadow-xl" data-popup={value?.id}>
+                  <div class="card z-10 p-4 w-60 shadow-xl" data-popup={main_value?.id}>
                     <nav class="list-nav">
                       <ul>
-                        {#each value?.expand?.sub_menu_via_main_menu_id ?? [] as sub_value}
+                        {#each main_value?.expand?.sub_menu_via_main_menu_id ?? [] as sub_value}
                           {#each sub_value?.expand?.sub_menu_list_via_sub_menu_id ?? [] as list_value}
                             <!-- content here -->
                             <li>
-                              <a href={`/${value?.id}/${sub_value?.id}/${list_value?.id}`}>
+                              <a href={`/${main_value?.id}/${sub_value?.id}/${list_value?.id}`}>
                                 <span class="w-6 text-center"
-                                  ><i class={`fa ${value?.icon_font_awesome}`} /></span
+                                  ><i class={`fa ${main_value?.icon_font_awesome}`} /></span
                                 >
                                 <span class="capitalize">{list_value?.label}</span>
                               </a>
