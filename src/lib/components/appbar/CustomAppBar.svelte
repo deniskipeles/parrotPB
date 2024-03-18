@@ -179,7 +179,7 @@
                     <span>{value?.label?.split('/')?.join(' ')}</span>
                   </button>
                   <!-- popup -->
-                  <div class="card z-10 p-4 w-60 shadow-xl" data-popup={key}>
+                  <div class="card z-10 p-4 w-60 shadow-xl" data-popup={value?.id}>
                     <nav class="list-nav">
                       <ul>
                         {#each value?.expand?.sub_menu_via_main_menu_id ?? [] as sub_value}
