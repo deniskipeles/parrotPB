@@ -120,7 +120,7 @@
       <svelte:fragment slot="lead"
         ><i class={`fa fa-plus text-2xl`} aria-hidden="true" /></svelte:fragment
       >
-      <span class="capitalize">add</span>
+      <span class="capitalize">add {JSON.stringify($page?.data?.links)}</span>
     </AppRailTile>
   </AppRail>
   <!-- Nav Links -->
