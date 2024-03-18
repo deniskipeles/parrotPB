@@ -176,7 +176,7 @@
                     use:popup={{ event: 'hover', target: main_value?.id, closeQuery: 'a[href]' }}
                   >
                     <i class={`fa ${main_value?.icon_font_awesome} opacity-50`} />
-                    <span>{main_value?.label?.split('/')?.join(' ')}</span>
+                    <span>{main_value?.label}</span>
                   </button>
                   <!-- popup -->
                   <div class="card z-10 p-4 w-60 shadow-xl" data-popup={main_value?.id}>
