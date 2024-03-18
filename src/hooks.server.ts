@@ -1,6 +1,6 @@
 import { fetchLinks, loadCompany, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
-import { getRelatedCollections } from '$lib/utils';
+//import { getRelatedCollections } from '$lib/utils';
 
 
 export const handle: Handle = async ({ event, resolve }) => {
