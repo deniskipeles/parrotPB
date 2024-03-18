@@ -21,22 +21,22 @@
 
     for (const key in $page.data?.links ?? []) {
       let k = key;
-      if ([key?.split('/').join('') + ''].includes(basePath)) {
+      if ([key?.split('/')?.join('') + ''].includes(basePath)) {
         currentRailCategory = k;
       }
     }
   });
 
   // Reactive
-  $: submenu = $page?.data?.links[currentRailCategory ?? '/'];
+  $: submenu = $page?.data?.links?.find(l=>currentRailCategory == l);
   // $: listboxItemActive = (href: string) => (`/${$page.params?.main_link}/${$page.params?.sub_link}`) ? 'bg-primary-active-token' : '';
   $: listboxItemActive = (href: string) =>
     $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
 
   function getIcon(value: any) {
     if (value?.length > 0) {
-      if (value[0]?.icon_font_awesome.length > 0) {
-        return value[0]?.icon_font_awesome;
+      if (value?.icon_font_awesome?.length > 0) {
+        return value?.icon_font_awesome;
       }
     }
     return 'fa fa-cogs';
@@ -266,7 +266,7 @@
         <!-- Nav List -->
         <nav class="list-nav">
           <ul>
-            {#each segment.list ?? [] as { href, label, badge }}
+            {#each segment?.list ?? [] as { href, label, badge }}
               <li on:keypress on:click={drawerStore.close}>
                 <a
                   href={segment?.link + href}
