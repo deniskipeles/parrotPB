@@ -4,8 +4,7 @@
 	import { getModalStore } from '@skeletonlabs/skeleton';
 
 	// Classes
-	const cBase =
-		'card bg-surface-100/60 dark:bg-surface-500/30 backdrop-blur-lg overflow-hidden w-full max-w-[800px] shadow-xl mt-8 mb-auto';
+	const cBase = 'card bg-surface-100/60 dark:bg-surface-500/30 backdrop-blur-lg overflow-hidden w-full max-w-[800px] shadow-xl mt-8 mb-auto';
 	const cHeader = 'bg-surface-300-600-token flex items-center';
 	const cSearchInput = 'bg-transparent border-0 ring-0 focus:ring-0 w-full p-4 text-lg';
 	const cResults = 'overflow-x-auto max-h-[480px] hide-scrollbar';
@@ -15,36 +14,34 @@
 	// Local
 	let searchTerm = '';
 
-function transformObject(items) {
-  const result = {};
-  items.forEach(item => {
-    const innerList = [];
-    item.expand.sub_menu_via_main_menu_id.forEach(subMenu => {
-      subMenu.expand.sub_menu_list_via_sub_menu_id.forEach(subMenuList => {
-        innerList.push({
-          href: `/${subMenu.id}/${subMenuList.id}`,
-          label: subMenuList.label,
-          keywords: subMenuList.keywords.join(', ')
-        });
-      });
-    });
-    result[`/${item.id}`] = [{
-id:item?.id,
-      title: item.label,
-      list: innerList
-    }];
-  });
-  return result;
-}
+	function transformData(data) {
+	  const result = {};
+	  data.items.forEach(item => {
+	    const innerList = [];
+	    item.expand.sub_menu_via_main_menu_id.forEach(subMenu => {
+	      subMenu.expand.sub_menu_list_via_sub_menu_id.forEach(subMenuList => {
+	        innerList.push({
+	          href: `/${subMenu.id}/${subMenuList.id}`,
+	          label: subMenuList.label,
+	          keywords: subMenuList.keywords.join(', ')
+	        });
+	      });
+	    });
+	    result[`/${item.id}`] = [{
+	      id: item?.id,
+	      title: item.label,
+	      list: innerList
+	    }];
+	  });
+	  return result;
+	}
 
-	// let resultsCopy = [...menuNavLinks['/docs'], ...menuNavLinks['/elements'], ...menuNavLinks['/svelte'], ...menuNavLinks['/utilities']];
-	let resultsCopy:any = []
-let links = transformObject($page.data?.links)
+	let resultsCopy: any = [];
+	let links = transformData($page.data?.links);
 	for (const key in links ?? {}) {
 		if (Object.prototype.hasOwnProperty.call(links ?? {}, key)) {
 			const element = (links ?? {})[key];
-			
-			resultsCopy = [...resultsCopy,...element]
+			resultsCopy = [...resultsCopy, ...element];
 		}
 	}
 	let results = resultsCopy;
@@ -92,7 +89,7 @@ let links = transformObject($page.data?.links)
 						<li class="text-lg">
 							<a
 								class={cResultAnchor}
-								href={category?.id+link.href}
+								href={category?.id + link.href}
 								on:click={() => {
 									modalStore.close();
 								}}
@@ -101,7 +98,7 @@ let links = transformObject($page.data?.links)
 									<i class="fa-regular fa-file" />
 									<span class="flex-auto font-bold opacity-75">{link.label}</span>
 								</div>
-								<span class="hidden md:block text-xs opacity-50">{category?.id+link.href}</span>
+								<span class="hidden md:block text-xs opacity-50">{category?.id + link.href}</span>
 							</a>
 						</li>
 					{/each}
