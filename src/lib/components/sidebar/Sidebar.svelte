@@ -21,14 +21,14 @@
 
     for (const key in $page.data?.links ?? []) {
       let k = key;
-      if ([key?.split('/')?.join('') + ''].includes(basePath)) {
-        currentRailCategory = k;
+      if ([key?.id + '']?.includes(basePath)) {
+        currentRailCategory = k?.id;
       }
     }
   });
 
   // Reactive
-  $: submenu = $page?.data?.links?.find(l=>currentRailCategory == l);
+  $: submenu = $page?.data?.links?.find(l=>currentRailCategory == l?.id);
   // $: listboxItemActive = (href: string) => (`/${$page.params?.main_link}/${$page.params?.sub_link}`) ? 'bg-primary-active-token' : '';
   $: listboxItemActive = (href: string) =>
     $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
@@ -195,14 +195,14 @@
     {:else}
       {#each submenu?.expand?.sub_menu_via_main_menu_id ?? [] as segment, i}
         <!-- Title -->
-        <p class="font-bold pl-4 text-2xl">{segment.title}</p>
+        <p class="font-bold pl-4 text-2xl">{segment?.label}</p>
         <div class="">
           <!-- trigger -->
           <button
             class="btn hover:variant-soft-primary"
             use:popup={{
               event: 'click',
-              target: `formAddLinks-${segment.id}`,
+              target: `formAddLinks-${segment?.id}`,
               closeQuery: `a[href]-${i}`
             }}
           >
@@ -220,7 +220,7 @@
             >
               <nav class="list-nav">
                 <input type="hidden" name="parent_link" value={segment?.id} />
-                <input type="hidden" name="parent_link_value" value={segment?.link} />
+                <input type="hidden" name="parent_link_value" value={segment?.id} />
                 <ul>
                   <li>
                     <label class="label">
