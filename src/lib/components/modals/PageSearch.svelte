@@ -86,12 +86,12 @@
         <ul>
             {#each category?.list ?? [] as link}
             <li class="text-lg">
-                <a class={cResultAnchor} href={category?.link + link.href} on:click={() => { modalStore.close(); }}>
+                <a class={cResultAnchor} href={category?.id + link.href} on:click={() => { modalStore.close(); }}>
                     <div class="flex items-center gap-4">
                         <i class="fa-regular fa-file"></i>
                         <span class="flex-auto font-bold opacity-75">{link.label}</span>
                     </div>
-                    <span class="hidden md:block text-xs opacity-50">{category?.link + link.href}</span>
+                    <span class="hidden md:block text-xs opacity-50">{category?.id + link.href}</span>
                 </a>
             </li>
             {/each}
