@@ -14,11 +14,34 @@
 
 	// Local
 	let searchTerm = '';
+
+function transformObject(items) {
+  const result = {};
+  items.forEach(item => {
+    const innerList = [];
+    item.expand.sub_menu_via_main_menu_id.forEach(subMenu => {
+      subMenu.expand.sub_menu_list_via_sub_menu_id.forEach(subMenuList => {
+        innerList.push({
+          href: `/${subMenu.id}/${subMenuList.id}`,
+          label: subMenuList.label,
+          keywords: subMenuList.keywords.join(', ')
+        });
+      });
+    });
+    result[`/${item.id}`] = [{
+      title: item.label,
+      list: innerList
+    }];
+  });
+  return result;
+}
+
 	// let resultsCopy = [...menuNavLinks['/docs'], ...menuNavLinks['/elements'], ...menuNavLinks['/svelte'], ...menuNavLinks['/utilities']];
 	let resultsCopy:any = []
-	for (const key in $page.data?.links ?? {}) {
-		if (Object.prototype.hasOwnProperty.call($page.data?.links ?? {}, key)) {
-			const element = ($page.data?.links ?? {})[key];
+let links = transformObject($page.data?.links)
+	for (const key in links ?? {}) {
+		if (Object.prototype.hasOwnProperty.call(links ?? {}, key)) {
+			const element = (links ?? {})[key];
 			
 			resultsCopy = [...resultsCopy,...element]
 		}
@@ -64,7 +87,7 @@
 			{#each results as category}
 				<div class="text-sm font-bold p-4">{category.title}</div>
 				<ul>
-					{#each category.list as link}
+					{#each category?.list ?? [] as link}
 						<li class="text-lg">
 							<a
 								class={cResultAnchor}
