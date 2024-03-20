@@ -11,7 +11,7 @@
   import { LayoutPage } from '$lib/components';
   import { goto } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
-  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams, getYouTubeId } from '$lib/utils';
 
   const perPage = $page.url.searchParams.get('perPage') ?? 30;
   // function onPrevPage(): void {
@@ -70,7 +70,16 @@
           >
             <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
               <!-- Featured Image -->
-              {#if post.cover_image}
+              {#if post?.url}
+              <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
+                <iframe class="w-full aspect-video"
+                  src={`https://www.youtube.com/embed/${getYouTubeId(post?.url)}`}
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              </div>
+              {:else if post.cover_image}
                 <img
                   class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
                   src={getPbImageUrl(post, post.cover_image, '720x480')}

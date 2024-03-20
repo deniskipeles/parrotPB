@@ -1,6 +1,12 @@
 import { pb } from '$lib/pocketbase';
 import { marked } from 'marked';
 
+export function getYouTubeId(url='') {
+    const regex = /https:\/\/(m\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[2] : null;
+}
+  
 export const serializeNonPOJOs = (obj: any) => {
   return JSON.parse(JSON.stringify(obj));
 };

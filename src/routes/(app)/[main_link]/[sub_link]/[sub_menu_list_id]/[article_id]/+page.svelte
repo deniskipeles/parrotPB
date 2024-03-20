@@ -167,16 +167,16 @@ function getYouTubeId(url) {
               alt={data?.article.title}
               class="w-full rounded-container-token shadow-xl"
             />{/if}
-{#if data?.article?.url}
-<div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
-  <iframe class="w-full aspect-video"
-    src={`https://www.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
-</div>
-{/if}
+            {#if data?.article?.url}
+            <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
+              <iframe class="w-full aspect-video"
+                src={`https://www.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            {/if}
         </header>
         <!-- Article -->
         <Preview markdown={data?.article?.content} />
