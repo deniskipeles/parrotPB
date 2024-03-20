@@ -48,14 +48,8 @@
 <ol class="breadcrumb m-4 capitalize">
   <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
-  <li class="crumb">
-    <a class="anchor" href={`/${$page.params?.main_link}`}
-      >{$page.params?.main_link}</a
-    >
-  </li>
-  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    {$page.params?.sub_link}
+    {$page.params?.main_link}
   </li>
 </ol>
 
@@ -108,7 +102,7 @@
         </div>
         <div class="flex items-center space-x-4">
           <a
-            href={`/${$page.params?.main_link}/${$page.params?.sub_link}?page=${
+            href={`/${$page.params?.main_link}?page=${
               (data?.meta?.page ?? 1) - 1
             }&perPage=${perPage}`}
           >
@@ -124,7 +118,7 @@
             href={!(
               data.meta?.totalPages == Number(pageNumber ?? 1) || data.meta.totalPages == 0
             )
-              ? `/${$page.params?.main_link}/${$page.params?.sub_link}?page=${
+              ? `/${$page.params?.main_link}?page=${
                   (data?.meta?.page ?? 1) + 1
                 }&perPage=${perPage}`
               : '#'}

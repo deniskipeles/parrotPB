@@ -13,9 +13,9 @@
   import Error from '$lib/components/Error.svelte';
   import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams } from '$lib/utils';
 
-  const perPage = $page.url.searchParams.get('perPage') || 30;
+  const perPage = $page.url.searchParams.get('perPage') ?? 30;
   // function onPrevPage(): void {
-  //   const perPage = $page.url.searchParams.get('perPage') || 30
+  let pageNumber = $page.url.searchParams.get('page') ?? 1
   //   goto(``);
   // }
   // function onNextPage(): void {
@@ -28,7 +28,7 @@
     toastStore.trigger(t);
   }
   function gotoCreateArticle() {
-    goto(`/${$page.params?.main_link}/${$page.params?.sub_link}/create-article`, {
+    goto(`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}/create-article`, {
       replaceState: false
     });
   }
@@ -50,12 +50,12 @@
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
-      >{$page.params?.sub_link?.replace('/', '')?.split('-')?.join(' ')?.split('_')?.join(' ')}</a
+      >{$page.params?.sub_link}</a
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    Page {$page.params?.page}
+    {$page.params?.sub_menu_list_id}
   </li>
 </ol>
 
@@ -124,9 +124,9 @@
         </div>
         <div class="flex items-center space-x-4">
           <a
-            href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${
+            href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}?page=${
               (data?.meta?.page ?? 1) - 1
-            }?perPage=${perPage}`}
+            }&perPage=${perPage}`}
           >
             <button
               class="btn variant-filled"
@@ -138,17 +138,17 @@
 
           <a
             href={!(
-              data.meta?.totalPages == Number($page.params?.page ?? 1) || data.meta.totalPages == 0
+              data.meta?.totalPages == Number(pageNumber ?? 1) || data.meta.totalPages == 0
             )
-              ? `/${$page.params?.main_link}/${$page.params?.sub_link}/${
+              ? `/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}?page=${
                   (data?.meta?.page ?? 1) + 1
-                }?perPage=${perPage}`
+                }&perPage=${perPage}`
               : '#'}
           >
             <button
               class="btn variant-filled"
               disabled={data.meta?.totalPages ==
-                Number($page.params?.page ?? data?.meta?.page ?? 1) || data.meta.totalPages == 0}
+                Number(pageNumber ?? data?.meta?.page ?? 1) || data.meta.totalPages == 0}
             >
               Next &rarr;
             </button>
