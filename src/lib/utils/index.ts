@@ -1,6 +1,24 @@
 import { pb } from '$lib/pocketbase';
 import { marked } from 'marked';
 
+export function getLabelById(items=[], id="") {
+  for (const item of items) {
+    if (item.id === id) {
+      return item.label;
+    }
+    if (item.expand) {
+      for (const key in item.expand) {
+        const nestedItems = item.expand[key];
+        const label = getLabelById(nestedItems, id);
+        if (label) {
+          return label;
+        }
+      }
+    }
+  }
+  return null;
+}
+
 export function getYouTubeId(url='') {
     const regex = /https:\/\/(m\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);

@@ -11,7 +11,7 @@
   import { LayoutPage } from '$lib/components';
   import { goto } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
-  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams, getYouTubeId } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams, getYouTubeId,getLabelById } from '$lib/utils';
 
   const perPage = $page.url.searchParams.get('perPage') ?? 30;
   // function onPrevPage(): void {
@@ -50,18 +50,18 @@
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}`}
-      >{$page.params?.main_link}</a
+      >{getLabelById($page.data?.links,$page.params?.main_link)}</a
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
-      >{$page.params?.sub_link}</a
+      >{getLabelById($page.data?.links,$page.params?.sub_link)}</a
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    {$page.params?.sub_menu_list_id}
+    {getLabelById($page.data?.links,$page.params?.sub_menu_list_id)}
   </li>
 </ol>
 

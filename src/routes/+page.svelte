@@ -4,16 +4,10 @@
   import { page } from '$app/stores';
   import { LayoutPage } from '$lib/components';
   import Error from '$lib/components/Error.svelte';
-  import { blogDateFormatter, getPbImageUrl, mdToText } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, mdToText, getYouTubeId } from '$lib/utils';
   import type { PageData } from './$types';
 
   const perPage = $page.url.searchParams.get('perPage') || 30;
-
-  function getYouTubeId(url) {
-    const regex = /https:\/\/(m\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match ? match[2] : null;
-  }
 </script>
 
 <LayoutPage>
@@ -31,25 +25,23 @@
         >
           <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
             <!-- Featured Image -->
-            {#if post.cover_image}
+            {#if post?.url}
+              <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
+                <iframe class="w-full aspect-video"
+                  src={`https://www.youtube.com/embed/${getYouTubeId(post?.url)}`}
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              </div>
+              {:else if post.cover_image}
               <img
                 class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
                 src={getPbImageUrl(post, post.cover_image, '720x480')}
                 alt="thumbnail"
               />
             {/if}
-
-{#if post?.url}
-<div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
-  <iframe class="w-full aspect-video"
-    src={`https://www.youtube.com/embed/${getYouTubeId(post?.url)}`}
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
-</div>
-{/if}
-
+            
             <!-- Content -->
             <div class="space-y-4">
               <time class="block">{blogDateFormatter(post.updated)}</time>

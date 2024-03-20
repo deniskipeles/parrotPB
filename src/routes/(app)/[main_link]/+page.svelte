@@ -11,7 +11,7 @@
   import { LayoutPage } from '$lib/components';
   import { goto } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
-  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams, getYouTubeId } from '$lib/utils';
+  import { blogDateFormatter, getPbImageUrl, getSubText, mdToText, setSearchParams, getYouTubeId, getLabelById } from '$lib/utils';
 
   const perPage = $page.url.searchParams.get('perPage') ?? 30;
   // function onPrevPage(): void {
@@ -49,7 +49,7 @@
   <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    {$page.params?.main_link}
+    {getLabelById($page.data?.links,$page.params?.main_link)}
   </li>
 </ol>
 
