@@ -49,6 +49,12 @@
   <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb">
+    <a class="anchor" href={`/${$page.params?.main_link}`}
+      >{$page.params?.main_link}</a
+    >
+  </li>
+  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
+  <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
       >{$page.params?.sub_link}</a
     >

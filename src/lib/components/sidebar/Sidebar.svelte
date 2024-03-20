@@ -269,8 +269,8 @@
             {#each segment?.expand?.sub_menu_list_via_sub_menu_id ?? [] as { id, label, description }}
               <li on:keypress on:click={drawerStore.close}>
                 <a
-                  href={`/${submenu?.id}/${segment?.id/${id}`}}
-                  class={listboxItemActive(`/${submenu?.id}/${segment?.id/${id}`)}
+                  href={`/${submenu?.id}/${segment?.id}/${id}`}
+                  class={listboxItemActive(`/${submenu?.id}/${segment?.id}/${id}`)}
                   data-sveltekit-preload-data="hover"
                 >
                   <span class="flex-auto">{@html label}</span>
