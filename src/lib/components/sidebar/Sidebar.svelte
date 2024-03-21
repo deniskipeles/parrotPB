@@ -16,31 +16,25 @@
   page.subscribe((page_) => {
     // ex: /basePath/...
     if (page_.url.pathname == '/') currentRailCategory = '/';
-    let basePath: string = page_.url.pathname.split('/')[1];
+    let basePath: string = page_.url.pathname;
     if (!basePath) return;
 
     for (const key in $page.data?.links ?? []) {
       let k = key;
-      if ([key?.id + '']?.includes(basePath)) {
+      if ((basePath?.includes(key?.id))) {
         currentRailCategory = k?.id;
       }
     }
   });
 
   // Reactive
-  $: submenu = $page?.data?.links?.find(l=>currentRailCategory == l?.id);
-  // $: listboxItemActive = (href: string) => (`/${$page.params?.main_link}/${$page.params?.sub_link}`) ? 'bg-primary-active-token' : '';
+  $: mainMenu = $page?.data?.links?.find(l=>currentRailCategory == l?.id);
+
+
   $: listboxItemActive = (href: string) =>
     $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
 
-  function getIcon(value: any) {
-    if (value?.length > 0) {
-      if (value?.icon_font_awesome?.length > 0) {
-        return value?.icon_font_awesome;
-      }
-    }
-    return 'fa fa-cogs';
-  }
+  
 
   let loading_links = false;
   let error: any = null;
@@ -67,24 +61,17 @@
   let loading = false;
   const createLinks: SubmitFunction = async ({ formData }) => {
     loading = true;
-    // let link = (await formData.get('link')) as string;
-    // link = await link.trim().split('/').join('-').split(' ').join('-').toLowerCase();
-    // await formData.append('link', `/${link}`);
-
+    loading_links = true;
     return async ({ result, formData }) => {
-      await formData.get('link');
       await applyAction(result);
       invalidateAll();
       loading = false;
+      loading_links = false;
     };
   };
 
   let list = ['svelte', 'sveltekit', 'nodejs'];
-  let link_ = '';
-  function inputLink() {
-    link_ = link_?.replace('/', '');
-    link_ = `/${link_.trimStart().split('/').join('-').split(' ').join('-').toLowerCase()}`;
-  }
+  
 </script>
 
 <div
@@ -134,34 +121,22 @@
       >
         <nav class="list-nav">
           <div>
+            <input type="hidden" name="table" value={"main_menu"} />
             <div>
               <label class="label">
-                <span>Title</span>
-                <input class="input pl-2" name="title" type="text" placeholder="Docs" />
+                <span>Label</span>
+                <input class="input pl-2" name="label" type="text" placeholder="Docs" />
               </label>
             </div>
             <div>
               <label class="label">
-                <span>Link</span>
-                <input
-                  class="input pl-2"
-                  bind:value={link_}
-                  on:input={inputLink}
-                  name="link"
-                  type="text"
-                  placeholder="/docs"
-                />
-              </label>
-            </div>
-            <div>
-              <label class="label">
-                <span>Font Awesome</span>
+                <span>Font Awesome icon</span>
                 <input
                   class="input pl-2"
                   name="icon_font_awesome"
-                  value="fa fa-plus"
+                  value="fa-plus"
                   type="text"
-                  placeholder="fa fa-home"
+                  placeholder="fa-home"
                 />
               </label>
             </div>
@@ -172,7 +147,7 @@
                   class="textarea p-2"
                   name="description"
                   rows="4"
-                  placeholder="Super short description about my page category."
+                  placeholder="Super short description about..."
                 />
               </label>
             </div>
@@ -184,7 +159,7 @@
               {:else}
                 <!-- else content here -->
                 <button class="variant-filled-secondary">
-                  <i class={`fa fa-plus text-2xl`} aria-hidden="true" /> Add Category
+                  <i class={`fa fa-plus text-xl`} aria-hidden="true" /> Save Main Menu
                 </button>
               {/if}
             </div>
@@ -193,47 +168,125 @@
         <!-- <div class="arrow bg-surface-100-800-token" /> -->
       </form>
     {:else}
-      {#each submenu?.expand?.sub_menu_via_main_menu_id ?? [] as segment, i}
+    
+      <div class="">
+          <!-- trigger -->
+          <button
+            class="btn hover:variant-soft-primary"
+            use:popup={{
+              event: 'click',
+              target: `formAddLinks-${mainMenu?.id}`,
+              closeQuery: `a[href]-${mainMenu?.id}`
+            }}
+          >
+            <i class="fa fa-plus text-xs md:!hidden" />
+            <span class="hidden md:inline-block text-xs">ADD Sub Menu</span>
+            <i class="fa-solid fa-caret-down opacity-50 text-xs" />
+          </button>
+          <!-- popup -->
+          <div data-popup={`formAddLinks-${mainMenu.id}`}>
+            <form
+              action="/?/createLinks"
+              method="POST"
+              use:enhance={createLinks}
+              class="card p-4 w-60 shadow-xl z-10"
+            >
+              <nav class="list-nav">
+                <input type="hidden" name="main_menu_id" value={mainMenu?.id} />
+                <input type="hidden" name="table" value={"sub_menu"} />
+                <ul>
+                  <li>
+                    <label class="label">
+                      <span>Label</span>
+                      <input class="input pl-2" name="label" type="text" placeholder="KE news" />
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label">
+                      <span>Description</span>
+                      <textarea
+                      class="textarea p-2"
+                      name="description"
+                      rows="4"
+                      placeholder="Super short description about..."
+                    />
+                    </label>
+                  </li>
+                  <li>
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label class="label">
+                      <span>Keywords</span>
+                      <InputChip
+                        bind:value={list}
+                        name="keywords"
+                        placeholder="Enter any value..."
+                      />
+                    </label>
+                  </li>
+                  <hr class="!my-4" />
+                  <li class="p-4 space-y-2 items-center">
+                    {#if loading_links}
+                      <!-- content here -->
+                      <ProgressRadial stroke={100} width="w-10" />
+                    {:else}
+                      <button class="variant-filled-secondary">
+                        <i class={`fa fa-plus text-lg`} aria-hidden="true" /> Save Sub Menu
+                      </button>
+                    {/if}
+                  </li>
+                </ul>
+              </nav>
+              <!-- <div class="arrow bg-surface-100-800-token" /> -->
+            </form>
+          </div>
+        </div>
+    
+      {#each mainMenu?.expand?.sub_menu_via_main_menu_id ?? [] as subMenu, i}
         <!-- Title -->
-        <p class="font-bold pl-4 text-2xl">{segment?.label}</p>
+        <p class="font-bold pl-4 text-xl">{subMenu?.label}</p>
         <div class="">
           <!-- trigger -->
           <button
             class="btn hover:variant-soft-primary"
             use:popup={{
               event: 'click',
-              target: `formAddLinks-${segment?.id}`,
+              target: `formAddLinks-${subMenu?.id}`,
               closeQuery: `a[href]-${i}`
             }}
           >
-            <i class="fa fa-plus text-lg md:!hidden" />
-            <span class="hidden md:inline-block">ADD CATEGORY</span>
-            <i class="fa-solid fa-caret-down opacity-50" />
+            <i class="fa fa-plus text-xs md:!hidden" />
+            <span class="hidden md:inline-block text-xs">ADD Sub Menu List</span>
+            <i class="fa-solid fa-caret-down opacity-50 text-xs" />
           </button>
           <!-- popup -->
-          <div data-popup={`formAddLinks-${segment.id}`}>
+          <div data-popup={`formAddLinks-${subMenu.id}`}>
             <form
-              action="/?/createSublinks"
+              action="/?/createLinks"
               method="POST"
-              use:enhance={createSublinks}
+              use:enhance={createLinks}
               class="card p-4 w-60 shadow-xl z-10"
             >
               <nav class="list-nav">
-                <input type="hidden" name="parent_link" value={segment?.id} />
-                <input type="hidden" name="parent_link_value" value={segment?.id} />
+                <input type="hidden" name="table" value={`sub_menu_list`} />
+                <input type="hidden" name="sub_menu_id" value={subMenu?.id} />
                 <ul>
                   <li>
                     <label class="label">
                       <span>Label</span>
-                      <input class="input pl-2" name="label" type="text" placeholder="My Link" />
+                      <input class="input pl-2" name="label" type="text" placeholder="KE news" />
                     </label>
                   </li>
-                  <!-- <li>
+                  <li>
                     <label class="label">
-                      <span>Link</span>
-                      <input class="input pl-2" name="href" type="text" placeholder="/my-link" />
+                      <span>Description</span>
+                      <textarea
+                        class="textarea p-2"
+                        name="description"
+                        rows="4"
+                        placeholder="Super short description about..."
+                      />
                     </label>
-                  </li> -->
+                  </li>
                   <li>
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="label">
@@ -253,7 +306,7 @@
                     {:else}
                       <!-- else content here -->
                       <button class="variant-filled-secondary">
-                        <i class={`fa fa-plus text-2xl`} aria-hidden="true" /> ADD Category
+                        <i class={`fa fa-plus text-lg`} aria-hidden="true" /> Save Sub Menu List
                       </button>
                     {/if}
                   </li>
@@ -263,14 +316,15 @@
             </form>
           </div>
         </div>
+        
         <!-- Nav List -->
         <nav class="list-nav">
           <ul>
-            {#each segment?.expand?.sub_menu_list_via_sub_menu_id ?? [] as { id, label, description }}
+            {#each subMenu?.expand?.sub_menu_list_via_sub_menu_id ?? [] as { id, label, description }}
               <li on:keypress on:click={drawerStore.close}>
                 <a
-                  href={`/${submenu?.id}/${segment?.id}/${id}`}
-                  class={listboxItemActive(`/${submenu?.id}/${segment?.id}/${id}`)}
+                  href={`/${mainMenu?.id}/${subMenu?.id}/${id}`}
+                  class={listboxItemActive(`/${mainMenu?.id}/${subMenu?.id}/${id}`)}
                   data-sveltekit-preload-data="hover"
                 >
                   <span class="flex-auto">{@html label}</span>
@@ -281,7 +335,7 @@
           </ul>
         </nav>
         <!-- Divider -->
-        {#if i + 1 < submenu.length}<hr class="!my-6 opacity-50" />{/if}
+        {#if i + 1 < mainMenu?.expand?.sub_menu_via_main_menu_id?.length}<hr class="!my-6 opacity-50" />{/if}
       {/each}
     {/if}
   </section>

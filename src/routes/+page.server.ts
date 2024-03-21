@@ -1,4 +1,4 @@
-import { create_links, create_sub_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
+import { create_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -49,15 +49,6 @@ export const actions: Actions = {
     locals.links = links;
     return { ...res, links };
   },
-  createSublinks: async ({ request, locals }) => {
-    const formData = await request.formData();
-
-    const res = await create_sub_links(formData);
-    // console.log(res)
-    const links = await fetchLinks();
-    locals.links = links;
-    return { ...res, links };
-  }
 };
 
 
