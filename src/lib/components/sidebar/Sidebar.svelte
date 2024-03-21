@@ -150,6 +150,103 @@
       </form>
     {:else}
       
+
+      {#each mainMenu?.expand?.sub_menu_via_main_menu_id ?? [] as subMenu, i}
+        <!-- Title -->
+        <p class="font-bold pl-4 text-xl">{subMenu?.label}</p>
+        <div class="">
+          <!-- trigger -->
+          <button
+            class="btn hover:variant-soft-primary"
+            use:popup={{
+              event: 'click',
+              target: `formAddLinks-${subMenu?.id}`,
+              closeQuery: `a[href]-${i}`
+            }}
+          >
+            <i class="fa fa-plus text-xs md:!hidden" />
+            <span class="hidden md:inline-block text-xs">ADD Sub Menu List</span>
+            <i class="fa-solid fa-caret-down opacity-50 text-xs" />
+          </button>
+          <!-- popup -->
+          <div data-popup={`formAddLinks-${subMenu.id}`}>
+            <form
+              action="/?/createLinks"
+              method="POST"
+              use:enhance={createLinks}
+              class="card p-4 w-60 shadow-xl z-10"
+            >
+              <nav class="list-nav">
+                <input type="hidden" name="table" value={`sub_menu_list`} />
+                <input type="hidden" name="sub_menu_id" value={subMenu?.id} />
+                <ul>
+                  <li>
+                    <label class="label">
+                      <span>Label</span>
+                      <input class="input pl-2" name="label" type="text" placeholder="KE news" />
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label">
+                      <span>Description</span>
+                      <textarea
+                        class="textarea p-2"
+                        name="description"
+                        rows="4"
+                        placeholder="Super short description about..."
+                      />
+                    </label>
+                  </li>
+                  <li>
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label class="label">
+                      <span>Keywords</span>
+                      <InputChip
+                        bind:value={list}
+                        name="keywords"
+                        placeholder="Enter any value..."
+                      />
+                    </label>
+                  </li>
+                  <hr class="!my-4" />
+                  <li class="p-4 space-y-2 items-center">
+                    {#if loading_links}
+                      <!-- content here -->
+                      <ProgressRadial stroke={100} width="w-10" />
+                    {:else}
+                      <!-- else content here -->
+                      <button class="variant-filled-secondary">
+                        <i class={`fa fa-plus text-lg`} aria-hidden="true" /> Save Sub Menu List
+                      </button>
+                    {/if}
+                  </li>
+                </ul>
+              </nav>
+              <!-- <div class="arrow bg-surface-100-800-token" /> -->
+            </form>
+          </div>
+        </div>
+
+        <!-- Nav List -->
+        <nav class="list-nav">
+          <ul>
+            {#each subMenu?.expand?.sub_menu_list_via_sub_menu_id ?? [] as { id, label, description }}
+              <li on:keypress on:click={drawerStore.close}>
+                <a
+                  href={`/${mainMenu?.id}/${subMenu?.id}/${id}`}
+                  class={listboxItemActive(`/${mainMenu?.id}/${subMenu?.id}/${id}`)}
+                  data-sveltekit-preload-data="hover"
+                >
+                  <span class="flex-auto">{@html label}</span>
+                  {#if description}<span class="badge variant-filled-secondary">{description}</span>{/if}
+                </a>
+              </li>
+            {/each}
+          </ul>
+        </nav>
+        <!-- Divider -->
+        {#if i + 1 < mainMenu?.expand?.sub_menu_via_main_menu_id?.length}<hr class="!my-6 opacity-50" />{/if}
+      {/each}
     {/if}
   </section>
 </div>
