@@ -94,6 +94,7 @@
     </AppRailTile>
   </AppRail>
   <!-- Nav Links -->
+  {#if currentRailCategory !== '/'}
   <section class="p-4 pb-20 space-y-4 overflow-y-auto">
     {#if currentRailCategory == 'add'}
       <form
@@ -317,4 +318,5 @@
       {/each}
     {/if}
   </section>
+  {/if}
 </div>
