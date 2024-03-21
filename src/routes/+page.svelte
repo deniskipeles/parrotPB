@@ -38,15 +38,17 @@
 
 
 
-{#if data?.article}
 <svelte:head>
+  {#if data?.article}
   <title>{data?.article?.title}</title>
   <meta name="description" content={getSubText(100, data?.article?.content)} />
   <link rel="apple-touch-icon" sizes="76x76" href={logo} />
   <link rel="icon" type="image/svg+xml" href={logo} />
   <link rel="icon" type="image/png" href={logo} />
+  {/if}
 </svelte:head>
 
+{#if data?.article}
 <!-- Breadcrumbs -->
 <ol class="breadcrumb m-4 capitalize">
   <li class="crumb"><a class="anchor" href="/">home</a></li>
