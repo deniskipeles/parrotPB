@@ -1,13 +1,9 @@
 <script lang="ts">
   import Preview from '$lib/editor/Preview.svelte';
   import { onMount } from 'svelte';
-  //   import DOMPurify from 'dompurify';
-  // Components
   import { Avatar, SlideToggle } from '@skeletonlabs/skeleton';
   import { Error, LayoutPage } from '$lib/components';
-
-  import type { PageData } from './$types';
-
+  // import type { PageData } from './$types';
   /** @type {import('./$types').PageData} */
   export let data: PageData;
 
