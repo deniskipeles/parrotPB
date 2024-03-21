@@ -80,7 +80,7 @@
     {#each $page.data?.links ?? [] as record}
       <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.id}>
         <svelte:fragment slot="lead"
-          ><i class={`fa ${record?.icon_font_awesome} text-2xl`} aria-hidden="true" /></svelte:fragment
+          ><i class={`fa ${record?.icon_font_awesome?.includes("fa-") ? record?.icon_font_awesome  : ""+record?.icon_font_awesome } text-2xl`} aria-hidden="true" /></svelte:fragment
         >
         <span class="capitalize">{record?.label}</span>
       </AppRailTile>

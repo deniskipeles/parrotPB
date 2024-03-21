@@ -22,8 +22,8 @@
   // Local
   const toastStore = getToastStore();
   const change = () => {
-    // injectNumbering();
-    // injectBullets();
+    injectNumbering();
+    injectBullets();
     imgJsInjection()
     tableJsInjection()
     // CodeBlock Highlight
@@ -88,7 +88,7 @@
     if (olElements.length) {
       olElements.forEach((ol) => {
         if (!ol.classList.contains('list1')) {
-          ol.classList.add('list1');
+          ol.classList.add('list');
           // Iterate through the list items and add numbering
           const lis = ol.querySelectorAll('li');
           lis.forEach((li, index) => {
@@ -110,8 +110,8 @@
     if (olElements.length) {
       olElements.forEach((img) => {
         img.classList.add("w-auto");
-        img.classList.add("rounded-container-token");
-        img.classList.add("shadow-xl");
+        //img.classList.add("rounded-container-token");
+        //img.classList.add("shadow-xl");
       })
     }
   }
