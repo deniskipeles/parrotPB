@@ -28,14 +28,7 @@
   let url: string = '';
 
   let obj_id: any = null;
-  page.subscribe((page) => {
-    page.data?.links[`/${page.params.main_link}`]?.forEach((elem: any) => {
-      const links = elem?.list;
-      if (Array.isArray(links)) {
-        obj_id = links.find((e) => e?.href == `/${page.params?.sub_link}`)?.id;
-      }
-    });
-  });
+  
 
   const prompting = writable(false);
   const saving = writable(false);
@@ -103,7 +96,7 @@
     formData.append('tags', JSON.stringify(list));
     formData.delete('content');
     formData.append('content', markdown);
-    formData.append('category_id', obj_id);
+    formData.append('sub_menu_list_id', $page?.params?.sub_menu_list_id);
     const res = await fetch('/api/article', {
       method: 'POST',
       body: formData
@@ -111,7 +104,7 @@
     saving.set(false);
     // console.log(res);
     if (!res?.error) {
-      goto(`/${$page?.params?.main_link}/${$page?.params?.sub_link}/1/${res?.record?.id}`);
+      goto(`/${$page?.params?.main_link}/${$page?.params?.sub_link}/${$page?.params?.sub_menu_list_id}/${res?.record?.id}`);
     }
   }}
 >
