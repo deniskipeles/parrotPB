@@ -22,8 +22,8 @@
   // Local
   const toastStore = getToastStore();
   const change = () => {
-    injectNumbering();
-    injectBullets();
+    //injectNumbering();
+    //injectBullets();
     imgJsInjection()
     tableJsInjection()
     // CodeBlock Highlight
