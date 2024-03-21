@@ -48,7 +48,7 @@ export const actions: Actions = {
     const links = await fetchLinks();
     locals.links = links;
     return { ...res, links };
-  },
+  }
 };
 
 

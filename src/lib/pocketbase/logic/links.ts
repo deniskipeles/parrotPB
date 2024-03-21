@@ -2,7 +2,8 @@ import { groupByKey, serializeNonPOJOs } from '$lib/utils';
 import { pb } from '../pb';
 
 export const create_links = async (data: any) => {
-  let table = data.get('table') as string;
+  let table = data?.get('table') as string;
+  data?.delete("table")
   try {
     let record = await pb.collection(table).create(data);
     record = serializeNonPOJOs(record);

@@ -3,58 +3,42 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
 
-  import { AppRail, AppRailTile, InputChip, ProgressRadial, popup } from '@skeletonlabs/skeleton';
+  import {
+    AppRail,
+    AppRailTile,
+    InputChip,
+    ProgressRadial,
+    popup,
+  } from '@skeletonlabs/skeleton';
   import { getDrawerStore } from '@skeletonlabs/skeleton';
   import type { SubmitFunction } from '@sveltejs/kit';
 
-  // Local
-  // let currentRailCategory: keyof typeof menuNavLinks | undefined = undefined;
   let currentRailCategory: string | undefined = undefined;
   const drawerStore = getDrawerStore();
 
-  // Lifecycle
-  page.subscribe((page_) => {
-    // ex: /basePath/...
-    if (page_.url.pathname == '/') currentRailCategory = '/';
-    let basePath: string = page_.url.pathname;
+  page.subscribe(($page) => {
+    if ($page.url.pathname === '/') currentRailCategory = '/';
+
+    let basePath: string = $page.url.pathname;
     if (!basePath) return;
 
     for (const key in $page.data?.links ?? []) {
       let k = key;
-      if ((basePath?.includes(key?.id))) {
+      if (basePath?.includes(key?.id)) {
         currentRailCategory = k?.id;
       }
     }
   });
 
-  // Reactive
-  $: mainMenu = $page?.data?.links?.find(l=>currentRailCategory == l?.id);
-
+  $: mainMenu = $page?.data?.links?.find((l) => currentRailCategory == l?.id);
 
   $: listboxItemActive = (href: string) =>
     $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
 
-  
-
   let loading_links = false;
   let error: any = null;
   const createSublinks: SubmitFunction = async ({ formData }) => {
-    let href = (await formData.get('label')) as string;
-    href = await href.trim().split('/').join('-').split(' ').join('-').toLowerCase();
-    await formData.append('href', `/${href}`);
-    loading_links = true;
     return async ({ result, formData }) => {
-      const link = formData.get('parent_link_value') as string;
-
-      await applyAction(result);
-      loading_links = false;
-      if ($page.form?.error) {
-        error = $page.form?.error;
-      } else {
-        invalidateAll();
-        currentRailCategory = link;
-        console.log(link);
-      }
     };
   };
 
@@ -71,7 +55,6 @@
   };
 
   let list = ['svelte', 'sveltekit', 'nodejs'];
-  
 </script>
 
 <div
@@ -154,10 +137,8 @@
             <hr class="!my-4" />
             <div class="p-4 space-y-2 items-center">
               {#if loading}
-                <!-- content here -->
                 <ProgressRadial stroke={100} width="w-10" />
               {:else}
-                <!-- else content here -->
                 <button class="variant-filled-secondary">
                   <i class={`fa fa-plus text-xl`} aria-hidden="true" /> Save Main Menu
                 </button>
@@ -168,79 +149,78 @@
         <!-- <div class="arrow bg-surface-100-800-token" /> -->
       </form>
     {:else}
-    
       <div class="">
-          <!-- trigger -->
-          <button
-            class="btn hover:variant-soft-primary"
-            use:popup={{
-              event: 'click',
-              target: `formAddLinks-${mainMenu?.id}`,
-              closeQuery: `a[href]-${mainMenu?.id}`
-            }}
+        <!-- trigger -->
+        <button
+          class="btn hover:variant-soft-primary"
+          use:popup={{
+            event: 'click',
+            target: `formAddLinks-${mainMenu?.id}`,
+            closeQuery: `a[href]-${mainMenu?.id}`
+          }}
+        >
+          <i class="fa fa-plus text-xs md:!hidden" />
+          <span class="hidden md:inline-block text-xs">ADD Sub Menu</span>
+          <i class="fa-solid fa-caret-down opacity-50 text-xs" />
+        </button>
+        <!-- popup -->
+        <div data-popup={`formAddLinks-${mainMenu.id}`}>
+          <form
+            action="/?/createLinks"
+            method="POST"
+            use:enhance={createLinks}
+            class="card p-4 w-60 shadow-xl z-10"
           >
-            <i class="fa fa-plus text-xs md:!hidden" />
-            <span class="hidden md:inline-block text-xs">ADD Sub Menu</span>
-            <i class="fa-solid fa-caret-down opacity-50 text-xs" />
-          </button>
-          <!-- popup -->
-          <div data-popup={`formAddLinks-${mainMenu.id}`}>
-            <form
-              action="/?/createLinks"
-              method="POST"
-              use:enhance={createLinks}
-              class="card p-4 w-60 shadow-xl z-10"
-            >
-              <nav class="list-nav">
-                <input type="hidden" name="main_menu_id" value={mainMenu?.id} />
-                <input type="hidden" name="table" value={"sub_menu"} />
-                <ul>
-                  <li>
-                    <label class="label">
-                      <span>Label</span>
-                      <input class="input pl-2" name="label" type="text" placeholder="KE news" />
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label">
-                      <span>Description</span>
-                      <textarea
+            <nav class="list-nav">
+              <input type="hidden" name="main_menu_id" value={mainMenu?.id} />
+              <input type="hidden" name="table" value={"sub_menu"} />
+              <ul>
+                <li>
+                  <label class="label">
+                    <span>Label</span>
+                    <input class="input pl-2" name="label" type="text" placeholder="KE news" />
+                  </label>
+                </li>
+                <li>
+                  <label class="label">
+                    <span>Description</span>
+                    <textarea
                       class="textarea p-2"
                       name="description"
                       rows="4"
                       placeholder="Super short description about..."
                     />
-                    </label>
-                  </li>
-                  <li>
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
-                    <label class="label">
-                      <span>Keywords</span>
-                      <InputChip
-                        bind:value={list}
-                        name="keywords"
-                        placeholder="Enter any value..."
-                      />
-                    </label>
-                  </li>
-                  <hr class="!my-4" />
-                  <li class="p-4 space-y-2 items-center">
-                    {#if loading_links}
-                      <!-- content here -->
-                      <ProgressRadial stroke={100} width="w-10" />
-                    {:else}
-                      <button class="variant-filled-secondary">
-                        <i class={`fa fa-plus text-lg`} aria-hidden="true" /> Save Sub Menu
-                      </button>
-                    {/if}
-                  </li>
-                </ul>
-              </nav>
-              <!-- <div class="arrow bg-surface-100-800-token" /> -->
-            </form>
-          </div>
+                  </label>
+                </li>
+                <li>
+                  <!-- svelte-ignore a11y-label-has-associated-control -->
+                  <label class="label">
+                    <span>Keywords</span>
+                    <InputChip
+                      bind:value={list}
+                      name="keywords"
+                      placeholder="Enter any value..."
+                    />
+                  </label>
+                </li>
+                <hr class="!my-4" />
+                <li class="p-4 space-y-2 items-center">
+                  {#if loading_links}
+                    <!-- content here -->
+                    <ProgressRadial stroke={100} width="w-10" />
+                  {:else}
+                    <button class="variant-filled-secondary">
+                      <i class={`fa fa-plus text-lg`} aria-hidden="true" /> Save Sub Menu
+                    </button>
+                  {/if}
+                </li>
+              </ul>
+            </nav>
+            <!-- <div class="arrow bg-surface-100-800-token" /> -->
+          </form>
         </div>
-    
+      </div>
+
       {#each mainMenu?.expand?.sub_menu_via_main_menu_id ?? [] as subMenu, i}
         <!-- Title -->
         <p class="font-bold pl-4 text-xl">{subMenu?.label}</p>
@@ -316,7 +296,7 @@
             </form>
           </div>
         </div>
-        
+
         <!-- Nav List -->
         <nav class="list-nav">
           <ul>
