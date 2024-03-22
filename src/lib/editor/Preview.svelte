@@ -38,7 +38,7 @@
     h4: "h4 text-lg font-bold mb-4",
     h5: "h5 text-base font-bold mb-4",
     h6: "h6 text-sm font-bold mb-4",
-    p: "p block text-gray-700 mb-4",
+    p: "p block mb-4",
     a: "a anchor text-blue-500 underline hover:no-underline",
     ul: "ul list-disc pl-6 mb-4",
     ol: "ol list list-decimal pl-6 mb-4",
@@ -177,8 +177,10 @@
 
 <style>
   .inline-svg {
+    height: 1em; /* Adjust the height based on your font size */
+    width: auto; /* Maintain the aspect ratio of the SVG */
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: text-bottom; /* Align the bottom of the SVG with the text baseline */
+    margin: 0 0.25em; /* Add some margin around the SVG for better spacing */
   }
-
 </style>
