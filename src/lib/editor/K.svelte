@@ -1,8 +1,51 @@
 <script>
-	import katex from 'katex'
-	const render = n => katex.render(n.textContent, n)
+  import {
+    onMount
+  } from "svelte"
+  // import katex from "katex"
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      // customised options
+      // • auto-render specific keys, e.g.:
+      delimiters: [{
+        left: "$$", right: "$$", display: true
+      },
+        {
+          left: '$', right: '$', display: true
+        },
+        {
+          left: "\\(", right: "\\)", display: false
+        },
+        {
+          left: "\\begin{equation}", right: "\\end{equation}", display: true
+        },
+        {
+          left: "\\begin{align}", right: "\\end{align}", display: true
+        },
+        {
+          left: "\\begin{alignat}", right: "\\end{alignat}", display: true
+        },
+        {
+          left: "\\begin{gather}", right: "\\end{gather}", display: true
+        },
+        {
+          left: "\\begin{CD}", right: "\\end{CD}", display: true
+        },
+        {
+          left: "\\[", right: "\\]", display: true
+        }],
+      // • rendering keys, e.g.:
+      throwOnError: false
+    });
+  });
 </script>
+
+
 <svelte:head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </svelte:head>
-<span use:render><slot/></span>
+<span><slot /></span>
