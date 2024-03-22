@@ -11,8 +11,87 @@
   onMount(() => change());
   afterNavigate(() => change());
   // Local
+  
+  function injectTailwindClasses(classesObj) {
+    // Iterate through the object keys
+    for (const [element, classes] of Object.entries(classesObj)) {
+      // Get all elements matching the tag name inside <article>
+      const elements = document.querySelectorAll('article ' + element);
+  
+      // Iterate through each element
+      for (let i = 0; i < elements.length; i++) {
+        // Split the classes string into an array
+        const classesArray = classes.split(' ');
+  
+        // Add each class to the element
+        for (const cssClass of classesArray) {
+          elements[i].classList.add(cssClass);
+        }
+      }
+    }
+  }
+
+  const tailwindClasses = {
+    h1: "h1 text-3xl font-bold mb-4",
+    h2: "h2 text-2xl font-bold mb-4",
+    h3: "h3 text-xl font-bold mb-4",
+    h4: "h4 text-lg font-bold mb-4",
+    h5: "h5 text-base font-bold mb-4",
+    h6: "h6 text-sm font-bold mb-4",
+    p: "p text-gray-700 mb-4",
+    a: "a anchor text-blue-500 underline hover:no-underline",
+    ul: "ul list-disc pl-6 mb-4",
+    ol: "ol list list-decimal pl-6 mb-4",
+    li: "li list text-gray-700",
+    blockquote: "blockquote text-gray-700 italic border-l-4 border-gray-300 pl-4 mb-4",
+    pre: "pre text-gray-700 bg-gray-100 p-4 rounded mb-4",
+    code: "code text-gray-700 bg-gray-100 px-1 rounded",
+    img: "img w-full h-auto mb-4",
+    table: "table table-hover w-full text-left divide-y divide-gray-300 mb-4",
+    th: "th text-gray-700 font-bold bg-gray-100 px-4 py-2",
+    td: "td text-gray-700 px-4 py-2",
+    strong: "strong font-bold",
+    em: "em italic",
+    hr: "hr border-gray-300 mb-4",
+    button: "button bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700",
+    input: "input border border-gray-300 rounded py-2 px-4 w-full",
+    textarea: "textarea border border-gray-300 rounded py-2 px-4 w-full",
+    select: "select border border-gray-300 rounded py-2 px-4 w-full",
+    label: "label text-gray-700 font-bold mb-2",
+    form: "form",
+    fieldset: "fieldset border border-gray-300 rounded px-4 py-2 mb-4",
+    legend: "legend text-gray-700 font-bold mb-2",
+    iframe: "iframe w-full h-auto mb-4",
+    figure: "figure mb-4",
+    figcaption: "figcaption text-gray-700 italic mb-4",
+    cite: "cite text-gray-700 italic",
+    q: "q text-gray-700 italic",
+    sup: "sup text-xs font-normal",
+    sub: "sub text-xs font-normal",
+    small: "small text-xs font-normal",
+    mark: "mark bg-yellow-200 text-gray-700 px-1 rounded",
+    del: "del line-through text-gray-500",
+    ins: "ins underline text-gray-700",
+    time: "time text-gray-700",
+    abbr: "abbr border-b border-dotted text-gray-700",
+    acronym: "acronym border-b border-dotted text-gray-700",
+    address: "address text-gray-700",
+    caption: "caption text-gray-700 font-bold mb-2",
+    code: "code text-gray-700 bg-gray-100 px-1 rounded",
+    dd: "dd text-gray-700 mb-2",
+    dt: "dt text-gray-700 font-bold mb-2",
+    kbd: "kbd text-gray-700 bg-gray-100 px-1 rounded",
+    samp: "samp text-gray-700 bg-gray-100 px-1 rounded",
+    var: "var text-gray-700 italic",
+    // Add more elements and their corresponding Tailwind classes here
+  };
+
+  
+  
   const toastStore = getToastStore();
   const change = () => {
+    // Call the function to inject Tailwind classes into the HTML elements
+    injectTailwindClasses(tailwindClasses);
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -49,6 +128,8 @@
       hljs.highlightElement(elem);
     });
   };
+  
+  
 
 
   function tableJsInjection() {
@@ -75,7 +156,7 @@
 >
   <article
     class="flex w-full max-w-full flex-1 flex-col gap-5 prose-headings:leading-tight prose-h1:text-50px prose-h2:text-40px prose-h3:text-30px prose-h4:text-25px prose-h5:text-20px prose-h6:text-18px prose-p:text-base prose-p:leading-relaxed prose-p:text-white/50 prose-a:text-base prose-a:text-main prose-a:underline prose-a:underline-offset-4 prose-blockquote:w-fit prose-blockquote:rounded-md prose-blockquote:border-l-2 prose-blockquote:border-l-white/50 prose-blockquote:bg-white/5 prose-blockquote:p-5 prose-strong:text-white prose-code:text-base prose-code:text-white/50 prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-2 prose-ol:text-base
-    prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-2 prose-ul:text-base prose-img:w-auto prose-img:rounded-md   prose-ul:list prose-ul:list-dl prose-ol:list-nav prose-ol:list-options prose-h1:h1 prose-h2:h2 prose-h3:h3 prose-h4:h4 prose-h5:h5 prose-h6:h6 prose-a:anchor prose-blockquote:blockquote prose-pre:pre prose-code:code prose-del:del prose-ins:ins prose-table:table-container prose-table:table prose-table:table-hover"
+    prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-2 prose-ul:text-base prose-img:w-auto prose-img:rounded-md"
   >
     {@html marked.parse(markdown)}
   </article>
