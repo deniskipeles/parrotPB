@@ -32,24 +32,24 @@
   }
 
   const tailwindClasses = {
-    h1: "h1 text-3xl font-bold mb-4",
-    h2: "h2 text-2xl font-bold mb-4",
-    h3: "h3 text-xl font-bold mb-4",
-    h4: "h4 text-lg font-bold mb-4",
-    h5: "h5 text-base font-bold mb-4",
-    h6: "h6 text-sm font-bold mb-4",
-    p: "p block mb-4",
+    h1: "h1 text-3xl mb-4",
+    h2: "h2 text-2xl mb-4",
+    h3: "h3 text-xl mb-4",
+    h4: "h4 text-lg mb-4",
+    h5: "h5 text-base mb-4",
+    h6: "h6 text-sm mb-4",
+    p: "p mb-4 flex-inline-svg",
     a: "a anchor text-blue-500 underline hover:no-underline",
     ul: "ul list-disc pl-6 mb-4",
     ol: "ol list list-decimal pl-6 mb-4",
-    li: "li list text-gray-700",
-    blockquote: "blockquote text-gray-700 italic border-l-4 border-gray-300 pl-4 mb-4",
-    pre: "pre text-gray-700 bg-gray-100 p-4 rounded mb-4",
-    code: "code text-gray-700 bg-gray-100 px-1 rounded",
-    img: "img w-auto h-auto mb-4",
+    li: "li list",
+    blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
+    pre: "pre bg-gray-100 p-4 rounded mb-4",
+    code: "code bg-gray-100 px-1 rounded",
+    img: "img w-auto mb-4",
     table: "table table-hover w-full text-left divide-y divide-gray-300 mb-4",
-    th: "th text-gray-700 font-bold bg-gray-100 px-4 py-2",
-    td: "td text-gray-700 px-4 py-2",
+    th: "th font-bold bg-gray-100 px-4 py-2",
+    td: "td px-4 py-2",
     strong: "strong font-bold",
     em: "em italic",
     hr: "hr border-gray-300 mb-4",
@@ -57,32 +57,32 @@
     input: "input border border-gray-300 rounded py-2 px-4 w-full",
     textarea: "textarea border border-gray-300 rounded py-2 px-4 w-full",
     select: "select border border-gray-300 rounded py-2 px-4 w-full",
-    label: "label text-gray-700 font-bold mb-2",
+    label: "label font-bold mb-2",
     form: "form",
     fieldset: "fieldset border border-gray-300 rounded px-4 py-2 mb-4",
-    legend: "legend text-gray-700 font-bold mb-2",
+    legend: "legend font-bold mb-2",
     iframe: "iframe w-full h-auto mb-4",
     figure: "figure mb-4",
-    figcaption: "figcaption text-gray-700 italic mb-4",
-    cite: "cite text-gray-700 italic",
-    q: "q text-gray-700 italic",
+    figcaption: "figcaption italic mb-4",
+    cite: "cite italic",
+    q: "q italic",
     sup: "sup text-xs font-normal",
     sub: "sub text-xs font-normal",
     small: "small text-xs font-normal",
-    mark: "mark bg-yellow-200 text-gray-700 px-1 rounded",
+    mark: "mark bg-yellow-200 px-1 rounded",
     del: "del line-through text-gray-500",
-    ins: "ins underline text-gray-700",
-    time: "time text-gray-700",
-    abbr: "abbr border-b border-dotted text-gray-700",
-    acronym: "acronym border-b border-dotted text-gray-700",
-    address: "address text-gray-700",
-    caption: "caption text-gray-700 font-bold mb-2",
-    code: "code text-gray-700 bg-gray-100 px-1 rounded",
-    dd: "dd text-gray-700 mb-2",
-    dt: "dt text-gray-700 font-bold mb-2",
-    kbd: "kbd text-gray-700 bg-gray-100 px-1 rounded",
-    samp: "samp text-gray-700 bg-gray-100 px-1 rounded",
-    var: "var text-gray-700 italic",
+    ins: "ins underline ",
+    time: "time ",
+    abbr: "abbr border-b border-dotted ",
+    acronym: "acronym border-b border-dotted ",
+    address: "address ",
+    caption: "caption font-bold mb-2",
+    code: "code bg-gray-100 px-1 rounded",
+    dd: "dd mb-2",
+    dt: "dt font-bold mb-2",
+    kbd: "kbd bg-gray-100 px-1 rounded",
+    samp: "samp bg-gray-100 px-1 rounded",
+    var: "var italic",
     // Add more elements and their corresponding Tailwind classes here
   };
 
@@ -183,4 +183,16 @@
     vertical-align: text-bottom; /* Align the bottom of the SVG with the text baseline */
     margin: 0 0.25em; /* Add some margin around the SVG for better spacing */
   }
+  
+  .flex-inline-svg {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .flex-inline-svg img {
+    height: 1em; /* Adjust the height based on your font size */
+    width: auto; /* Maintain the aspect ratio of the SVG */
+    margin: 0 0.25em; /* Add some margin around the SVG for better spacing */
+  }
+
 </style>
