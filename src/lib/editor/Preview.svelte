@@ -86,12 +86,24 @@
     // Add more elements and their corresponding Tailwind classes here
   };
 
+  function injectInlineSVGClass() {
+    const imgElements = document.querySelectorAll('p img');
   
+    for (let i = 0; i < imgElements.length; i++) {
+      imgElements[i].classList.add('inline-svg');
+    }
+  }
+  
+  
+
   
   const toastStore = getToastStore();
   const change = () => {
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses);
+    // Call the function to inject the inline-svg class into img elements within p tags
+    injectInlineSVGClass();
+    
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -162,3 +174,11 @@
   </article>
 </div>
 
+
+<style>
+  .inline-svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+</style>
