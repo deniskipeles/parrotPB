@@ -1,5 +1,6 @@
 <script lang="ts">
   import { marked } from 'marked';
+  import K from './K.svelte';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
@@ -155,7 +156,9 @@
   class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
-    {@html marked.parse(markdown)}
+    <K>
+      {@html marked.parse(markdown)}
+    </K>
   </article>
 </div>
 
