@@ -159,7 +159,7 @@
       return '<pre><code>' + code + '</code></pre>';
     }
   };
-  marked({renderer})
+  marked.use({renderer})
 </script>
 
 
