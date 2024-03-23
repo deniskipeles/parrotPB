@@ -1,45 +1,83 @@
 <script>
   import {
-    onMount
+    onMount,
+    afterNavigate
   } from "svelte"
   // import katex from "katex"
 
-
-  document.addEventListener("DOMContentLoaded", function() {
-    renderMathInElement(document.body, {
-      // customised options
-      // • auto-render specific keys, e.g.:
-      delimiters: [{
-        left: "$$", right: "$$", display: true
-      },
-        {
-          left: '$', right: '$', display: true
-        },
-        {
-          left: "\\(", right: "\\)", display: false
-        },
-        {
-          left: "\\begin{equation}", right: "\\end{equation}", display: true
-        },
-        {
-          left: "\\begin{align}", right: "\\end{align}", display: true
-        },
-        {
-          left: "\\begin{alignat}", right: "\\end{alignat}", display: true
-        },
-        {
-          left: "\\begin{gather}", right: "\\end{gather}", display: true
-        },
-        {
-          left: "\\begin{CD}", right: "\\end{CD}", display: true
-        },
-        {
-          left: "\\[", right: "\\]", display: true
-        }],
-      // • rendering keys, e.g.:
-      throwOnError: false
+  let mounted = false
+  let mounted_track = 0
+  onMount(()=>{
+    mounted=true;
+    mounted_track=1
+  })
+  afterNavigate(()=>mounted_track+=1)
+  
+  $: if(mounted && mounted_track>0){
+    document.addEventListener("DOMContentLoaded", function () {
+    // Select all 'article' elements
+    const articleElements = document.querySelectorAll("article");
+  
+    // Loop through each 'article' element
+    articleElements.forEach((articleElement) => {
+      renderMathInElement(articleElement, {
+        // Customized options
+        // • Auto-render specific keys, e.g.:
+        delimiters: [
+          {
+            left: "$$",
+            right: "$$",
+            display: true,
+          },
+          {
+            left: "$",
+            right: "$",
+            display: true,
+          },
+          {
+            left: "\\(",
+            right: "\\)",
+            display: false,
+          },
+          {
+            left: "\\begin{equation}",
+            right: "\\end{equation}",
+            display: true,
+          },
+          {
+            left: "\\begin{align}",
+            right: "\\end{align}",
+            display: true,
+          },
+          {
+            left: "\\begin{alignat}",
+            right: "\\end{alignat}",
+            display: true,
+          },
+          {
+            left: "\\begin{gather}",
+            right: "\\end{gather}",
+            display: true,
+          },
+          {
+            left: "\\begin{CD}",
+            right: "\\end{CD}",
+            display: true,
+          },
+          {
+            left: "\\[",
+            right: "\\]",
+            display: true,
+          },
+        ],
+  
+        // • Rendering keys, e.g.:
+        throwOnError: false,
+      });
     });
   });
+  }
+
 </script>
 
 

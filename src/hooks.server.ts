@@ -20,19 +20,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.user = structuredClone(pb.authStore.model);
   try {
     	// this are page builders and are necessary else it return an error page
-	event.locals.links = await fetchLinks()
-	event.locals.tables = await listTablesRecords();
-	event.locals.roots = await listRootsRecords();
-	  
-		
-    	// load the store data from the request cookie string
-	/*const collections = events.locals.tables; // assuming the JSON data is stored in a variable called 'json'
-
-	const mainMenu = collections.find(collection => collection.name === 'main_menu');
-	const relatedCollections = getRelatedCollections(mainMenu, collections);
-    	*/
-	
-		
+    	event.locals.links = await fetchLinks()
+    	event.locals.tables = await listTablesRecords();
+    	event.locals.roots = await listRootsRecords();
     	event.locals.company = await loadCompany();
   } catch (err) {
     error(404, { message: `${err}` });
