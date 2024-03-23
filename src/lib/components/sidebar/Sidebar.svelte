@@ -161,6 +161,7 @@
           }}
         >
           <i class="fa fa-plus text-xs md:!hidden" />
+          <i class="fa fa-plus text-xs md:!hidden" />
           <span class="hidden md:inline-block text-xs">ADD Sub Menu</span>
           <i class="fa-solid fa-caret-down opacity-50 text-xs" />
         </button>
@@ -233,6 +234,8 @@
               closeQuery: `a[href]-${i}`
             }}
           >
+            <i class="fa fa-plus text-xs md:!hidden" />
+            <i class="fa fa-plus text-xs md:!hidden" />
             <i class="fa fa-plus text-xs md:!hidden" />
             <span class="hidden md:inline-block text-xs">ADD Sub Menu List</span>
             <i class="fa-solid fa-caret-down opacity-50 text-xs" />
