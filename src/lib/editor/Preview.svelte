@@ -1,6 +1,7 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import K from './K.svelte';
+  import MathJax from './MathJax.svelte';
+  import MermaidDiagram from './MermaidDiagram.svelte';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
@@ -149,6 +150,16 @@
       })
     }
   }
+  
+  const renderer = new marked.Renderer();
+  renderer.code = function (code, language) {
+    if (code.match(/^sequenceDiagram/) || code.match(/^graph/)) {
+      return '<pre class="mermaid">' + code + '</pre>';
+    } else {
+      return '<pre><code>' + code + '</code></pre>';
+    }
+  };
+  marked({renderer})
 </script>
 
 
@@ -156,12 +167,12 @@
   class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
-    <K>
-      {@html marked.parse(markdown)}
-    </K>
+    {#key markdown}
+      <MathJax math={marked.parse(markdown)}/>
+    {/key}
   </article>
 </div>
-
+<MermaidDiagram/>
 
 <style>
   h3 img,
