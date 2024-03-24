@@ -18,12 +18,12 @@
     // Iterate through the object keys
     for (const [element, classes] of Object.entries(classesObj)) {
       // Get all elements matching the tag name inside <article>
-      const elements = document.querySelectorAll('article ' + element);
+      const elements = document.querySelectorAll("article " + element);
   
       // Iterate through each element
       for (let i = 0; i < elements.length; i++) {
-        // Split the classes string into an array
-        const classesArray = classes.split(' ');
+        // Split the classes string into an array and filter out empty strings
+        const classesArray = classes.split(" ").filter((c) => c.trim());
   
         // Add each class to the element
         for (const cssClass of classesArray) {
@@ -47,14 +47,15 @@
     li: "li list",
     blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
     pre: "pre",
+    // code: "code bg-gray-100 px-1 rounded",
     img: "img w-auto mb-4",
-    table: "table table-hover w-full text-left divide-y divide-gray-300 mb-4 rounded-container-token",
+    table: "table table-hover w-auto rounded-container-token",
     th: "th font-bold bg-gray-100 px-4 py-2",
     td: "td px-4 py-2",
     strong: "strong font-bold",
     em: "em italic",
     hr: "hr border-gray-300 mb-4",
-    button: "button bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700",
+    //button: "button bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700",
     input: "input border border-gray-300 rounded py-2 px-4 w-full",
     textarea: "textarea border border-gray-300 rounded py-2 px-4 w-full",
     select: "select border border-gray-300 rounded py-2 px-4 w-full",
@@ -78,6 +79,7 @@
     acronym: "acronym border-b border-dotted ",
     address: "address ",
     caption: "caption font-bold mb-2",
+    //code: "code bg-gray-100 px-1 rounded",
     dd: "dd mb-2",
     dt: "dt font-bold mb-2",
     kbd: "kbd bg-gray-100 px-1 rounded",
@@ -86,13 +88,10 @@
     // Add more elements and their corresponding Tailwind classes here
   };
   
-  
-
-  
   const toastStore = getToastStore();
   const change = () => {
     // Call the function to inject Tailwind classes into the HTML elements
-    injectTailwindClasses(tailwindClasses);
+    injectTailwindClasses(tailwindClasses)
     
     //tableJsInjection()
     // CodeBlock Highlight
@@ -129,10 +128,8 @@
       }
       hljs.highlightElement(elem);
     });
+    
   };
-  
-  
-
 
   function tableJsInjection() {
     const tableElements = document.querySelectorAll<HTMLTableElement>('article table'); // Select the ordered list
@@ -140,9 +137,9 @@
       tableElements.forEach((table) => {
         const divTag = document.createElement('div');
         divTag.classList.add("table-container");
-        //table.classList.add("table");
-        //table.classList.add("rounded-container-token");
-        //table.classList.add("table-hover");
+        table.classList.add("table");
+        table.classList.add("rounded-container-token");
+        table.classList.add("table-hover");
         divTag.append(table.cloneNode(true))
         table.parentNode?.replaceChild(divTag,table)
       })
