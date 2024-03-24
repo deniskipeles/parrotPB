@@ -47,7 +47,7 @@
     }
   });
 
-  afterNavigate(() => {
+  afterNavigate(async() => {
     if(!mermaid){
       try {
         await loadMermaid();
