@@ -1,6 +1,7 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
 
+  export let markdownChange
   export let txt = `
 ### Moore Street
 \`\`\`mermaid
@@ -35,6 +36,11 @@ Monomer3 --> Chain
         });
 
         stackedit.on('fileChange', (file) => {
+          markdownChange(file.content.text)
+          el.value = file.content.text;
+        });
+        stackedit.on('close', (file) => {
+          markdownChange(file.content.text)
           el.value = file.content.text;
         });
       }

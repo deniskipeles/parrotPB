@@ -58,6 +58,10 @@
         prompting.set(false);
       });
   }
+  
+  function markdownChange(val){
+    markdown = val;
+  }
 </script>
 
 <form class="m-4" on:submit|preventDefault={onSubmit}>
@@ -162,7 +166,7 @@
     <SlideToggle name="slider-label" on:change={() => (preview = !preview)} checked={preview}
       >Preview</SlideToggle
     >
-    <StackEdit txt={markdown} />
+    <StackEdit {markdownChange} />
   </div>
   {#if !preview}
     <!-- content here -->
