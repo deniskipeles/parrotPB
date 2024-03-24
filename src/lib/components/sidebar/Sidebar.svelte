@@ -50,6 +50,11 @@
 
   let loading = false;
   const createLinks: SubmitFunction = async ({ formData }) => {
+    const table = (await formData.get('table')) as string;
+    if(table == "sub_menu_list"){
+      await formData.delete('Keywords');
+      await formData.append('Keywords', JSON.stringify(list));
+    }
     loading = true;
     loading_links = true;
     return async ({ result, formData }) => {
