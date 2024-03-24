@@ -6,6 +6,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import Preview from './Preview.svelte';
+  import StackEdit from './StackEdit.svelte';
   import { writable } from 'svelte/store';
 
   let markdown = '';
@@ -145,16 +146,6 @@
     />
   </label>
 
-  <!-- <label class="label">
-    <span>Excerpt</span>
-    <textarea
-      class="textarea"
-      name="excerpt"
-      rows="3"
-      placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-    />
-  </label> -->
-
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="label">
     <span>Tags</span>
@@ -171,7 +162,7 @@
     <SlideToggle name="slider-label" on:change={() => (preview = !preview)} checked={preview}
       >Preview</SlideToggle
     >
-    <button type="button" class="btn variant-filled">Images</button>
+    <StackEdit txt={markdown} />
   </div>
   {#if !preview}
     <!-- content here -->

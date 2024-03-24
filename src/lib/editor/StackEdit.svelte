@@ -12,13 +12,13 @@ Monomer3 --> Chain
 `;
 
   onMount(() => {
-    loadEditor();
+    //loadEditor();
   });
 
-  afterUpdate(() => loadEditor());
+ // afterUpdate(() => loadEditor());
 	let val
 
-  function loadEditor(params) {
+  function loadEditor(params=true) {
     loadMermaid().then(() => {
       if (window.Stackedit) {
         const stackedit = new window.Stackedit();
@@ -57,7 +57,7 @@ Monomer3 --> Chain
   }
 </script>
 
-<textarea id="txt" bind:value={txt}></textarea>
-<textarea id="txt" bind:value={txt}></textarea>
+<textarea id="txt" bind:value={txt} hidden="true"></textarea>
+<button type="button" class="btn variant-filled" on:click={()=>loadEditor(false)}>Use Stackedit</button>
 
 
