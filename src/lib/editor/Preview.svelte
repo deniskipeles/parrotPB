@@ -154,7 +154,7 @@
   
   const renderer = new marked.Renderer();
   renderer.code = function (code, language) {
-    if (code.match(/^sequenceDiagram/) || code.match(/^graph/)) {
+    if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || code.match(/^classDiagram/) || code.match(/^erDiagram/) || code.match(/^stateDiagram/) || code.match(/^timeline/) || code.match(/^pie/) || code.match(/^flowchart/) || code.match(/^gantt/) || code.match(/^zenumi/) || code.match(/^sunkey/) || code.match(/^quadrant/)) {
       return '<pre class="mermaid">' + code + '</pre>';
     } else {
       return '<pre><code>' + code + '</code></pre>';
