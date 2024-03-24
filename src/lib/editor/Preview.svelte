@@ -126,7 +126,9 @@
       if (!elem.parentNode?.querySelector('button')) {
         elem.parentNode?.prepend(btn);
       }
-      hljs.highlightElement(elem);
+      if (!elem.classList.contains('mermaid')) {
+        hljs.highlightElement(elem);
+      }
     });
     
   };
@@ -157,7 +159,7 @@
   marked.use({renderer})
 </script>
 
-
+<MermaidDiagram>
 <div
   class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
 >
@@ -167,12 +169,6 @@
     {/key}
   </article>
 </div>
-<MermaidDiagram/>
+</MermaidDiagram>
 
-<style>
-  h3 img,
-  p img,
-  li img {
-    vertical-align: middle;
-  }
-</style>
+

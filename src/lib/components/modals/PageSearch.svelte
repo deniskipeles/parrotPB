@@ -56,7 +56,7 @@ let links = transformObject($page.data?.links)
 	function filterList(list: List) {
 		return list?.filter((rowObj) => {
 			const formattedSearchTerm = searchTerm.toLowerCase() || '';
-			return Object.values(rowObj)?.join(' ').toLowerCase().includes(formattedSearchTerm);
+			return Object.values(rowObj)?.join(' ')?.toLowerCase()?.includes(formattedSearchTerm);
 		});
 	}
 

@@ -1,6 +1,6 @@
 <!-- MermaidDiagram.svelte -->
 <div>
-  ©
+  <slot/>
 </div>
 
 <script>
