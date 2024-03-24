@@ -2,7 +2,7 @@
   import { onMount, afterUpdate } from 'svelte';
 
   export let markdownChange
-  export let txt = `
+  export let markdown = `
 ### Moore Street
 \`\`\`mermaid
 graph LR
@@ -63,7 +63,7 @@ Monomer3 --> Chain
   }
 </script>
 
-<textarea id="txt" bind:value={txt} hidden="true"></textarea>
+<textarea id="txt" bind:value={markdown} hidden="true"></textarea>
 <button type="button" class="btn variant-filled" on:click={()=>loadEditor(false)}>Use Stackedit</button>
 
 

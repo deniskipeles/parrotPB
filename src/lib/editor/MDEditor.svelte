@@ -166,7 +166,7 @@
     <SlideToggle name="slider-label" on:change={() => (preview = !preview)} checked={preview}
       >Preview</SlideToggle
     >
-    <StackEdit {markdownChange} />
+    <StackEdit {markdown} {markdownChange} />
   </div>
   {#if !preview}
     <!-- content here -->
