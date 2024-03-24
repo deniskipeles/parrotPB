@@ -1,6 +1,6 @@
 <script lang="ts">
   import { applyAction, enhance } from '$app/forms';
-  import { goto, invalidateAll } from '$app/navigation';
+  import { goto, invalidateAll, afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
 
   import {
@@ -12,9 +12,15 @@
   } from '@skeletonlabs/skeleton';
   import { getDrawerStore } from '@skeletonlabs/skeleton';
   import type { SubmitFunction } from '@sveltejs/kit';
+  
+  
 
   let currentRailCategory: string | undefined = undefined;
   const drawerStore = getDrawerStore();
+  
+  afterNavigate(()=>{
+    drawerStore.close()
+  })
 
   page.subscribe(($page) => {
     if ($page.url.pathname === '/') currentRailCategory = '/';
