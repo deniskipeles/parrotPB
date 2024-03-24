@@ -1,9 +1,7 @@
 <!-- MermaidDiagram.svelte -->
-<pre>
-  <code class="mermaid">
-    {diagramCode}
-  </code>
-</pre>
+<div>
+  ©
+</div>
 
 <script>
   import { onMount } from 'svelte';
@@ -50,7 +48,7 @@
   });
 
   afterNavigate(() => {
-    if(!window.mermaid){
+    if(!mermaid){
       try {
         await loadMermaid();
         const config = {
