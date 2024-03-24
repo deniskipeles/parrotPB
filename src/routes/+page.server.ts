@@ -1,12 +1,18 @@
-import { create_links, create_sub_links, fetchLinks } from '$lib/pocketbase';
-import { getSubText } from '$lib/utils';
+import { create_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
+import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
+
 
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ locals, url }) => {
   try {
     const { pb, ...rest } = locals;
+    const article = url.searchParams.get('article');
+    if(article){
+      const res = await getArticle(article);
+      return res;
+    }
     // fetch a paginated records list
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const page = Number(url.searchParams.get('page') ?? 1);
@@ -42,14 +48,45 @@ export const actions: Actions = {
     const links = await fetchLinks();
     locals.links = links;
     return { ...res, links };
-  },
-  createSublinks: async ({ request, locals }) => {
-    const formData = await request.formData();
-
-    const res = await create_sub_links(formData);
-    // console.log(res)
-    const links = await fetchLinks();
-    locals.links = links;
-    return { ...res, links };
   }
 };
+
+
+
+
+
+
+async function getArticle(article_id='') {
+  try {
+    let article = await pb_.collection('articles').getOne(article_id, {
+      expand: 'developer_id'
+    });
+
+    let tags: string[] = [];
+    if (Array.isArray(article?.tags)) {
+      tags = article?.tags;
+    } else if (typeof article?.tags == 'string') {
+      tags = [article?.tags];
+    } else {
+      tags = [JSON.stringify(article?.tags)];
+    }
+    const tags_filter = tags.map((i) => `tags ?~ "${i}"`)?.join(' || ');
+    let recommended = (
+      await pb_.collection('view_articles_list').getList(1, 5, {
+        filter: `(${tags_filter}) && id != "${article?.id}"`,
+        sort: '-created',
+        "fields":`*:excerpt(${400},${true})`
+      })
+    ).items;
+    recommended = recommended.map((i) => {
+      i.content = getSubText(50, i.content);
+      return i;
+    });
+    article = serializeNonPOJOs(article)
+    return { article , recommended };
+  } catch (error) {
+    return { error: serializeNonPOJOs(error) };
+  }
+}
+
+

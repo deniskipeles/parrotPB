@@ -54,8 +54,14 @@
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
+  <li class="crumb">
+    <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
+      >{getLabelById($page.data?.links,$page.params?.sub_link)}</a
+    >
+  </li>
+  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    {getLabelById($page.data?.links,$page.params?.sub_link)}
+    {getLabelById($page.data?.links,$page.params?.sub_menu_list_id)}
   </li>
 </ol>
 
@@ -64,14 +70,30 @@
     <Error error={data?.error} />
   {:else if data?.meta}
     <!-- else content here -->
+    <button on:click={gotoCreateArticle} type="button" class="btn m-4 w-full variant-filled"
+      >Create Article</button
+    >
     <div class="page-container-wide page-padding">
+      <!-- <header class="flex justify-between items-center">
+        <div class="space-y-4">
+          <h2 class="h2">The Skeleton Blog</h2>
+          <p>Keep up with the latest news, tutorials, and releases for Skeleton.</p>
+        </div>
+        <button
+          class="btn-icon btn-icon-sm !bg-orange-500"
+          on:click={copyRSSToClipboard}
+          on:keypress
+        >
+          <i class="fa-solid fa-square-rss text-xl" />
+        </button>
+      </header> -->
       <hr />
       <!-- Blog List -->
       <section class="blog-list space-y-8">
         {#each data?.meta?.items as post}
           <a
             class="block hover:card hover:variant-soft p-4 rounded-container-token"
-            href={`${$page.url.origin}?article=${post.id}`}
+            href={`${$page.url.pathname}/${post.id}`}
             data-sveltekit-preload-data="hover"
           >
             <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
@@ -117,7 +139,7 @@
         </div>
         <div class="flex items-center space-x-4">
           <a
-            href={`/${$page.params?.main_link}/${$page.params?.sub_link}?page=${
+            href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}?page=${
               (data?.meta?.page ?? 1) - 1
             }&perPage=${perPage}`}
           >
@@ -133,7 +155,7 @@
             href={!(
               data.meta?.totalPages == Number(pageNumber ?? 1) || data.meta.totalPages == 0
             )
-              ? `/${$page.params?.main_link}/${$page.params?.sub_link}?page=${
+              ? `/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}?page=${
                   (data?.meta?.page ?? 1) + 1
                 }&perPage=${perPage}`
               : '#'}
