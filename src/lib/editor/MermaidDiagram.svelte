@@ -6,7 +6,8 @@
 </pre>
 
 <script>
-  import { onMount, afterUpdate as onUpdate } from 'svelte';
+  import { onMount } from 'svelte';
+  import { afterNavigate } from '$app/navigation';
 
   export let diagramCode = `graph LR\nA--->B`;
   let codeElement;
@@ -48,8 +49,26 @@
     }
   });
 
-  onUpdate(() => {
-    renderDiagram();
+  afterNavigate(() => {
+    if(!window.mermaid){
+      try {
+        await loadMermaid();
+        const config = {
+          startOnLoad: true,
+          theme: 'forest',
+          flowchart: {
+            useMaxWidth: false,
+            htmlLabels: true,
+          },
+        };
+  
+        mermaid.initialize(config);
+        mermaid.init(undefined, codeElement);
+        renderDiagram();
+      } catch (error) {
+        console.error('Error loading Mermaid:', error);
+      }
+    }
   });
 
   function renderDiagram() {
