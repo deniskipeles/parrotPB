@@ -17,20 +17,20 @@
 
 function transformObject(items) {
   const result = {};
-  items.forEach(item => {
+  items?.forEach(item => {
     const innerList = [];
-    item.expand.sub_menu_via_main_menu_id.forEach(subMenu => {
-      subMenu.expand.sub_menu_list_via_sub_menu_id.forEach(subMenuList => {
+    item?.expand?.sub_menu_via_main_menu_id?.forEach(subMenu => {
+      subMenu?.expand?.sub_menu_list_via_sub_menu_id?.forEach(subMenuList => {
         innerList.push({
-          href: `/${subMenu.id}/${subMenuList.id}`,
-          label: subMenuList.label,
-          keywords: subMenuList.keywords.join(', ')
+          href: `/${subMenu?.id}/${subMenuList?.id}`,
+          label: subMenuList?.label,
+          keywords: subMenuList?.keywords?.join(', ') ?? subMenuList?.keywords
         });
       });
     });
-    result[`/${item.id}`] = [{
-id:item?.id,
-      title: item.label,
+    result[`/${item?.id}`] = [{
+      id:item?.id,
+      title: item?.label,
       list: innerList
     }];
   });
@@ -54,7 +54,7 @@ let links = transformObject($page.data?.links)
 	let elemDocSearch: HTMLElement;
 
 	function filterList(list: List) {
-		return list.filter((rowObj) => {
+		return list?.filter((rowObj) => {
 			const formattedSearchTerm = searchTerm.toLowerCase() || '';
 			return Object.values(rowObj).join(' ').toLowerCase().includes(formattedSearchTerm);
 		});
@@ -63,8 +63,8 @@ let links = transformObject($page.data?.links)
 	function onInput(): void {
 		let resultsDeepCopy = structuredClone(resultsCopy);
 		results = resultsDeepCopy.filter((category:any) => {
-			category.list = filterList(category.list);
-			if (category.list.length) return category;
+			category.list = filterList(category?.list);
+			if (category?.list?.length) return category;
 		});
 	}
 
