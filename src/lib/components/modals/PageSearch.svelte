@@ -21,10 +21,10 @@ function transformObject(items) {
     const innerList = [];
     item?.expand?.sub_menu_via_main_menu_id?.forEach(subMenu => {
       subMenu?.expand?.sub_menu_list_via_sub_menu_id?.forEach(subMenuList => {
-        innerList.push({
+        innerList?.push({
           href: `/${subMenu?.id}/${subMenuList?.id}`,
           label: subMenuList?.label,
-          keywords: subMenuList?.keywords?.join(', ') ?? subMenuList?.keywords
+          keywords: subMenuList?.keywords?.join(', ')
         });
       });
     });
@@ -56,9 +56,8 @@ let links = transformObject($page.data?.links)
 	function filterList(list: List) {
 		return list?.filter((rowObj) => {
 			const formattedSearchTerm = searchTerm.toLowerCase() || '';
-			if(Object.values(rowObj)){
-			  return Object.values(rowObj)?.join(' ')?.toLowerCase()?.includes(formattedSearchTerm);
-			}
+			
+			 return Object.values(rowObj)?.join(' ').toLowerCase().includes(formattedSearchTerm);
 		});
 	}
 

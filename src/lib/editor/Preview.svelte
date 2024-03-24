@@ -27,9 +27,7 @@
   
         // Add each class to the element
         for (const cssClass of classesArray) {
-          if (!elements[i].classList.contains('mermaid')) {
             elements[i].classList.add(cssClass);
-          }
         }
       }
     }
@@ -94,7 +92,7 @@
   const change = () => {
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses)
-    
+
     //tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -131,6 +129,10 @@
       if (!elem.classList.contains('mermaid')) {
         hljs.highlightElement(elem);
       }
+    });
+    
+    document.querySelectorAll<HTMLPreElement>('pre.mermaid')?.forEach((elem, index) => {
+      elem.classList.remove('pre');
     });
     
   };
