@@ -27,7 +27,9 @@
   
         // Add each class to the element
         for (const cssClass of classesArray) {
-          elements[i].classList.add(cssClass);
+          if (!elements[i].classList.contains('mermaid')) {
+            elements[i].classList.add(cssClass);
+          }
         }
       }
     }
