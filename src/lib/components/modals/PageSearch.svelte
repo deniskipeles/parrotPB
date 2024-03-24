@@ -14,35 +14,11 @@
 
 	// Local
 	let searchTerm = '';
-
-function transformObject(items) {
-  const result = {};
-  items.forEach(item => {
-    const innerList = [];
-    item.expand.sub_menu_via_main_menu_id.forEach(subMenu => {
-      subMenu.expand.sub_menu_list_via_sub_menu_id.forEach(subMenuList => {
-        innerList.push({
-          href: `/${subMenu.id}/${subMenuList.id}`,
-          label: subMenuList.label,
-          keywords: subMenuList.keywords.join(', ')
-        });
-      });
-    });
-    result[`/${item.id}`] = [{
-id:item?.id,
-      title: item.label,
-      list: innerList
-    }];
-  });
-  return result;
-}
-
 	// let resultsCopy = [...menuNavLinks['/docs'], ...menuNavLinks['/elements'], ...menuNavLinks['/svelte'], ...menuNavLinks['/utilities']];
 	let resultsCopy:any = []
-let links = transformObject($page.data?.links)
-	for (const key in links ?? {}) {
-		if (Object.prototype.hasOwnProperty.call(links ?? {}, key)) {
-			const element = (links ?? {})[key];
+	for (const key in $page.data?.links ?? {}) {
+		if (Object.prototype.hasOwnProperty.call($page.data?.links ?? {}, key)) {
+			const element = ($page.data?.links ?? {})[key];
 			
 			resultsCopy = [...resultsCopy,...element]
 		}
@@ -88,11 +64,11 @@ let links = transformObject($page.data?.links)
 			{#each results as category}
 				<div class="text-sm font-bold p-4">{category.title}</div>
 				<ul>
-					{#each category?.list ?? [] as link}
+					{#each category.list as link}
 						<li class="text-lg">
 							<a
 								class={cResultAnchor}
-								href={category?.id+link.href}
+								href={category?.link+link.href}
 								on:click={() => {
 									modalStore.close();
 								}}
@@ -101,7 +77,7 @@ let links = transformObject($page.data?.links)
 									<i class="fa-regular fa-file" />
 									<span class="flex-auto font-bold opacity-75">{link.label}</span>
 								</div>
-								<span class="hidden md:block text-xs opacity-50">{category?.id+link.href}</span>
+								<span class="hidden md:block text-xs opacity-50">{category?.link+link.href}</span>
 							</a>
 						</li>
 					{/each}

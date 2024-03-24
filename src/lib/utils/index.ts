@@ -1,53 +1,9 @@
 import { pb } from '$lib/pocketbase';
 import { marked } from 'marked';
 
-export function getLabelById(items=[], id="") {
-  for (const item of items) {
-    if (item.id === id) {
-      return item.label;
-    }
-    if (item.expand) {
-      for (const key in item.expand) {
-        const nestedItems = item.expand[key];
-        const label = getLabelById(nestedItems, id);
-        if (label) {
-          return label;
-        }
-      }
-    }
-  }
-  return null;
-}
-
-export function getYouTubeId(url='') {
-    const regex = /https:\/\/(m\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match ? match[2] : null;
-}
-  
 export const serializeNonPOJOs = (obj: any) => {
   return JSON.parse(JSON.stringify(obj));
 };
-
-export function getRelatedCollections(collection, collections) {
-  const relatedCollections = [];
-
-  for (const otherCollection of collections) {
-    if (otherCollection.id === collection.id) {
-      continue; // Skip the collection itself
-    }
-
-    const relationFields = otherCollection.schema.filter(field => field.type === 'relation');
-
-    for (const field of relationFields) {
-      if (field.options.collectionId === collection.id) {
-        relatedCollections.push(`${otherCollection.name}_via_${field.name}`);
-      }
-    }
-  }
-
-  return relatedCollections;
-}
 
 export const getPbImageUrl = (doc: any, img: string | null, dim: string | undefined) => {
   const logo = (img ? pb.files.getUrl(doc, img, { thumb: dim ?? '100x100' }) : null) ?? null;

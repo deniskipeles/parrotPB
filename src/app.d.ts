@@ -11,12 +11,10 @@ declare namespace App {
 	// interface PageData {}
 	interface Locals {
 		userid: string;
-		links: import('pocketbase').RecordModel[];
+		links: JSON;
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
 		company: import('pocketbase').RecordModel;
-		tables: import('pocketbase').RecordModel[];
-		roots: import('pocketbase').RecordModel[];
 	}
 
 	// interface Error {}

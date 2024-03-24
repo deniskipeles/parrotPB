@@ -14,29 +14,26 @@
 		<!-- Row 1 -->
 		<section class={cRowOne}>
 			<div class="grid grid-cols-1 gap-2 place-content-center place-items-center md:place-items-start">
-				<a class="lg:!ml-0 w-[32px] lg:w-auto overflow-hidden flex" href="https://www.ktechs.xyz" title="visit ktechs page">
-          <img class="w-12 h-12" src='/favicon.svg' /> 
-          <!-- <LogoIcon/> -->
-        </a>
-				<p class="!text-sm opacity-80">parrot</p>
+				<LogoIcon />
+				<p class="!text-sm opacity-80">UI Toolkit for Svelte + Tailwind.</p>
 				<!-- Current Version -->
-				<span class="badge variant-soft">V 0.1</span>
+				<span class="badge variant-soft">{'footer comp version to be change'}</span>
 			</div>
 			<div class="hidden md:grid grid-cols-3 gap-8">
 				<div class="space-y-6">
 					<h6 class="h6">Explore</h6>
 					<ul class="space-y-3">
-						<li><a class="anchor" href="https://www.ktechs.xyz">ktechs</a></li>
-						<li><a class="anchor" href="https://skeletonlabs.co/docs/get-started">Get Started</a></li>
-						<li><a class="anchor" href="https://skeletonlabs.co/blog">Blog</a></li>
+						<li><a class="anchor" href="/docs/introduction">Introduction</a></li>
+						<li><a class="anchor" href="/docs/get-started">Get Started</a></li>
+						<li><a class="anchor" href="/blog">Blog</a></li>
 					</ul>
 				</div>
 				<div class="space-y-6">
 					<h6 class="h6">Features</h6>
 					<ul class="space-y-3">
-						<li><a class="anchor" href="https://skeletonlabs.co/elements/core">Tailwind</a></li>
-						<li><a class="anchor" href="https://skeletonlabs.co/actions/clipboard">Svelte</a></li>
-						<li><a class="anchor" href="https://skeletonlabs.co/utilities/codeblocks">Utilities</a></li>
+						<li><a class="anchor" href="/elements/core">Tailwind</a></li>
+						<li><a class="anchor" href="/actions/clipboard">Svelte</a></li>
+						<li><a class="anchor" href="/utilities/codeblocks">Utilities</a></li>
 					</ul>
 				</div>
 				<div class="space-y-6">

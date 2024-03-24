@@ -1,9 +1,13 @@
 <script lang="ts">
   import Preview from '$lib/editor/Preview.svelte';
   import { onMount } from 'svelte';
+  //   import DOMPurify from 'dompurify';
+  // Components
   import { Avatar, SlideToggle } from '@skeletonlabs/skeleton';
   import { Error, LayoutPage } from '$lib/components';
-  // import type { PageData } from './$types';
+
+  import type { PageData } from './$types';
+
   /** @type {import('./$types').PageData} */
   export let data: PageData;
 
@@ -13,9 +17,7 @@
     getPbImageUrl,
     getSubText,
     mdToText,
-    setObjectFormData,
-    getYouTubeId,
-    getLabelById
+    setObjectFormData
   } from '$lib/utils';
   import { page } from '$app/stores';
   import { afterNavigate, invalidateAll } from '$app/navigation';
@@ -50,7 +52,11 @@
       }
     }
   }
-
+function getYouTubeId(url) {
+    const regex = /https:\/\/(m\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[2] : null;
+  }
 </script>
 
 <svelte:head>
@@ -66,23 +72,17 @@
   <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    <a class="anchor" href={`/${$page.params?.main_link}`}
-      >{getLabelById($page.data?.links,$page.params?.main_link)}</a
-    >
-  </li>
-  <li class="crumb-separator" aria-hidden>&rsaquo;</li>
-  <li class="crumb capitalize">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
-      >{getLabelById($page.data?.links,$page.params?.sub_link)}</a
+      >{$page.params?.sub_link?.replace('/', '')?.split('-')?.join(' ')?.split('_')?.join(' ')}</a
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
     <a
       class="anchor"
-      href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}`}
+      href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.page}`}
     >
-      {getLabelById($page.data?.links,$page.params?.sub_menu_list_id)}
+      Page {$page.params?.page}
     </a>
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
@@ -167,16 +167,16 @@
               alt={data?.article.title}
               class="w-full rounded-container-token shadow-xl"
             />{/if}
-            {#if data?.article?.url}
-            <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
-              <iframe class="w-full aspect-video"
-                src={`https://www.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-              </iframe>
-            </div>
-            {/if}
+{#if data?.article?.url}
+<div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
+  <iframe class="w-full aspect-video"
+    src={`https://www.youtube.com/embed/${getYouTubeId(data?.article?.url)}`}
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+{/if}
         </header>
         <!-- Article -->
         <Preview markdown={data?.article?.content} />

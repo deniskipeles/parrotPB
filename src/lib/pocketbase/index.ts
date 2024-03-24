@@ -28,34 +28,3 @@ export async function loadCompany() {
   }
   return record;
 }
-
-
-export const listTablesRecords = async () => {
-	let records = [];
-	// let records: RecordModel[] = [table];
-	try {
-		// you can also fetch all records at once via getFullList
-		records = await pb.collection('view_tables').getFullList({
-			sort: 'name'
-		});
-		records = serializeNonPOJOs(records);
-		return records;
-	} catch (error) {
-		return records;
-	}
-};
-
-export const listRootsRecords = async () => {
-	let records: RecordModel[] = [];
-	try {
-		// you can also fetch all records at once via getFullList
-		records = await pb.collection('root').getFullList({
-			sort: '-created',
-			//expand: 'z_roots_images'
-		});
-		records = serializeNonPOJOs(records);
-		return records;
-	} catch (error) {
-		return records;
-	}
-};

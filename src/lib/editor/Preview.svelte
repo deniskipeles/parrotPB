@@ -1,7 +1,5 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import MathJax from './MathJax.svelte';
-  import MermaidDiagram from './MermaidDiagram.svelte';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
@@ -9,93 +7,24 @@
 
   export let markdown = '';
 
+  function addClassToAllTags(htmlString: string) {
+    // Define a regular expression to match HTML tags except for <code>
+    const tagRegex = /<(?!code)([a-zA-Z0-9-]+)([^>]*)>/g;
+    // Replace each matched tag with the tag and a class attribute
+    const updatedHtmlString = htmlString.replace(tagRegex, '<$1 class="$1"$2>');
+
+    return updatedHtmlString;
+  }
+
   let toBeCalled = true;
   onMount(() => change());
   afterNavigate(() => change());
   // Local
-  
-  function injectTailwindClasses(classesObj) {
-    // Iterate through the object keys
-    for (const [element, classes] of Object.entries(classesObj)) {
-      // Get all elements matching the tag name inside <article>
-      const elements = document.querySelectorAll('article ' + element);
-  
-      // Iterate through each element
-      for (let i = 0; i < elements.length; i++) {
-        // Split the classes string into an array
-        const classesArray = classes.split(' ');
-  
-        // Add each class to the element
-        for (const cssClass of classesArray) {
-          elements[i].classList.add(cssClass);
-        }
-      }
-    }
-  }
-
-  const tailwindClasses = {
-    h1: "h1 text-3xl mb-4",
-    h2: "h2 text-2xl mb-4",
-    h3: "h3 text-xl mb-4",
-    h4: "h4 text-lg mb-4",
-    h5: "h5 text-base mb-4",
-    h6: "h6 text-sm mb-4",
-    p: "p mb-4",
-    a: "a anchor text-blue-500 underline hover:no-underline",
-    ul: "ul list-disc pl-6 mb-4",
-    ol: "ol list list-decimal pl-6 mb-4",
-    li: "li list",
-    blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
-    pre: "pre bg-gray-100 p-4 rounded mb-4",
-    code: "code bg-gray-100 px-1 rounded",
-    img: "img w-auto mb-4",
-    table: "table table-hover w-full text-left divide-y divide-gray-300 mb-4",
-    th: "th font-bold bg-gray-100 px-4 py-2",
-    td: "td px-4 py-2",
-    strong: "strong font-bold",
-    em: "em italic",
-    hr: "hr border-gray-300 mb-4",
-    button: "button bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700",
-    input: "input border border-gray-300 rounded py-2 px-4 w-full",
-    textarea: "textarea border border-gray-300 rounded py-2 px-4 w-full",
-    select: "select border border-gray-300 rounded py-2 px-4 w-full",
-    label: "label font-bold mb-2",
-    form: "form",
-    fieldset: "fieldset border border-gray-300 rounded px-4 py-2 mb-4",
-    legend: "legend font-bold mb-2",
-    iframe: "iframe w-full h-auto mb-4",
-    figure: "figure mb-4",
-    figcaption: "figcaption italic mb-4",
-    cite: "cite italic",
-    q: "q italic",
-    sup: "sup text-xs font-normal",
-    sub: "sub text-xs font-normal",
-    small: "small text-xs font-normal",
-    mark: "mark bg-yellow-200 px-1 rounded",
-    del: "del line-through text-gray-500",
-    ins: "ins underline ",
-    time: "time ",
-    abbr: "abbr border-b border-dotted ",
-    acronym: "acronym border-b border-dotted ",
-    address: "address ",
-    caption: "caption font-bold mb-2",
-    code: "code bg-gray-100 px-1 rounded",
-    dd: "dd mb-2",
-    dt: "dt font-bold mb-2",
-    kbd: "kbd bg-gray-100 px-1 rounded",
-    samp: "samp bg-gray-100 px-1 rounded",
-    var: "var italic",
-    // Add more elements and their corresponding Tailwind classes here
-  };
-  
-  
-
-  
   const toastStore = getToastStore();
   const change = () => {
-    // Call the function to inject Tailwind classes into the HTML elements
-    injectTailwindClasses(tailwindClasses);
-    
+    // injectNumbering();
+    // injectBullets();
+    imgJsInjection()
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -131,11 +60,61 @@
       }
       hljs.highlightElement(elem);
     });
+    // ordered list
+    /*document.querySelectorAll('ol').forEach((elem) => {
+      elem.classList.add('list');
+    });*/
+    
   };
-  
-  
 
+  // Function to inject bullets into the unordered list
+  function injectBullets() {
+    const ulElements = document.querySelectorAll('article ul'); // Select all unordered lists
+    ulElements.forEach((ul) => {
+      if (!ul.classList.contains('list1')) {
+        ul.classList.add('list1');
+        // Iterate through the list items and add bullets
+        const lis = ul.querySelectorAll('li');
+        lis.forEach((li) => {
+          li.textContent = `• ${li.textContent}`;
+        });
+      }
+    });
+  }
 
+  // Function to inject numbering into the ordered list
+  function injectNumbering() {
+    const olElements = document.querySelectorAll('article ol'); // Select the ordered list
+    if (olElements.length) {
+      olElements.forEach((ol) => {
+        if (!ol.classList.contains('list1')) {
+          ol.classList.add('list1');
+          // Iterate through the list items and add numbering
+          const lis = ol.querySelectorAll('li');
+          lis.forEach((li, index) => {
+            const number = index + 1;
+            const span = document.createElement('span');
+            span.classList.add('badge');
+            span.classList.add('bg-primary-500');
+            span.innerText = number + '. ';
+            li.prepend(span);
+            li.textContent = `${li.textContent}`;
+          });
+        }
+      });
+    }
+  }
+
+  function imgJsInjection() {
+    const olElements = document.querySelectorAll('article img'); // Select the ordered list
+    if (olElements.length) {
+      olElements.forEach((img) => {
+        img.classList.add("w-auto");
+        img.classList.add("rounded-container-token");
+        img.classList.add("shadow-xl");
+      })
+    }
+  }
   function tableJsInjection() {
     const tableElements = document.querySelectorAll<HTMLTableElement>('article table'); // Select the ordered list
     if (tableElements.length) {
@@ -150,34 +129,9 @@
       })
     }
   }
-  
-  const renderer = new marked.Renderer();
-  renderer.code = function (code, language) {
-    if (code.match(/^sequenceDiagram/) || code.match(/^graph/)) {
-      return '<pre class="mermaid">' + code + '</pre>';
-    } else {
-      return '<pre><code>' + code + '</code></pre>';
-    }
-  };
-  marked.use({renderer})
 </script>
 
-
-<div
-  class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
->
-  <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
-    {#key markdown}
-      <MathJax math={marked.parse(markdown)}/>
-    {/key}
-  </article>
-</div>
-<MermaidDiagram/>
-
-<style>
-  h3 img,
-  p img,
-  li img {
-    vertical-align: middle;
-  }
-</style>
+<!-- else content here -->
+<article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
+  {@html addClassToAllTags(marked.parse(markdown))}
+</article>
