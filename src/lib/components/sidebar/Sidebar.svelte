@@ -52,8 +52,8 @@
   const createLinks: SubmitFunction = async ({ formData }) => {
     const table = (await formData.get('table')) as string;
     if(table == "sub_menu_list"){
-      await formData.delete('Keywords');
-      await formData.append('Keywords', JSON.stringify(list));
+      await formData.delete('keywords');
+      await formData.append('keywords', JSON.stringify(list));
     }
     loading = true;
     loading_links = true;
@@ -260,7 +260,7 @@
               class="card p-4 w-60 shadow-xl z-10"
             >
               <nav class="list-nav">
-                <input type="hidden" name="table" value={`sub_menu_list`} />
+                <input type="hidden" name="table" value="sub_menu_list" />
                 <input type="hidden" name="sub_menu_id" value={subMenu?.id} />
                 <ul>
                   <li>
