@@ -6,7 +6,7 @@
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
   import { afterNavigate } from '$app/navigation';
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  // import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
   export let markdown = '';
 
