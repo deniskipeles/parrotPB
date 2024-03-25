@@ -18,18 +18,9 @@
     change()
   });
   
-  import { mermaidRendered } from '$lib/stores';
-  import mermaid from 'mermaid'
   
-  mermaid.initialize({ theme: 'forest', startOnLoad: false })
-  onMount(() => {
-    mermaidRendered.set(true)
-    setTimeout(async () => {
-      await mermaid.run({
-        suppressErrors:true
-      })
-    }, 0)
-  })
+  
+  
   
   // Local
   function injectTailwindClasses(classesObj) {
