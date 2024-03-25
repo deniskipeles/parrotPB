@@ -77,14 +77,11 @@
             <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
               <!-- Featured Image -->
               {#if post?.url}
-              <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
-                <iframe class="w-full aspect-video"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(post?.url)}`}
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen>
-                </iframe>
-              </div>
+                <img
+                  class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
+                  src="/Youtube_logo.png"
+                  alt="thumbnail"
+                />
               {:else if post.cover_image}
                 <img
                   class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
