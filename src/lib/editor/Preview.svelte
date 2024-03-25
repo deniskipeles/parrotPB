@@ -58,7 +58,7 @@
     pre: "pre",
     // code: "code bg-gray-100 px-1 rounded",
     img: "img w-auto mb-4",
-    table: "table table-hover w-auto rounded-container-token",
+    table: "table table-hover",
     th: "th font-bold bg-gray-100 px-4 py-2",
     td: "td px-4 py-2",
     strong: "strong font-bold",
@@ -102,7 +102,7 @@
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses)
 
-    //tableJsInjection()
+    tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
       const btn = document.createElement('button');
@@ -152,9 +152,9 @@
       tableElements.forEach((table) => {
         const divTag = document.createElement('div');
         divTag.classList.add("table-container");
-        table.classList.add("table");
-        table.classList.add("rounded-container-token");
-        table.classList.add("table-hover");
+        //table.classList.add("table");
+        //table.classList.add("rounded-container-token");
+        //table.classList.add("table-hover");
         divTag.append(table.cloneNode(true))
         table.parentNode?.replaceChild(divTag,table)
       })
@@ -174,7 +174,7 @@
 
 
 <div
-  class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
+  class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto"
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
     {#key markdown}
