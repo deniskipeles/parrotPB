@@ -1,13 +1,19 @@
 <script>
-  //import mermaid from "mermaid";
+  import mermaid from "mermaid";
 	import { fade } from "svelte/transition";
   import { mermaidRendered } from "$lib/stores";
   import { onMount, afterUpdate } from 'svelte';
 
-  onMount(() => loadDiagrams());
-  afterUpdate(() => loadDiagrams());
+  //onMount(() => loadDiagrams());
+  //afterUpdate(() => loadDiagrams());
 	let val
-	let mermaid
+	mermaid.initialize({ theme: 'neutral', startOnLoad: false })
+  onMount(() => {
+    mermaidRendered.set(true)
+    setTimeout(async () => {
+      await mermaid.run()
+    }, 0)
+  })
 
   function loadDiagrams() {
     loadMermaid().then(() => {
