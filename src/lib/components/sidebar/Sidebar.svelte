@@ -186,7 +186,7 @@
             <nav class="list-nav">
               <input type="hidden" name="main_menu_id" value={mainMenu?.id} />
               <input type="hidden" name="table" value="sub_menu" />
-              <ul>
+              <ul class="card p-4 max-h-[200px] overflow-auto space-y-4">
                 <li>
                   <label class="label">
                     <span>Label</span>
@@ -215,7 +215,9 @@
                     />
                   </label>
                 </li>
+              </ul>
                 <hr class="!my-4" />
+              <ul>
                 <li class="p-4 space-y-2 items-center">
                   {#if loading_links}
                     <!-- content here -->
@@ -252,7 +254,7 @@
             <i class="fa-solid fa-caret-down opacity-50 text-xs" />
           </button>
           <!-- popup -->
-          <div data-popup={`formAddLinks-${subMenu.id}`}>
+          <div class="card p-4 max-h-[300px] overflow-auto space-y-4" data-popup={`formAddLinks-${subMenu.id}`}>
             <form
               action="/?/createLinks"
               method="POST"
