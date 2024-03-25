@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   //import mermaid from "mermaid";
 	import { fade } from "svelte/transition";
   import { mermaidRendered } from "$lib/stores";
