@@ -1,19 +1,32 @@
 <script lang="ts">
   import { marked } from 'marked';
   import MathJax from './MathJax.svelte';
-  import MermaidDiagram from './MermaidDiagram.svelte';
+  //import MermaidDiagram from './MermaidDiagram.svelte';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
   import { afterNavigate } from '$app/navigation';
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
   export let markdown = '';
 
   let toBeCalled = true;
-  onMount(() => change());
-  afterNavigate(() => change());
-  // Local
+  onMount(async() => {
+    change()
+    mermaid.initialize({ startOnLoad: false });
+    await mermaid.run({
+      suppressErrors: true,
+    });
+  });
+  afterNavigate(async() => {
+    change()
+    mermaid.initialize({ startOnLoad: false });
+    await mermaid.run({
+      suppressErrors: true,
+    });
+  });
   
+  // Local
   function injectTailwindClasses(classesObj) {
     // Iterate through the object keys
     for (const [element, classes] of Object.entries(classesObj)) {
@@ -154,7 +167,7 @@
   
   const renderer = new marked.Renderer();
   renderer.code = function (code, language) {
-    if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || code.match(/^classDiagram/) || code.match(/^erDiagram/) || code.match(/^stateDiagram/) || code.match(/^timeline/) || code.match(/^pie/) || code.match(/^flowchart/) || code.match(/^gantt/) || code.match(/^zenumi/) || code.match(/^sunkey/) || code.match(/^quadrant/)) {
+    if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
       return '<pre class="mermaid">' + code + '</pre>';
     } else {
       return '<pre><code>' + code + '</code></pre>';
@@ -163,7 +176,7 @@
   marked.use({renderer})
 </script>
 
-<MermaidDiagram>
+
 <div
   class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5"
 >
@@ -173,6 +186,6 @@
     {/key}
   </article>
 </div>
-</MermaidDiagram>
+
 
 
