@@ -1,7 +1,7 @@
 <script lang="ts">
   import { marked } from 'marked';
   import MathJax from './MathJax.svelte';
-  //import MermaidDiagram from './MermaidDiagram.svelte';
+  import MermaidDiagram from './MermaidDiagram.svelte';
   import { onMount } from 'svelte';
   import hljs from 'highlight.js';
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
@@ -11,20 +11,25 @@
   export let markdown = '';
 
   let toBeCalled = true;
-  onMount(async() => {
+  onMount(() => {
     change()
-    mermaid.initialize({ startOnLoad: false });
-    await mermaid.run({
-      suppressErrors: true,
-    });
   });
-  afterNavigate(async() => {
+  afterNavigate(() => {
     change()
-    mermaid.initialize({ startOnLoad: false });
-    await mermaid.run({
-      suppressErrors: true,
-    });
   });
+  
+  import { mermaidRendered } from '$lib/stores';
+  import mermaid from 'mermaid'
+  
+  mermaid.initialize({ theme: 'forest', startOnLoad: false })
+  onMount(() => {
+    mermaidRendered.set(true)
+    setTimeout(async () => {
+      await mermaid.run({
+        suppressErrors:true
+      })
+    }, 0)
+  })
   
   // Local
   function injectTailwindClasses(classesObj) {
@@ -182,7 +187,9 @@
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
     {#key markdown}
-      <MathJax math={marked.parse(markdown)}/>
+      <MermaidDiagram>
+        <MathJax math={marked.parse(markdown)}/>
+      </MermaidDiagram>
     {/key}
   </article>
 </div>

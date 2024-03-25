@@ -16,3 +16,4 @@ export const storeOnboardMethod: Writable<string> = localStorageStore('storeOnbo
 
 // Theme Generator Live Preview State
 export const storePreview = writable(false);
+export const mermaidRendered = writable(false);
