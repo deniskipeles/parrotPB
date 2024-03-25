@@ -76,7 +76,6 @@
                   src="/Youtube_logo.png"
                   alt="thumbnail"
                 />
-              </div>
               {:else if post.cover_image}
                 <img
                   class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"

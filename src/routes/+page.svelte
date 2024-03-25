@@ -206,7 +206,7 @@
                 src="/Youtube_logo.png"
                 alt="thumbnail"
               />
-              {:else if post.cover_image}
+            {:else if post.cover_image}
               <img
                 class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
                 src={getPbImageUrl(post, post.cover_image, '720x480')}
