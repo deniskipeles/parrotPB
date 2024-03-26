@@ -170,7 +170,7 @@
     }
   };
   //renderer.list(string body, boolean ordered, number start){
-  renderer.list(body, ordered, start){
+  renderer.list = function(body, ordered, start){
     if(ordered){
       return `
         <ol class="list ordered">
@@ -186,7 +186,7 @@
     }
   }
   //renderer.listitem(string text, boolean task, boolean checked){
-  renderer.listitem(text, task, checked){
+  renderer.listitem = function(text, task, checked){
     return `
       	<li>
       		<span>${task ? "1." : "•"}</span>
