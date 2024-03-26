@@ -173,13 +173,13 @@
   renderer.list = function(body, ordered, start){
     if(ordered){
       return `
-        <ol class="list ordered">
+        <ol class="list-decimal ordered">
           ${body}
         </ol>
       `;
     }else{
       return `
-        <ul class="list un-ordered">
+        <ul class="list-disc un-ordered">
         	${body}
         </ul>
       `;
@@ -189,8 +189,8 @@
   renderer.listitem = function(text, task, checked){
     return `
       	<li>
-      		<span class="flex-auto text-xs">
-      		${checked ? "1." : "•"} ${text}
+      		<span class="flex text-xs">
+      		  • ${text}
       		</span>
       	</li>
     `;
