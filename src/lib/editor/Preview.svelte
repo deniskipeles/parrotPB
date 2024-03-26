@@ -200,7 +200,7 @@
   };
   //renderer.list(string body, boolean ordered, number start){
   renderer.list = function(body, ordered, start){
-    if(ordered){
+    if(!ordered){
       return `
         <ol class="ordered">
           ${body}
