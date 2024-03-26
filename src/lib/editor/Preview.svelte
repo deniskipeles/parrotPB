@@ -51,9 +51,9 @@
     h6: "h6 text-sm mb-4",
     p: "p mb-4",
     a: "a anchor text-blue-500 underline hover:no-underline",
-    ul: "list list-disc",
-    ol: "list list-decimal",
-    li: "text-xs",
+    //ul: "list list-disc",
+    //ol: "list list-decimal",
+    //li: "text-xs",
     blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
     pre: "pre",
     // code: "code bg-gray-100 px-1 rounded",
@@ -169,6 +169,31 @@
       return '<pre><code>' + code + '</code></pre>';
     }
   };
+  //renderer.list(string body, boolean ordered, number start){
+  renderer.list(body, ordered, start){
+    if(ordered){
+      return `
+        <ol class="list ordered">
+          ${body}
+        </ol>
+      `;
+    }else{
+      return `
+        <ul class="list un-ordered">
+        	${body}
+        </ul>
+      `;
+    }
+  }
+  //renderer.listitem(string text, boolean task, boolean checked){
+  renderer.listitem(text, task, checked){
+    return `
+      	<li>
+      		<span>${task ? "1." : "•"}</span>
+      		<span class="flex-auto">${text}</span>
+      	</li>
+    `;
+  }
   marked.use({renderer})
 </script>
 
