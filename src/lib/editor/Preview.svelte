@@ -176,8 +176,8 @@
 
           spanIndex.textContent = index + '.';
           spanText.textContent = li.textContent;
-          spanText.classList.add('flex-auto');
-          spanText.classList.add('text-xs');
+          //spanText.classList.add('flex-auto');
+          //spanText.classList.add('text-xs');
 
           li.setAttribute('data-index', index);
           li.innerHTML = '';
