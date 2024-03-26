@@ -101,7 +101,7 @@
   const change = () => {
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses)
-
+    numbering()
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -161,6 +161,35 @@
     }
   }
   
+  const numbering =() => {
+    const olElements = document.querySelectorAll('ol:not([class])');
+
+    olElements.forEach((ol) => {
+      // Check if the ol element already has the 'list' class
+      if (!ol.classList.contains('list')) {
+        ol.classList.add('list');
+
+        let index = 1;
+        ol.querySelectorAll('li').forEach((li) => {
+          const spanIndex = document.createElement('span');
+          const spanText = document.createElement('span');
+
+          spanIndex.textContent = index + '.';
+          spanText.textContent = li.textContent;
+          spanText.classList.add('flex-auto');
+          spanText.classList.add('text-xs');
+
+          li.setAttribute('data-index', index);
+          li.innerHTML = '';
+          li.appendChild(spanIndex);
+          li.appendChild(spanText);
+
+          index++;
+        });
+      }
+    });
+  }
+  
   const renderer = new marked.Renderer();
   renderer.code = function (code, language) {
     if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
@@ -173,13 +202,13 @@
   renderer.list = function(body, ordered, start){
     if(ordered){
       return `
-        <ol class="list-decimal ordered">
+        <ol class="ordered">
           ${body}
         </ol>
       `;
     }else{
       return `
-        <ul class="list-disc un-ordered">
+        <ul class="list un-ordered">
         	${body}
         </ul>
       `;
