@@ -189,8 +189,9 @@
   renderer.listitem = function(text, task, checked){
     return `
       	<li>
-      		<span>${task ? "1." : "•"}</span>
-      		<span class="flex-auto">${text}</span>
+      		<span class="flex-auto text-xs">
+      		${checked ? "1." : "•"} ${text}
+      		</span>
       	</li>
     `;
   }

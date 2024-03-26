@@ -93,7 +93,7 @@ let links = transformObject($page.data?.links)
 						<li class="text-lg">
 							<a
 								class={cResultAnchor}
-								href={category?.id+link.href}
+								href={$page.url.origin+"/"+category?.id+link.href}
 								on:click={() => {
 									modalStore.close();
 								}}
