@@ -162,7 +162,7 @@
   }
   
   const numbering =() => {
-    const olElements = document.querySelectorAll('ol:not([class])');
+    const olElements = document.querySelectorAll('ol');
 
     olElements.forEach((ol) => {
       // Check if the ol element already has the 'list' class
@@ -175,9 +175,11 @@
           const spanText = document.createElement('span');
 
           spanIndex.textContent = index + '.';
+          spanText.classList.add('badge');
+          
           spanText.textContent = li.textContent;
-          //spanText.classList.add('flex-auto');
-          //spanText.classList.add('text-xs');
+          spanText.classList.add('flex-auto');
+          spanText.classList.add('text-xs');
 
           li.setAttribute('data-index', index);
           li.innerHTML = '';
@@ -230,11 +232,11 @@
   class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto"
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
-    {#key markdown}
       <MermaidDiagram>
-        <MathJax math={marked.parse(markdown)}/>
+        {#key markdown}
+            <MathJax math={marked.parse(markdown)}></MathJax>
+        {/key}
       </MermaidDiagram>
-    {/key}
   </article>
 </div>
 

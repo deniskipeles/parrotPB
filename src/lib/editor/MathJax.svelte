@@ -16,6 +16,10 @@
         tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
         svg: {fontCache: 'global'}
       };
+      MathJax.tex= {
+				...MathJax.tex,
+        tags: 'ams'
+      }
 		};
 	});
 </script>
