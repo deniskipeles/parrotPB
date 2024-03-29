@@ -199,8 +199,8 @@
 
     olElements.forEach((ol) => {
       // Check if the ol element already has the 'list' class
-      if (!ol.classList.contains('ulist') && ol.classList.contains('un-ordered')) {
-        ol.classList.add('ulist');
+      if (!ol.classList.contains('list') && ol.classList.contains('un-ordered')) {
+        ol.classList.add('list');
 
         let index = 1;
         ol.querySelectorAll('li').forEach((li) => {
@@ -214,6 +214,7 @@
           spanIndex.appendChild(icon)
           spanIndex.classList.add('badge-icon');
           spanIndex.classList.add('p-4');
+          spanIndex.classList.add('text-xs');
           spanIndex.classList.add('variant-soft-primary');
           
           spanText.textContent = li.textContent;
