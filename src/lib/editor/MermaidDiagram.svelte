@@ -4,49 +4,32 @@
   import { mermaidRendered } from "$lib/stores";
   import { onMount, afterUpdate } from 'svelte';
 
-  //onMount(() => loadDiagrams());
-  //afterUpdate(() => loadDiagrams());
+  onMount(() => loadMermaid());
+  afterUpdate(() => loadMermaid());
+  
 	let val
 	mermaid.initialize({ theme: 'neutral', startOnLoad: false })
-  onMount(() => {
+
+  const loadMermaid = () => {
+    mermaidRendered.set(true)
     try{
-      mermaidRendered.set(true)
       setTimeout(async () => {
         await mermaid.run()
       }, 10)
     }catch(e){
       console.log(e)
-      mermaidRendered.set(true)
       setTimeout(async () => {
         await mermaid.run()
       }, 0)
     }
-  })
-
-  function loadDiagrams() {
-    loadMermaid().then(() => {
-      mermaidRendered.set(true)
-      mermaid = window.mermaid;
-      if (mermaid) {
-
-        mermaid.initialize({ theme: 'forest', startOnLoad: false })
-      
-        setTimeout(async () => {
-          await mermaid.run({
-            suppressErrors:true
-          })
-        }, 0)
-
-      }
-    });
   }
 
-  async function loadMermaid() {
+  async function loadMermaid1() {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = "https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js";
       script.onload = () => {
-        mermaid = window.mermaid;
+        //mermaid = window.mermaid;
         resolve();
       };
       script.onerror = (error) => {
@@ -56,10 +39,6 @@
     });
   }
   
-  setTimeout(async () => {
-    $mermaidRendered.set(true)
-  }, 10000)
-
 </script>
 
 
