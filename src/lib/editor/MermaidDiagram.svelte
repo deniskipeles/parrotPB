@@ -9,10 +9,18 @@
 	let val
 	mermaid.initialize({ theme: 'neutral', startOnLoad: false })
   onMount(() => {
-    mermaidRendered.set(true)
-    setTimeout(async () => {
-      await mermaid.run()
-    }, 0)
+    try{
+      mermaidRendered.set(true)
+      setTimeout(async () => {
+        await mermaid.run()
+      }, 10)
+    }catch(e){
+      console.log(e)
+      mermaidRendered.set(true)
+      setTimeout(async () => {
+        await mermaid.run()
+      }, 0)
+    }
   })
 
   function loadDiagrams() {
@@ -47,11 +55,15 @@
       document.head.append(script);
     });
   }
+  
+  setTimeout(async () => {
+    $mermaidRendered.set(true)
+  }, 10000)
 
 </script>
 
 
-  {#if $mermaidRendered}
+{#if $mermaidRendered}
   <div>
     <slot />
   </div>
@@ -59,4 +71,4 @@
   <div out:fade={{ duration:300 }} class="placeholder">
     Loading...
   </div>
-  {/if}
+{/if}

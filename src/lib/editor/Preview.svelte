@@ -102,6 +102,7 @@
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses)
     numbering()
+    bulleting()
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
@@ -166,7 +167,7 @@
 
     olElements.forEach((ol) => {
       // Check if the ol element already has the 'list' class
-      if (!ol.classList.contains('list')) {
+      if (!ol.classList.contains('list') && ol.classList.contains('ordered')) {
         ol.classList.add('list');
 
         let index = 1;
@@ -175,10 +176,40 @@
           const spanText = document.createElement('span');
 
           spanIndex.textContent = index + '.';
-          spanText.classList.add('badge');
+          spanIndex.classList.add('badge');
           
           spanText.textContent = li.textContent;
-          spanText.classList.add('flex-auto');
+          //spanText.classList.add('flex-auto');
+          spanText.classList.add('text-xs');
+
+          li.setAttribute('data-index', index);
+          li.innerHTML = '';
+          li.appendChild(spanIndex);
+          li.appendChild(spanText);
+
+          index++;
+        });
+      }
+    });
+  }
+  const bulleting =() => {
+    const olElements = document.querySelectorAll('ul');
+
+    olElements.forEach((ol) => {
+      // Check if the ol element already has the 'list' class
+      if (!ol.classList.contains('list') && ol.classList.contains('un-ordered')) {
+        ol.classList.add('list');
+
+        let index = 1;
+        ol.querySelectorAll('li').forEach((li) => {
+          const spanIndex = document.createElement('span');
+          const spanText = document.createElement('span');
+
+          spanIndex.textContent = '•';
+          spanIndex.classList.add('badge');
+          
+          spanText.textContent = li.textContent;
+          //spanText.classList.add('flex-auto');
           spanText.classList.add('text-xs');
 
           li.setAttribute('data-index', index);
@@ -210,31 +241,33 @@
       `;
     }else{
       return `
-        <ul class="list un-ordered">
+        <ul class="un-ordered">
         	${body}
         </ul>
       `;
     }
   }
   //renderer.listitem(string text, boolean task, boolean checked){
-  renderer.listitem = function(text, task, checked){
+  /*renderer.listitem = function(text, task, checked){
     return `
-      	<li class="flex text-xs space-y-2">
-      		  • ${text}
+      	<li class="text-xs space-y-2">
+      		  •${text}
       	</li>
     `;
-  }
+  }*/
   marked.use({renderer})
+  
+  $: math = marked.parse(markdown);
 </script>
 
 
 <div
-  class="flex w-full items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto"
+  class="flex w-auto items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  overflow-x-auto"
 >
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
       <MermaidDiagram>
-        {#key markdown}
-            <MathJax math={marked.parse(markdown)}></MathJax>
+        {#key math}
+            <MathJax {math}></MathJax>
         {/key}
       </MermaidDiagram>
   </article>
