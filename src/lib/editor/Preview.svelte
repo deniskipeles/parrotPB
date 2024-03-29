@@ -176,10 +176,12 @@
           const spanText = document.createElement('span');
 
           spanIndex.textContent = index + '.';
-          spanIndex.classList.add('badge');
+          spanIndex.classList.add('badge-icon');
+          spanIndex.classList.add('p-4');
+          spanIndex.classList.add('variant-soft-primary');
           
           spanText.textContent = li.textContent;
-          //spanText.classList.add('flex-auto');
+          spanText.classList.add('flex-auto');
           spanText.classList.add('text-xs');
 
           li.setAttribute('data-index', index);
@@ -197,19 +199,25 @@
 
     olElements.forEach((ol) => {
       // Check if the ol element already has the 'list' class
-      if (!ol.classList.contains('list') && ol.classList.contains('un-ordered')) {
-        ol.classList.add('list');
+      if (!ol.classList.contains('ulist') && ol.classList.contains('un-ordered')) {
+        ol.classList.add('ulist');
 
         let index = 1;
         ol.querySelectorAll('li').forEach((li) => {
           const spanIndex = document.createElement('span');
           const spanText = document.createElement('span');
+          const icon = document.createElement('i');
+          icon.classList.add('fa-solid')
+          icon.classList.add('fa-arrow-right')
 
-          spanIndex.textContent = '•';
-          spanIndex.classList.add('badge');
+          spanIndex.innerHTML = '';
+          spanIndex.appendChild(icon)
+          spanIndex.classList.add('badge-icon');
+          spanIndex.classList.add('p-4');
+          spanIndex.classList.add('variant-soft-primary');
           
           spanText.textContent = li.textContent;
-          //spanText.classList.add('flex-auto');
+          spanText.classList.add('flex-auto');
           spanText.classList.add('text-xs');
 
           li.setAttribute('data-index', index);
@@ -247,17 +255,10 @@
       `;
     }
   }
-  //renderer.listitem(string text, boolean task, boolean checked){
-  /*renderer.listitem = function(text, task, checked){
-    return `
-      	<li class="text-xs space-y-2">
-      		  •${text}
-      	</li>
-    `;
-  }*/
+  //renderer.listitem(string text, boolean task, boolean checked)
   marked.use({renderer})
   
-  let math = marked.parse(markdown);
+  $: math = marked.parse(markdown);
 </script>
 
 
