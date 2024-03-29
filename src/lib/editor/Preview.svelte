@@ -257,7 +257,7 @@
   }*/
   marked.use({renderer})
   
-  $: math = marked.parse(markdown);
+  let math = marked.parse(markdown);
 </script>
 
 
