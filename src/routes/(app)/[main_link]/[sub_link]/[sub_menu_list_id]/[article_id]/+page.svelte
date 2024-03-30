@@ -1,5 +1,7 @@
 <script lang="ts">
   import Preview from '$lib/editor/Preview.svelte';
+  import StackEdit from '$lib/editor/StackEdit.svelte';
+  
   import { onMount } from 'svelte';
   import { Avatar, SlideToggle } from '@skeletonlabs/skeleton';
   import { Error, LayoutPage } from '$lib/components';
@@ -50,6 +52,10 @@
       }
     }
   }
+  
+  function markdownChange(val){
+    data.article.content = val;
+  }
 
 </script>
 
@@ -97,6 +103,7 @@
     <button on:click={async () => await updateArticle()} type="button" class="btn variant-filled"
       >Update Article</button
     >
+    <StackEdit markdown={data?.article?.content} {markdownChange} />
   </div>
   {#if edit && data.article}
     <label class="label">
@@ -239,6 +246,19 @@
           </a>
         {/each}
       </header>
+      
+        {#if $page.data?.user?.id === data.article?.developer_id}
+          <div class="flex gap-4">
+            <SlideToggle name="slider-label" on:change={() => (edit = !edit)} checked={edit}
+              >Edit The Article</SlideToggle
+            >
+            <button on:click={async () => await updateArticle()} type="button" class="btn variant-filled"
+              >Update Article</button
+            >
+            <StackEdit markdown={data?.article?.content} {markdownChange} />
+          </div>
+        {/if}
+      
     {/if}
   </LayoutPage>
 {/if}

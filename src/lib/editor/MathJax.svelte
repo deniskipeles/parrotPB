@@ -1,12 +1,12 @@
 <script>
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 
 	export let math;
 	let mathContent ='';
 	const dispatch = createEventDispatcher();
 	
-	onMount(() => {
+	const loadMathJax = () => {
 		let script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
     document.head.append(script);
@@ -21,7 +21,10 @@
         tags: 'ams'
       }
 		};
-	});
+	};
+	
+	onMount(() => loadMathJax());
+  afterUpdate(() => loadMathJax());
 </script>
 
 <p>

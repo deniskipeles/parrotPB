@@ -3,6 +3,7 @@
 	import { fade } from "svelte/transition";
   import { mermaidRendered } from "$lib/stores";
   import { onMount, afterUpdate } from 'svelte';
+  import { afterNavigate } from '$app/navigation';
 
   onMount(() => loadMermaid());
   afterUpdate(() => loadMermaid());
@@ -18,9 +19,6 @@
       }, 10)
     }catch(e){
       console.log(e)
-      setTimeout(async () => {
-        await mermaid.run()
-      }, 0)
     }
   }
 
