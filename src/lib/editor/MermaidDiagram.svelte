@@ -9,14 +9,15 @@
   // afterUpdate(() => loadMermaid());
   
 	let val
-	mermaid.initialize({ theme: 'neutral', startOnLoad: false })
 
   const loadMermaid = () => {
     mermaidRendered.set(true)
+	  mermaid.initialize({ theme: 'forest', startOnLoad: true })
+	  
     try{
       setTimeout(async () => {
         await mermaid.run()
-      }, 10)
+      }, 0)
     }catch(e){
       console.log(e)
     }
