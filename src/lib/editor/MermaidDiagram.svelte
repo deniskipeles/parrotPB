@@ -6,7 +6,7 @@
   import { afterNavigate } from '$app/navigation';
 
   onMount(() => loadMermaid());
-  afterUpdate(() => loadMermaid());
+  // afterUpdate(() => loadMermaid());
   
 	let val
 	mermaid.initialize({ theme: 'neutral', startOnLoad: false })

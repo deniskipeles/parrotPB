@@ -27,6 +27,9 @@
   import 'highlight.js/styles/github-dark.css';
   import { storeHighlightJs } from '@skeletonlabs/skeleton';
   import { getSubText } from '$lib/utils';
+  
+  import MathJax from '$lib/editor/MathJax.svelte';
+  import MermaidDiagram from '$lib/editor/MermaidDiagram.svelte';
 
   storeHighlightJs.set(hljs);
 
@@ -100,5 +103,8 @@
   <!-- Page Footer -->
   <svelte:fragment slot="pageFooter">
     <Footer />
+      <MermaidDiagram>
+            <MathJax math={"§"}></MathJax>
+      </MermaidDiagram>
   </svelte:fragment>
 </AppShell>

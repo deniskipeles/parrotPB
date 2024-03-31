@@ -1,6 +1,6 @@
 <script lang="ts">
   import Preview from '$lib/editor/Preview.svelte';
-  import StackEdit from '$lib/editor/StackEdit.svelte';
+  import EditButton from '$lib/editor/EditButton.svelte';
   
   import { onMount } from 'svelte';
   import { Avatar, SlideToggle } from '@skeletonlabs/skeleton';
@@ -56,6 +56,7 @@
   function markdownChange(val){
     data.article.content = val;
   }
+  const editFxn = () => edit = !edit;
 
 </script>
 
@@ -96,15 +97,13 @@
 </ol>
 
 {#if $page.data?.user?.id === data.article?.developer_id}
-  <div class="flex gap-4">
-    <SlideToggle name="slider-label" on:change={() => (edit = !edit)} checked={edit}
-      >Edit The Article</SlideToggle
-    >
-    <button on:click={async () => await updateArticle()} type="button" class="btn variant-filled"
-      >Update Article</button
-    >
-    <StackEdit markdown={data?.article?.content} {markdownChange} />
-  </div>
+  <EditButton 
+    {data}
+    {edit}
+    {editFxn}
+    {markdownChange}
+    {updateArticle}
+  />
   {#if edit && data.article}
     <label class="label">
       <span>Article Content :: Markdown Editor</span>
@@ -187,6 +186,13 @@
         </header>
         <!-- Article -->
         <Preview markdown={data?.article?.content} />
+        <EditButton 
+          {data}
+          {edit}
+          {editFxn}
+          {markdownChange}
+          {updateArticle}
+        />
         <!-- Footer -->
         <footer class="card p-4 variant-glass-surface flex justify-between items-center mb-28">
           <!-- Tags -->
@@ -246,18 +252,6 @@
           </a>
         {/each}
       </header>
-      
-        {#if $page.data?.user?.id === data.article?.developer_id}
-          <div class="flex gap-4">
-            <SlideToggle name="slider-label" on:change={() => (edit = !edit)} checked={edit}
-              >Edit The Article</SlideToggle
-            >
-            <button on:click={async () => await updateArticle()} type="button" class="btn variant-filled"
-              >Update Article</button
-            >
-            <StackEdit markdown={data?.article?.content} {markdownChange} />
-          </div>
-        {/if}
       
     {/if}
   </LayoutPage>
