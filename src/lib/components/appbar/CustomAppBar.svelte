@@ -3,7 +3,8 @@
   import { enhance } from '$app/forms';
 
   // Types
-  import type { ModalSettings, DrawerSettings,SlideToggle } from '@skeletonlabs/skeleton';
+  import type { ModalSettings, DrawerSettings } from '@skeletonlabs/skeleton';
+  import { SlideToggle } from '@skeletonlabs/skeleton';
   import type { SubmitFunction } from '@sveltejs/kit';
 
   // Docs
