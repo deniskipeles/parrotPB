@@ -3,7 +3,7 @@
   import { enhance } from '$app/forms';
 
   // Types
-  import type { ModalSettings, DrawerSettings } from '@skeletonlabs/skeleton';
+  import type { ModalSettings, DrawerSettings,SlideToggle } from '@skeletonlabs/skeleton';
   import type { SubmitFunction } from '@sveltejs/kit';
 
   // Docs
@@ -80,6 +80,7 @@
     }
   };
   // console.log($page.data.links)
+  let save_data = $page.data?.user?.save_data ?? false;
 </script>
 
 <!-- NOTE: using stopPropagation to override Chrome for Windows search shortcut -->
@@ -115,6 +116,10 @@
       </button>
       <!-- popup -->
       <div class="card p-4 w-60 shadow-xl" data-popup="user">
+        <section class="flex justify-between items-center">
+          <SlideToggle name="save_data" on:change={() => {}} checked={save_data}>Save Data</SlideToggle>
+        </section>
+        <hr />
         <nav class="list-nav">
           <ul>
             {#if $page.data.user}

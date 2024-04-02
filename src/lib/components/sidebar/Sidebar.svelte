@@ -6,6 +6,7 @@
   import {
     AppRail,
     AppRailTile,
+    AppRailAnchor,
     InputChip,
     ProgressRadial,
     popup,
@@ -18,19 +19,21 @@
   let currentRailCategory: string | undefined = undefined;
   const drawerStore = getDrawerStore();
   
+  function onClickAnchor(): void {
+		currentRailCategory = undefined;
+		drawerStore.close();
+	}
+  
   afterNavigate(()=>{
     drawerStore.close()
   })
 
   page.subscribe(($page) => {
-    if ($page.url.pathname === '/') currentRailCategory = '/';
-
     let basePath: string = $page.url.pathname;
     if (!basePath) return;
 
-    for (const key in $page.data?.links ?? []) {
-      let k = key;
-      if (basePath?.includes(key?.id)) {
+    for (var k in $page.data?.links ?? []) {
+      if (basePath?.includes(k?.id)) {
         currentRailCategory = k?.id;
       }
     }
@@ -38,8 +41,7 @@
 
   $: mainMenu = $page?.data?.links?.find((l) => currentRailCategory == l?.id);
 
-  $: listboxItemActive = (href: string) =>
-    $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
+  $: listboxItemActive = (href: string) => $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
 
   let loading_links = false;
   let error: any = null;
@@ -69,14 +71,17 @@
 </script>
 
 <div
-  class="grid grid-cols-[auto_1fr] h-full bg-surface-50-900-token border-r border-surface-500/30 {currentRailCategory ==
-  '/'
-    ? ''
-    : $$props.class ?? ''}"
+  class="grid grid-cols-[auto_1fr] h-full bg-surface-50-900-token border-r border-surface-500/30 {currentRailCategory == '/' ? '' : $$props.class ?? ''}"
 >
   <!-- App Rail -->
   <AppRail background="bg-transparent" border="border-r border-surface-500/30">
     <!-- Mobile Only -->
+    <AppRailAnchor href="/" on:click={() => { onClickAnchor() }}>
+			<svelte:fragment slot="lead"><i class="fa-solid fa-home text-2xl" /></svelte:fragment>
+			<span>Home</span>
+		</AppRailAnchor>
+		<hr class="opacity-30" />
+		<!--
     <AppRailTile
       bind:group={currentRailCategory}
       name="/"
@@ -88,6 +93,8 @@
       >
       <span class="capitalize">Home</span>
     </AppRailTile>
+    -->
+    
     {#each $page.data?.links ?? [] as record}
       <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.id}>
         <svelte:fragment slot="lead"
@@ -97,7 +104,7 @@
       </AppRailTile>
       <hr class="opacity-30" />
     {/each}
-    <AppRailTile bind:group={currentRailCategory} name="add" value={'add'}>
+    <AppRailTile bind:group={currentRailCategory} name="add" value="add">
       <svelte:fragment slot="lead"
         ><i class={`fa fa-plus text-2xl`} aria-hidden="true" /></svelte:fragment
       >
