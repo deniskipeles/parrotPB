@@ -255,7 +255,7 @@
           </nav>
           <hr />
           <div>
-            <a class="btn variant-filled w-full" href="/docs/generator">Create a Theme</a>
+            <a class="btn variant-filled w-full" href="/theme-generator">Create a Theme</a>
           </div>
         </div>
         <!-- <div class="arrow bg-surface-100-800-token" /> -->
