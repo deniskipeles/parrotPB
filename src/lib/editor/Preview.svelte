@@ -49,7 +49,7 @@
     h4: "h4 text-lg mb-4",
     h5: "h5 text-base mb-4",
     h6: "h6 text-sm mb-4",
-    p: "p flex mb-4 gap-4",
+    p: "p mb-4",
     a: "a anchor text-blue-500 underline hover:no-underline",
     //ul: "list list-disc",
     //ol: "list list-decimal",
@@ -273,10 +273,10 @@
   $: math = marked.parse(markdown);
 </script>
 
-<!--
 <div class="flex w-auto items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  overflow-x-auto">
--->
+<!--
 <div class="page-container">
+-->
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
       <MermaidDiagram>
         {#key math}
