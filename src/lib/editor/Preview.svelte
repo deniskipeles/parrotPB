@@ -49,7 +49,7 @@
     h4: "h4 text-lg mb-4",
     h5: "h5 text-base mb-4",
     h6: "h6 text-sm mb-4",
-    p: "p mb-4",
+    p: "p flex mb-4 gap-4",
     a: "a anchor text-blue-500 underline hover:no-underline",
     //ul: "list list-disc",
     //ol: "list list-decimal",
@@ -106,45 +106,41 @@
     tableJsInjection()
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
-      const btn = document.createElement('button');
-      btn.innerText = ' Copy ';
-      btn.classList.add('btn');
-      btn.classList.add('variant-filled');
-      // btn.style.backgroundColor = '#f0f0f0';
-      btn.addEventListener('click', () => {
-        const code = elem.innerText;
-        navigator.clipboard
-          .writeText(code)
-          .then(() => {
-            const t: ToastSettings = { message: 'Code copied to clipboard.' };
-            toastStore.trigger(t);
-            btn.innerText = 'Copied ✔️';
-            // console.log(code);
-            setTimeout(() => {
-              btn.innerText = 'Copy';
-            }, 4000);
-          })
-          .catch((e) => {
-            console.log(e);
-            const t: ToastSettings = {
-              message: 'Failed to copy to clipboard.',
-              background: 'bg-red-500'
-            };
-            toastStore.trigger(t);
-          });
-      });
-      if (!elem.parentNode?.querySelector('button')) {
-        elem.parentNode?.prepend(btn);
-      }
       if (!elem.classList.contains('mermaid')) {
         hljs.highlightElement(elem);
       }
     });
     
+    document.querySelectorAll<HTMLButtonElement>('.codeblock-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const codeElement = btn.parentElement?.nextElementSibling?.querySelector('code');
+            if (codeElement) {
+                const code = codeElement.innerText;
+                navigator.clipboard
+                    .writeText(code)
+                    .then(() => {
+                        const t: ToastSettings = { message: 'Code copied to clipboard.' };
+                        toastStore.trigger(t);
+                        btn.innerText = 'Copied ✔️👍';
+                        setTimeout(() => {
+                            btn.innerText = "Copy";
+                        }, 4000);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        const t: ToastSettings = {
+                            message: 'Failed to copy to clipboard.',
+                            background: 'bg-red-500'
+                        };
+                        toastStore.trigger(t);
+                    });
+            }
+        });
+    });
+
     document.querySelectorAll<HTMLPreElement>('pre.mermaid')?.forEach((elem, index) => {
       elem.classList.remove('pre');
     });
-    
   };
 
   function tableJsInjection() {
@@ -237,7 +233,22 @@
     if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
       return '<pre class="mermaid">' + code + '</pre>';
     } else {
-      return '<pre><code>' + code + '</code></pre>';
+      return `
+      <!-- prettier-ignore -->
+      <div class="codeblock overflow-hidden shadow bg-neutral-900/90 text-sm text-white rounded-container-token shadow" data-testid="codeblock">
+      	<!-- Header -->
+      	<header class="codeblock-header text-xs text-white/50 uppercase flex justify-between items-center p-2 pl-4">
+      		<!-- Language -->
+      		<span class="codeblock-language">${language}</span>
+      		<!-- Copy Button -->
+      		<button type="button" class="codeblock-btn btn btn-sm variant-soft !text-white" on:click={onCopyClick} use:clipboard=${code}>
+      			Copy
+      		</button>
+      	</header>
+      	<!-- Pre/Code -->
+      	<pre class="codeblock-pre whitespace-pre-wrap break-all p-4 pt-1"><code class="codeblock-code language-${language} lineNumbers">${code}</code></pre>
+      </div>
+      `
     }
   };
   //renderer.list(string body, boolean ordered, number start){
@@ -262,14 +273,14 @@
   $: math = marked.parse(markdown);
 </script>
 
-
-<div
-  class="flex w-auto items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  overflow-x-auto"
->
+<!--
+<div class="flex w-auto items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  overflow-x-auto">
+-->
+<div class="page-container">
   <article class="md prose lg:prose-xl max-w-full space-y-4 mb-2">
       <MermaidDiagram>
         {#key math}
-            <MathJax {math}></MathJax>
+            <MathJax {math}/>
         {/key}
       </MermaidDiagram>
   </article>

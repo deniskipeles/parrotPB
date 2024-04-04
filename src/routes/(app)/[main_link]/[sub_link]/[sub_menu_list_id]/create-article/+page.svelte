@@ -22,7 +22,12 @@
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">
-    {getLabelById($page.data?.links,$page.params?.sub_menu_list_id)}
+    <a
+      class="anchor"
+      href={`/${$page.params?.main_link}/${$page.params?.sub_link}/${$page.params?.sub_menu_list_id}`}
+    >
+      {getLabelById($page.data?.links,$page.params?.sub_menu_list_id)}
+    </a>
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
   <li class="crumb capitalize">Create Article</li>

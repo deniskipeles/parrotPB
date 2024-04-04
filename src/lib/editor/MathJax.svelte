@@ -2,7 +2,7 @@
 	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 
-	export let math;
+	export let math="";
 	let mathContent ='';
 	const dispatch = createEventDispatcher();
 	
@@ -13,13 +13,19 @@
 		
 		script.onload = () => {
       MathJax = {
-        tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ],
+          tags: 'ams'
+        },
         svg: {fontCache: 'global'}
       };
-      MathJax.tex= {
+      /*MathJax.tex= {
 				...MathJax.tex,
         tags: 'ams'
-      }
+      }*/
 		};
 	};
 	
@@ -32,5 +38,3 @@
 </p>
 
 
-
-	

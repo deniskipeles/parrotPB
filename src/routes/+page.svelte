@@ -62,7 +62,7 @@
       <Error error={data?.error} />
     {:else if data.article}
       <!-- blog-post -->
-      <div class="max-w-5xl mx-auto p-4 md:p-12 space-y-8">
+      <div class="max-w-5xl mx-auto space-y-8">
         <!-- Header -->
         <header class="space-y-4">
           <!-- Timestamp / Read Time -->
@@ -140,7 +140,7 @@
               >{data?.article?.title}</strong
             >
           </p>
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-4 overflow-x">
             {#each data?.article?.tags ?? [] as tag}
               <span class="text-sm font-bold opacity-50 capitalize">{tag}</span>
             {/each}
@@ -194,7 +194,7 @@
     <section class="blog-list space-y-8">
       {#each data?.meta?.items as post}
         <a
-          class="block hover:card hover:variant-soft p-4 rounded-container-token"
+          class="block hover:card hover:variant-soft rounded-container-token"
           href={`${$page.url.origin}?article=${post.id}`}
           data-sveltekit-preload-data="hover"
         >
