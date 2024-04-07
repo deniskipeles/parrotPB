@@ -103,8 +103,8 @@
   <!-- Page Footer -->
   <svelte:fragment slot="pageFooter">
     <Footer />
-      <MermaidDiagram>
+      <!--MermaidDiagram>
             <MathJax math={"§"}></MathJax>
-      </MermaidDiagram>
+      </MermaidDiagram-->
   </svelte:fragment>
 </AppShell>

@@ -26,7 +26,7 @@
 	};
 	
 	onMount(() => loadMathJax());
-  afterNavigate(() => loadMathJax());
+  //afterNavigate(() => loadMathJax());
 </script>
 
 <p>
