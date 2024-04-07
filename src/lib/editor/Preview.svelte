@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { marked } from 'marked';
+  // import { marked } from 'marked';
   import MathJax from './MathJax.svelte';
   import MermaidDiagram from './MermaidDiagram.svelte';
   import { onMount } from 'svelte';
@@ -7,6 +7,8 @@
   import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
   import { afterNavigate } from '$app/navigation';
   // import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  
+  import { markedFxn } from "$lib/utils/customMarked.js"
 
   export let markdown = '';
 
@@ -14,11 +16,6 @@
   onMount(() => {
     change()
   });
-  afterNavigate(() => {
-    change()
-  });
-  
-  
   
   
   
@@ -36,7 +33,9 @@
   
         // Add each class to the element
         for (const cssClass of classesArray) {
+          if (!elements[i].classList.contains(cssClass)) {
             elements[i].classList.add(cssClass);
+          }
         }
       }
     }
@@ -56,8 +55,9 @@
     //li: "text-xs",
     blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
     pre: "pre",
-    // code: "code bg-gray-100 px-1 rounded",
+    codespan: "code",
     img: "img w-auto mb-4",
+    divTable: "table-container",
     table: "table table-hover",
     th: "th font-bold bg-gray-100 px-4 py-2",
     td: "td px-4 py-2",
@@ -97,13 +97,15 @@
     // Add more elements and their corresponding Tailwind classes here
   };
   
+  const marked = markedFxn(tailwindClasses)
+  
   const toastStore = getToastStore();
   const change = () => {
     // Call the function to inject Tailwind classes into the HTML elements
     injectTailwindClasses(tailwindClasses)
     numbering()
     bulleting()
-    tableJsInjection()
+    
     // CodeBlock Highlight
     document.querySelectorAll<HTMLPreElement>('pre code').forEach((elem, index) => {
       if (!elem.classList.contains('mermaid')) {
@@ -143,133 +145,96 @@
     });
   };
 
-  function tableJsInjection() {
-    const tableElements = document.querySelectorAll<HTMLTableElement>('article table'); // Select the ordered list
-    if (tableElements.length) {
-      tableElements.forEach((table) => {
-        const divTag = document.createElement('div');
-        divTag.classList.add("table-container");
-        //table.classList.add("table");
-        //table.classList.add("rounded-container-token");
-        //table.classList.add("table-hover");
-        divTag.append(table.cloneNode(true))
-        table.parentNode?.replaceChild(divTag,table)
-      })
-    }
-  }
+
+  const numbering = (ol = document.querySelectorAll('ol')) => {
+    ol = ol || document.querySelectorAll('ol');
   
-  const numbering =() => {
-    const olElements = document.querySelectorAll('ol');
-
-    olElements.forEach((ol) => {
-      // Check if the ol element already has the 'list' class
-      if (!ol.classList.contains('list') && ol.classList.contains('ordered')) {
-        ol.classList.add('list');
-
+    ol.forEach((list) => {
+      if (!list.classList.contains('list') && list.classList.contains('ordered')) {
+        list.classList.add('list');
+  
         let index = 1;
-        ol.querySelectorAll('li').forEach((li) => {
+        list.querySelectorAll('li').forEach((li) => {
           const spanIndex = document.createElement('span');
           const spanText = document.createElement('span');
-
+  
           spanIndex.textContent = index + '.';
           spanIndex.classList.add('badge-icon');
           spanIndex.classList.add('p-4');
           spanIndex.classList.add('variant-soft-primary');
-          
+  
           spanText.textContent = li.textContent;
           spanText.classList.add('flex-auto');
           spanText.classList.add('text-xs');
-
+  
           li.setAttribute('data-index', index);
           li.innerHTML = '';
           li.appendChild(spanIndex);
           li.appendChild(spanText);
-
+  
+          // If there's a nested list, handle it separately
+          const nestedOL = li.querySelector('ol');
+          const nestedUL = li.querySelector('ul');
+          if (nestedOL) {
+            numbering(nestedOL);
+          }
+          if (nestedUL) {
+            bulleting(nestedUL);
+          }
+  
           index++;
         });
       }
     });
   }
-  const bulleting =() => {
-    const olElements = document.querySelectorAll('ul');
-
-    olElements.forEach((ol) => {
-      // Check if the ol element already has the 'list' class
-      if (!ol.classList.contains('list') && ol.classList.contains('un-ordered')) {
-        ol.classList.add('list');
-
+  
+  const bulleting = (ul = document.querySelectorAll('ul')) => {
+    ul = ul || document.querySelectorAll('ul');
+  
+    ul.forEach((list) => {
+      if (!list.classList.contains('list') && list.classList.contains('un-ordered')) {
+        list.classList.add('list');
+  
         let index = 1;
-        ol.querySelectorAll('li').forEach((li) => {
+        list.querySelectorAll('li').forEach((li) => {
           const spanIndex = document.createElement('span');
           const spanText = document.createElement('span');
           const icon = document.createElement('i');
           icon.classList.add('fa-solid')
           icon.classList.add('fa-arrow-right')
-
+  
           spanIndex.innerHTML = '';
           spanIndex.appendChild(icon)
           spanIndex.classList.add('badge-icon');
           spanIndex.classList.add('p-4');
           spanIndex.classList.add('text-xs');
           spanIndex.classList.add('variant-soft-primary');
-          
+  
           spanText.textContent = li.textContent;
           spanText.classList.add('flex-auto');
           spanText.classList.add('text-xs');
-
+  
           li.setAttribute('data-index', index);
           li.innerHTML = '';
           li.appendChild(spanIndex);
           li.appendChild(spanText);
-
+  
+          // If there's a nested list, handle it separately
+          const nestedOL = li.querySelector('ol');
+          const nestedUL = li.querySelector('ul');
+          if (nestedOL) {
+            numbering(nestedOL);
+          }
+          if (nestedUL) {
+            bulleting(nestedUL);
+          }
+  
           index++;
         });
       }
     });
   }
-  
-  const renderer = new marked.Renderer();
-  renderer.code = function (code, language) {
-    if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
-      return '<pre class="mermaid">' + code + '</pre>';
-    } else {
-      return `
-      <!-- prettier-ignore -->
-      <div class="codeblock overflow-hidden shadow bg-neutral-900/90 text-sm text-white rounded-container-token shadow" data-testid="codeblock">
-      	<!-- Header -->
-      	<header class="codeblock-header text-xs text-white/50 uppercase flex justify-between items-center p-2 pl-4">
-      		<!-- Language -->
-      		<span class="codeblock-language">${language}</span>
-      		<!-- Copy Button -->
-      		<button type="button" class="codeblock-btn btn btn-sm variant-soft !text-white" on:click={onCopyClick} use:clipboard=${code}>
-      			Copy
-      		</button>
-      	</header>
-      	<!-- Pre/Code -->
-      	<pre class="codeblock-pre whitespace-pre-wrap break-all p-4 pt-1"><code class="codeblock-code language-${language} lineNumbers">${code}</code></pre>
-      </div>
-      `
-    }
-  };
-  //renderer.list(string body, boolean ordered, number start){
-  renderer.list = function(body, ordered, start){
-    if(ordered){
-      return `
-        <ol class="ordered">
-          ${body}
-        </ol>
-      `;
-    }else{
-      return `
-        <ul class="un-ordered">
-        	${body}
-        </ul>
-      `;
-    }
-  }
-  //renderer.listitem(string text, boolean task, boolean checked)
-  marked.use({renderer})
-  
+
   $: math = marked.parse(markdown);
 </script>
 

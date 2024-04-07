@@ -1,5 +1,5 @@
 <script>
-	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 
 	export let math="";
@@ -22,15 +22,11 @@
         },
         svg: {fontCache: 'global'}
       };
-      /*MathJax.tex= {
-				...MathJax.tex,
-        tags: 'ams'
-      }*/
 		};
 	};
 	
 	onMount(() => loadMathJax());
-  //afterUpdate(() => loadMathJax());
+  afterNavigate(() => loadMathJax());
 </script>
 
 <p>

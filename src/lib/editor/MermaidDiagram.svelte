@@ -2,17 +2,17 @@
   import mermaid from "mermaid";
 	import { fade } from "svelte/transition";
   import { mermaidRendered } from "$lib/stores";
-  import { onMount, afterUpdate } from 'svelte';
+  import { onMount } from 'svelte';
   import { afterNavigate } from '$app/navigation';
 
   onMount(() => loadMermaid());
-  // afterUpdate(() => loadMermaid());
+  afterNavigate(() => loadMermaid());
   
 	let val
 
   const loadMermaid = () => {
     mermaidRendered.set(true)
-	  mermaid.initialize({ theme: 'forest', startOnLoad: true })
+	  mermaid.initialize({ theme: 'forest', startOnLoad: false })
 	  
     try{
       setTimeout(async () => {
@@ -22,22 +22,6 @@
       console.log(e)
     }
   }
-
-  async function loadMermaid1() {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = "https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js";
-      script.onload = () => {
-        //mermaid = window.mermaid;
-        resolve();
-      };
-      script.onerror = (error) => {
-        reject(error);
-      };
-      document.head.append(script);
-    });
-  }
-  
 </script>
 
 
