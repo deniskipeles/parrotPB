@@ -19,7 +19,7 @@
     "dompurify": "^2.4.3",
     "google-auth-library": "^9.0.0",
     "highlight.js": "^11.8.0",
-    "marked": "^4.2.12",
+    "marked": "latest",
     "pocketbase": "^0.18.0"
   },
   "devDependencies": {

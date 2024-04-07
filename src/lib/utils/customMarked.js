@@ -3,24 +3,61 @@ import {
 } from 'marked';
 //import katex from 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.mjs';
 
-const tailwindObj = {
-  'h1': {
-    'text-red-500': true,
-    'text-xl': true,
-    // ...
-  },
-  'h2': {
-    'text-blue-400': true,
-    'text-lg': true,
-    // ...
-  },
-  'p': {
-    'text-gray-700': true,
-    'leading-relaxed': true,
-    // ...
-  },
-
-}
+const tailwindObj =  {
+    h1: "h1 text-3xl mb-4",
+    h2: "h2 text-2xl mb-4",
+    h3: "h3 text-xl mb-4",
+    h4: "h4 text-lg mb-4",
+    h5: "h5 text-base mb-4",
+    h6: "h6 text-sm mb-4",
+    p: "p mb-4",
+    a: "a anchor text-blue-500 underline hover:no-underline",
+    //ul: "list list-disc",
+    //ol: "list list-decimal",
+    //li: "text-xs",
+    blockquote: "blockquote italic border-l-4 border-gray-300 pl-4 mb-4",
+    pre: "pre",
+    codespan: "code",
+    img: "img w-auto mb-4",
+    divTable: "table-container",
+    table: "table table-hover",
+    th: "th font-bold bg-gray-100 px-4 py-2",
+    td: "td px-4 py-2",
+    strong: "strong font-bold",
+    em: "em italic",
+    hr: "hr border-gray-300 mb-4",
+    //button: "button bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700",
+    input: "input border border-gray-300 rounded py-2 px-4 w-full",
+    textarea: "textarea border border-gray-300 rounded py-2 px-4 w-full",
+    select: "select border border-gray-300 rounded py-2 px-4 w-full",
+    label: "label font-bold mb-2",
+    form: "form",
+    fieldset: "fieldset border border-gray-300 rounded px-4 py-2 mb-4",
+    legend: "legend font-bold mb-2",
+    iframe: "iframe w-full h-auto mb-4",
+    figure: "figure mb-4",
+    figcaption: "figcaption italic mb-4",
+    cite: "cite italic",
+    q: "q italic",
+    sup: "sup text-xs font-normal",
+    sub: "sub text-xs font-normal",
+    small: "small text-xs font-normal",
+    mark: "mark bg-yellow-200 px-1 rounded",
+    del: "del line-through text-gray-500",
+    ins: "ins underline ",
+    time: "time ",
+    abbr: "abbr border-b border-dotted ",
+    acronym: "acronym border-b border-dotted ",
+    address: "address ",
+    caption: "caption font-bold mb-2",
+    //code: "code bg-gray-100 px-1 rounded",
+    dd: "dd mb-2",
+    dt: "dt font-bold mb-2",
+    kbd: "kbd bg-gray-100 px-1 rounded",
+    samp: "samp bg-gray-100 px-1 rounded",
+    var: "var italic",
+    // Add more elements and their corresponding Tailwind classes here
+  };
 
 function generateTailwindObj(tailwindClasses) {
   const tailwindobj = {};
@@ -257,12 +294,13 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     codespan(src) {
       const match = src.match(/^\$+([^\$\n]+?)\$+/);
       if (match) {
-        return {
+        return false
+        /*return {
           type: 'codespan',
           raw: match[0],
           //text: katex.renderToString(match[1].trim(), { throwOnError: false }),
           text: match[1].trim(),
-        };
+        };*/
       }
       // return false to use original codespan tokenizer
       return false;
@@ -270,9 +308,8 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
   };
 
   return marked.use({
-    //tokenizer, 
+    tokenizer, 
 		renderer
   });
-
 }
 

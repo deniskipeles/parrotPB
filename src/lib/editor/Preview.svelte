@@ -8,7 +8,7 @@
   import { afterNavigate } from '$app/navigation';
   // import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
   
-  import { markedFxn } from "$lib/utils/customMarked.js"
+  import { markedFxn } from "$lib/utils/customMarked"
 
   export let markdown = '';
 
@@ -97,7 +97,7 @@
     // Add more elements and their corresponding Tailwind classes here
   };
   
-  const marked = markedFxn(tailwindClasses)
+  
   
   const toastStore = getToastStore();
   const change = () => {
@@ -234,8 +234,10 @@
       }
     });
   }
-
-  $: math = marked.parse(markdown);
+  
+  const marked = markedFxn()
+	
+	$: math = marked.parse(markdown)
 </script>
 
 <div class="flex w-auto items-center justify-center rounded-md bg-white/5 p-[rfs(50px)] sm:p-5  overflow-x-auto">
