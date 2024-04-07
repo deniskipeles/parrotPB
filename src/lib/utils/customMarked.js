@@ -1,7 +1,7 @@
 import {
   marked
 } from 'marked';
-import katex from 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.mjs';
+//import katex from 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.mjs';
 
 const tailwindObj = {
   'h1': {
@@ -260,7 +260,8 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
         return {
           type: 'codespan',
           raw: match[0],
-          text: katex.renderToString(match[1].trim(), { throwOnError: false }),
+          //text: katex.renderToString(match[1].trim(), { throwOnError: false }),
+          text: match[1].trim(),
         };
       }
       // return false to use original codespan tokenizer
@@ -269,7 +270,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
   };
 
   return marked.use({
-    tokenizer, 
+    //tokenizer, 
 		renderer
   });
 
