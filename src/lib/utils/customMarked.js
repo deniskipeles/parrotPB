@@ -1,7 +1,13 @@
 import {
   marked
 } from 'marked';
-//import katex from 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.mjs';
+/*
+import katex from 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.mjs';
+import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+*/
+import katex from "katex";
+import hljs from "highlight.js"
+
 
 const tailwindObj =  {
     h1: "h1 text-3xl mb-4",
@@ -115,21 +121,63 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
   const renderer = new marked.Renderer();
 
   // Override renderer methods for HTML elements with Tailwind CSS classes
-  renderer.list = function(body, ordered, start){
+  function addClassAndSpanUl(listString) {
+    let modifiedString = listString.replace(/<li>/g, '<p class="new-class ul"><span>• </span>').replace(/<\/li>/g, '</p>');
+    return modifiedString;
+}
+
+function addClassAndSpanOl(listString) {
+    let orderedListRegex = /<li>([\s\S]*?)<\/li>/g;
+    let index = 1;
+    let modifiedString = listString.replace(orderedListRegex, function(match) {
+        let listItem = match.substring(4, match.length - 5).trim();
+        let newListItem = `<p class="new-class li"><span>${index}. </span>${listItem}</p>`;
+        index++;
+        return newListItem;
+    });
+    return modifiedString;
+}
+
+
+	
+	renderer.list = function(body, ordered, start){
+    
     if(ordered){
+			body = addClassAndSpanOl(body)
+			
       return `
-        <ol class="ordered">
+			  <div style="padding-left: 20px;">
+        <oll class="ordered">
           ${body}
-        </ol>
+        </oll>
+				</div>
       `;
     }else{
+      body = addClassAndSpanUl(body)
+			// console.log(body)
       return `
-        <ul class="un-ordered">
+			  <div style="padding-left: 20px;">
+        <ull class="un-ordered">
         	${body}
-        </ul>
+        </ull>
+				</div>
       `;
     }
   }
+
+	renderer.listitem = function(text, task, checked){
+		if (task) {
+			text = text.replace(`type="checkbox"`,"hidden")
+			console.log(text)
+			if (checked) {
+				return `<li>✔️ ${text}</li>`
+			} else {
+				return `<li>❌ ${text}</li>`
+			}
+		} else {
+			return `<li>${text}</li>`
+		}
+	}
 
   // Headings
   renderer.heading = (text, level) => {
@@ -185,7 +233,13 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
       return '<pre class="mermaid">' + code + '</pre>';
     } else {
-      return `
+			try {
+				code=hljs.highlight(code,{ language: language }).value
+			} catch (error) {
+				code=hljs.highlight(code,{ language: "Javascript" }).value
+			}
+			//console.log(code)
+			return `
       <!-- prettier-ignore -->
       <div class="codeblock overflow-hidden shadow bg-neutral-900/90 text-sm text-white rounded-container-token shadow" data-testid="codeblock">
       <!-- Header -->
@@ -193,7 +247,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
       <!-- Language -->
       <span class="codeblock-language">${language}</span>
       <!-- Copy Button -->
-      <button type="button" class="codeblock-btn btn btn-sm variant-soft !text-white" on:click={onCopyClick} use:clipboard=${code}>
+      <button type="button" class="codeblock-btn btn btn-sm variant-soft !text-white">
       Copy
       </button>
       </header>
@@ -204,7 +258,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     }
   };
 
-  // Image
+  // Imageb
   renderer.image = (href, title, text) => {
     const selector = 'img';
     const classes = tailwindobj[selector] ?? {};
@@ -222,7 +276,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     .filter((className) => classes[className])
     .join(' ');
     const selectorDiv = 'divTable';
-    const classesDiv = tailwindobj[selector] ?? {};
+    const classesDiv = tailwindobj[selectorDiv] ?? {};
     const classListDiv = Object.keys(classesDiv)
     .filter((className) => classesDiv[className])
     .join(' ');
@@ -290,26 +344,97 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
   };
         
   // Override function
-  const tokenizer = {
-    codespan(src) {
-      const match = src.match(/^\$+([^\$\n]+?)\$+/);
-      if (match) {
-        return false
-        /*return {
-          type: 'codespan',
-          raw: match[0],
-          //text: katex.renderToString(match[1].trim(), { throwOnError: false }),
-          text: match[1].trim(),
-        };*/
+  const options = {
+    throwOnError: false
+  };
+
+  /*const escapeMSC = (text) => {
+    return text.replace(/[*_{}[\]()#+\-.!|]/g, '\\$&');
+  };*/
+
+  const latexMath = {
+    name: 'latexMath',
+    level: 'inline',
+    start(src) {
+      if (src.match(/\$\$/)) {
+        return src.match(/\$\$/).index;
+      } else if (src.match(/\\\[/)) {
+        return src.match(/\\\[/).index;
+      } else if (src.match(/\\\(/)) {
+        return src.match(/\\\(/).index;
       }
-      // return false to use original codespan tokenizer
-      return false;
+      return;
+    },
+    tokenizer(src, tokens) {
+      const rule = /^(\$|\\\(|\\\[)(.*?)(\$|\\\)|\\\])/;
+      const match = rule.exec(src);
+      if (match) {
+        return {
+          type: 'latexMath',
+          raw: match[0],
+          text: match[2]
+        };
+      }
+    },
+    renderer(token) {
+      let displayMode = false;
+      if (token.raw.startsWith('$$')) {
+        displayMode = true;
+      }
+      return `<span class="latex-math">${katex.renderToString(token.text, { ...options, displayMode })}</span>`;
     }
   };
 
+  const latexText = {
+    name: 'latexText',
+    level: 'inline',
+    tokenizer(src, tokens) {
+      const rule = /^(?:(?!\$|\\\(|\\\[|`|[*_~]|\[|\!\[).)+/;
+      const match = rule.exec(src);
+      if (match) {
+        return {
+          type: 'latexText',
+          raw: match[0],
+          text: match[0]
+        };
+      }
+    },
+    renderer(token) {
+      return token.text;
+    }
+  };
+
+  const latexBlockMath = {
+  name: 'latexBlockMath',
+  level: 'block',
+  start(src) {
+    if (src.match(/(?:\\\[|\\\(|\\$\\$)/)) {
+      return src.match(/(?:\\\[|\\\(|\\$\\$)/).index;
+    }
+    return;
+  },
+  tokenizer(src, tokens) {
+    const rule = /^(?:\\\[|\$\$)(.*?)(?:\\\]|\$\$)/s; // Use 's' flag for multi-line matching
+    const match = rule.exec(src);
+    if (match) {
+      return {
+        type: 'latexBlockMath',
+        raw: match[0],
+        text: match[1]
+      };
+    }
+  },
+  renderer(token) {
+    return `<div class="latex-block-math">${katex.renderToString(token.text, { ...options, displayMode: true })}</div>`;
+  }
+};
+
+
+  //marked.use({  });
+
   return marked.use({
-    tokenizer, 
-		renderer
+		renderer,
+		extensions: [latexText, latexMath, latexBlockMath]
   });
 }
 

@@ -20,6 +20,7 @@
     "google-auth-library": "^9.0.0",
     "highlight.js": "^11.8.0",
     "marked": "latest",
+    "katex": "^0.16.10",
     "pocketbase": "^0.18.0"
   },
   "devDependencies": {
