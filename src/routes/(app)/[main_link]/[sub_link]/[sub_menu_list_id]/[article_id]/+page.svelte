@@ -60,25 +60,18 @@
 
 </script>
 
-<svelte:head>
-  <title>{data?.article?.title}</title>
-  <meta name="description" content={getSubText(100, data?.article?.content)} />
-  <link rel="apple-touch-icon" sizes="76x76" href={logo} />
-  <link rel="icon" type="image/svg+xml" href={logo} />
-  <link rel="icon" type="image/png" href={logo} />
-</svelte:head>
 
 <!-- Breadcrumbs -->
 <ol class="breadcrumb m-4 capitalize">
   <li class="crumb"><a class="anchor" href="/">home</a></li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
-  <li class="crumb capitalize">
+  <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}`}
       >{getLabelById($page.data?.links,$page.params?.main_link)}</a
     >
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
-  <li class="crumb capitalize">
+  <li class="crumb">
     <a class="anchor" href={`/${$page.params?.main_link}/${$page.params?.sub_link}`}
       >{getLabelById($page.data?.links,$page.params?.sub_link)}</a
     >
@@ -93,7 +86,7 @@
     </a>
   </li>
   <li class="crumb-separator" aria-hidden>&rsaquo;</li>
-  <li class="capitalize">article</li>
+  <li class="crumb capitalize">Article</li>
 </ol>
 
 {#if $page.data?.user?.id === data.article?.developer_id}
@@ -256,3 +249,13 @@
     {/if}
   </LayoutPage>
 {/if}
+
+
+
+<svelte:head>
+  <title>{data?.article?.title}</title>
+  <meta name="description" content={getSubText(100, data?.article?.content)} />
+  <link rel="apple-touch-icon" sizes="76x76" href={logo} />
+  <link rel="icon" type="image/svg+xml" href={logo} />
+  <link rel="icon" type="image/png" href={logo} />
+</svelte:head>

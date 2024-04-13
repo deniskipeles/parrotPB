@@ -1,6 +1,8 @@
 import { pb } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import type { RouteParams } from '../$types';
+import { markedFxn } from "$lib/utils/customMarked"
+const marked = markedFxn()
 
 export async function load({ params, url, parent }) {
   try {
@@ -15,11 +17,11 @@ export async function load({ params, url, parent }) {
       .getList(page, perPage, {
         filter,
         sort: '-created',
-        fields: `*:excerpt(${300},${true})`
+        fields: `*:excerpt(${400},${true})`
       });
 
     resultList['items'] = resultList.items.map((i) => {
-      i.content = getSubText(40, i?.content);
+      i.content = marked.parse(i?.content);
       return i;
     });
 

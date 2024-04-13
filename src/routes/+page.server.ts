@@ -3,6 +3,8 @@ import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
+import { markedFxn } from "$lib/utils/customMarked"
+const marked = markedFxn()
 
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ locals, url }) => {
@@ -18,10 +20,11 @@ export const load = async ({ locals, url }) => {
     const page = Number(url.searchParams.get('page') ?? 1);
     const resultList = await pb.collection('view_articles_list').getList(Number(page), perPage, {
       sort: '-created',
-      // fields: `*:excerpt(${200},${true})`
+      fields: `*:excerpt(${400},${true})`
     });
     resultList['items'] = resultList.items.map((i) => {
-      i.content = getSubText(40, i.content);
+      //i.content = getSubText(40, i.content);
+      i.content = marked.parse(i?.content);
       return i;
     });
     return { ...rest, meta: resultList };
@@ -79,7 +82,7 @@ async function getArticle(article_id='') {
       })
     ).items;
     recommended = recommended.map((i) => {
-      i.content = getSubText(50, i.content);
+      i.content = marked.parse(i.content);
       return i;
     });
     article = serializeNonPOJOs(article)

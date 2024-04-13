@@ -1,6 +1,9 @@
 import { pb } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 
+import { markedFxn } from "$lib/utils/customMarked"
+const marked = markedFxn()
+
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
   try {
@@ -21,11 +24,11 @@ export async function load({ params }) {
       await pb.collection('view_articles_list').getList(1, 5, {
         filter: `(${tags_filter}) && id != "${article?.id}"`,
         sort: '-created',
-        // "fields":`*:excerpt(${400},${true})`
+        "fields":`*:excerpt(${400},${true})`
       })
     ).items;
     recommended = recommended.map((i) => {
-      i.content = getSubText(50, i.content);
+      i.content = marked.parse(i.content);
       return i;
     });
     article = serializeNonPOJOs(article)

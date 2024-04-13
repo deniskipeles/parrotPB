@@ -70,29 +70,14 @@
     <Error error={data?.error} />
   {:else if data?.meta}
     <!-- else content here -->
-    <button on:click={gotoCreateArticle} type="button" class="btn m-4 w-full variant-filled"
-      >Create Article</button
-    >
-    <div class="page-container-wide page-padding">
-      <!-- <header class="flex justify-between items-center">
-        <div class="space-y-4">
-          <h2 class="h2">The Skeleton Blog</h2>
-          <p>Keep up with the latest news, tutorials, and releases for Skeleton.</p>
-        </div>
-        <button
-          class="btn-icon btn-icon-sm !bg-orange-500"
-          on:click={copyRSSToClipboard}
-          on:keypress
-        >
-          <i class="fa-solid fa-square-rss text-xl" />
-        </button>
-      </header> -->
       <hr />
       <!-- Blog List -->
       <section class="blog-list space-y-8">
+        <button on:click={gotoCreateArticle} type="button" class="btn m-4 w-full variant-filled">Create Article</button>
+        <hr />
         {#each data?.meta?.items as post}
           <a
-            class="block hover:card hover:variant-soft p-4 rounded-container-token"
+            class="block card card-hover hover:variant-soft p-4 rounded-container-token"
             href={`${$page.url.pathname}/${post.id}`}
             data-sveltekit-preload-data="hover"
           >
@@ -167,6 +152,5 @@
           </a>
         </div>
       </footer>
-    </div>
   {/if}
 </LayoutPage>

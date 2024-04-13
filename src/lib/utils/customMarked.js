@@ -231,7 +231,7 @@ function addClassAndSpanOl(listString) {
 
   renderer.code = function (code, language) {
     if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || language == 'mermaid') {
-      return '<pre class="mermaid">' + code + '</pre>';
+      return '<div class="codeblock overflow-x-auto shadow"><pre class="mermaid">' + code + '</pre></div><hr/>';
     } else {
 			try {
 				code=hljs.highlight(code,{ language: language }).value
@@ -241,7 +241,7 @@ function addClassAndSpanOl(listString) {
 			//console.log(code)
 			return `
       <!-- prettier-ignore -->
-      <div class="codeblock overflow-hidden shadow bg-neutral-900/90 text-sm text-white rounded-container-token shadow" data-testid="codeblock">
+      <div class="codeblock overflow-hidden shadow bg-neutral-900/90 text-sm text-white rounded-container-token" data-testid="codeblock">
       <!-- Header -->
       <header class="codeblock-header text-xs text-white/50 uppercase flex justify-between items-center p-2 pl-4">
       <!-- Language -->
