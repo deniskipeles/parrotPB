@@ -194,7 +194,7 @@
     <section class="blog-list space-y-8">
       {#each data?.meta?.items as post}
         <a
-          class="block card card-hover hover:variant-soft rounded-container-token"
+          class="block card hover:variant-soft rounded-container-token"
           href={`${$page.url.origin}?article=${post.id}`}
           data-sveltekit-preload-data="hover"
         >

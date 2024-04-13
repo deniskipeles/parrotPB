@@ -77,7 +77,7 @@
         <hr />
         {#each data?.meta?.items as post}
           <a
-            class="block card card-hover hover:variant-soft p-4 rounded-container-token"
+            class="block card-hover hover:variant-soft p-4 rounded-container-token"
             href={`${$page.url.pathname}/${post.id}`}
             data-sveltekit-preload-data="hover"
           >
