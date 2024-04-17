@@ -439,5 +439,5 @@ function addClassAndSpanOl(listString) {
 }
 
 export function replaceMarkdownHeaders(str) {
-    return str.replace(/^#{1,6}\s.*\n/gm, '');
+    return str.replace(/#/g, '');
 }
