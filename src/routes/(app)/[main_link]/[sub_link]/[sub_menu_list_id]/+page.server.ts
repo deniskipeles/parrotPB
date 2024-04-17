@@ -2,7 +2,7 @@ import { pb } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import type { RouteParams } from '../$types';
 
-import { markedFxn } from "$lib/utils/customMarked"
+import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
 const marked = markedFxn()
 
 export async function load({ params, url, parent }) {
@@ -22,7 +22,8 @@ export async function load({ params, url, parent }) {
       });
 
     resultList['items'] = resultList.items.map((i) => {
-      i.content = marked.parse(i?.content);
+      const content = replaceMarkdownHeaders(i.content)
+      i.content = marked.parse(content);
       return i;
     });
 

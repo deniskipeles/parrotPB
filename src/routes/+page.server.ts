@@ -3,7 +3,7 @@ import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
-import { markedFxn } from "$lib/utils/customMarked"
+import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
 const marked = markedFxn()
 
 /** @type {import('./$types').PageServerLoad} */
@@ -24,7 +24,8 @@ export const load = async ({ locals, url }) => {
     });
     resultList['items'] = resultList.items.map((i) => {
       //i.content = getSubText(40, i.content);
-      i.content = marked.parse(i?.content);
+      const content = replaceMarkdownHeaders(i.content)
+      i.content = marked.parse(content);
       return i;
     });
     return { ...rest, meta: resultList };
@@ -82,7 +83,8 @@ async function getArticle(article_id='') {
       })
     ).items;
     recommended = recommended.map((i) => {
-      i.content = marked.parse(i.content);
+      const content = replaceMarkdownHeaders(i.content)
+      i.content = marked.parse(content);
       return i;
     });
     article = serializeNonPOJOs(article)
