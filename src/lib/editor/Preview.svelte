@@ -18,6 +18,18 @@
   
   
   const toastStore = getToastStore();
+  function injectTailwindCss() {
+    const spans = document.getElementsByTagName('span');
+    for (let i = 0; i < spans.length; i++) {
+        const classes = spans[i].classList;
+        if (Array.from(classes).some(cls => /-(.*?)-?line(-.*?)?/.test(cls))) {
+            if (spans[i].textContent.includes('line') && !classes.contains('text-gray-900') && !classes.contains('dark:text-gray-200')) {
+                spans[i].classList.add('text-gray-900', 'dark:text-gray-200');
+            }
+        }
+    }
+  }
+
   const change = () => {
     document.querySelectorAll<HTMLButtonElement>('.codeblock-btn').forEach((btn) => {
       if (!btn.classList.contains('btn-mounted')) {
@@ -48,6 +60,11 @@
         });
       }
     });
+    try{
+      injectTailwindCss()
+    }catch(e){
+      console.log(e)
+    }
   };
   
   const marked = markedFxn()
