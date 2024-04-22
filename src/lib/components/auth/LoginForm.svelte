@@ -44,8 +44,8 @@
     </label>
 
     <label class="label">
-      <span>Email</span>
-      <input name="email" class="input" type="email" placeholder="Input" />
+      <span>Email/Username</span>
+      <input name="email" class="input" type="text" placeholder="Input" />
     </label>
     <p>Password</p>
     <div class="input-group input-group-divider grid-cols-[1fr_auto]">

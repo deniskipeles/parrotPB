@@ -17,7 +17,7 @@ ParrotPB is an open-source blogging platform designed as a WordPress alternative
 
 To check out ParrotPB in action, head to [writube.vercel.app](https://writube.vercel.app) and use the following credentials:
 
-- Username: tester
+- Username/email: tester/tester@gmail.com
 - Password: tester
 
 ## Hosting & Setup
