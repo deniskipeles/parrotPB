@@ -1,5 +1,6 @@
 <script lang="ts">
   import '../app.postcss';
+  import { page } from '$app/stores';
 
   let currentTile = 0;
 
