@@ -79,8 +79,8 @@
 </script>
 
 <svelte:head>
-  <title>{$page.data?.wapp?.data?.title}</title>
-  <meta name="description" content={$page.data?.wapp?.data?.description} />
+  <title>{$page.data?.wapp?.data?.title ?? "ktechs documentation page"}</title>
+  <meta name="description" content={$page.data?.wapp?.data?.description ?? "ktechs docs is a wordpress alternative for ai generated content"} />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 </svelte:head>
 
@@ -103,12 +103,10 @@
   {#if ($page?.data?.roots?.find(obj=>obj?.name=="controls"))?.data?.allow_mathjax}
     <MathJax>
       <slot />
-      <h1>MathJax</h1>
     </MathJax>
   {:else}
     <slot />
   {/if}
-  {JSON.stringify($page.data.wapp)}
   
 
   <!-- Page Footer -->

@@ -169,7 +169,7 @@
                 <!-- <p>{post.excerpt}</p> -->
                 <p>{@html post.content}</p>
                 <!-- <Preview markdown={post?.content} /> -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4 overflow-x">
                   {#each post.tags as tag}
                     <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>
                   {/each}
