@@ -28,7 +28,7 @@
   import { storeHighlightJs } from '@skeletonlabs/skeleton';
   import { getSubText } from '$lib/utils';
   
-  //import MathJax from '$lib/editor/MathJax.svelte';
+  import MathJax from '$lib/editor/MathJax.svelte';
   import MermaidDiagram from '$lib/editor/MermaidDiagram.svelte';
 
   storeHighlightJs.set(hljs);
@@ -78,8 +78,8 @@
 </script>
 
 <svelte:head>
-  <title>{data?.company?.data?.title}</title>
-  <meta name="description" content={getSubText(100, data?.company?.data?.description)} />
+  <title>{data?.wapp?.data?.title}</title>
+  <meta name="description" content={data?.wapp?.data?.description} />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 </svelte:head>
 
@@ -99,7 +99,14 @@
   </svelte:fragment>
 
   <!-- Page Content -->
-  <slot />
+  {#if ($page?.data?.roots?.find(obj=>obj?.name=="controls"))?.data?.allow_mathjax}
+    <MathJax>
+      <slot />
+    </MathJax>
+  {:else}
+    <slot />
+  {/if}
+  
 
   <!-- Page Footer -->
   <svelte:fragment slot="pageFooter">

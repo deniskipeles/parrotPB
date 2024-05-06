@@ -4,9 +4,6 @@
 // for information about these interfaces
 // and what to do when importing types
 declare namespace App {
-	// interface Locals {
-	// 	userid: string;
-	// }
 
 	// interface PageData {}
 	interface Locals {
@@ -14,7 +11,7 @@ declare namespace App {
 		links: import('pocketbase').RecordModel[];
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
-		company: import('pocketbase').RecordModel;
+		wapp: import('pocketbase').RecordModel|{ [key: string]: any } | null;
 		tables: import('pocketbase').RecordModel[];
 		roots: import('pocketbase').RecordModel[];
 	}

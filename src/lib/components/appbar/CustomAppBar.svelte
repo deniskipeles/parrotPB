@@ -305,7 +305,7 @@
       </a>
       <a
         class="btn-icon hover:variant-soft-primary"
-        href="https://discord.gg/EXqV7W8MtY"
+        href="https://discord.com/invite/4aWD8FxYTU"
         target="_blank"
         rel="noreferrer"
       >

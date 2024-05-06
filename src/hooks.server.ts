@@ -23,7 +23,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     	event.locals.links = await fetchLinks()
     	event.locals.tables = await listTablesRecords();
     	event.locals.roots = await listRootsRecords();
-    	event.locals.company = await loadCompany();
+    	event.locals.wapp = event.locals.roots.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
   } catch (err) {
     error(404, { message: `${err}` });
   }
