@@ -27,7 +27,7 @@
   
   let grog = true
   const { completion, input, isLoading, handleSubmit, data:dt } = useCompletion({
-    api:grog?"https://aik-bice.vercel.app/api/completion":"https://aik-bice.vercel.app/api/completion/google",
+    api:()=>grog?"https://aik-bice.vercel.app/api/completion":"https://aik-bice.vercel.app/api/completion/google",
     onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
   });
