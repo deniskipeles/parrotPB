@@ -5,74 +5,37 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import Preview from './Preview.svelte';
   import StackEdit from './StackEdit.svelte';
   import { writable } from 'svelte/store';
 
   let markdown = '';
-
-  // Local
-  onMount(() => {
-    // CodeBlock Highlight
-    document.querySelectorAll('pre code').forEach((elem: any) => {
-      hljs.highlightElement(elem);
-    });
-    // ordered list
-    document.querySelectorAll('ol').forEach((elem: any) => {
-      elem.classList.add('list');
-    });
-  });
-
-  let preview = false;
+  
   let list: string[] = ['foo', 'bar'];
   let titleValue: string = '';
   let url: string = '';
 
   let obj_id: any = null;
-  
-
-  const prompting = writable(false);
   const saving = writable(false);
-
-  let prompt = '';
-  const headers = {
-    'Content-Type': 'application/json'
-  };
-  function onSubmit() {
-    prompting.set(true);
-    fetch('/api/ai', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({ prompt })
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response data here
-        prompting.set(false);
-        console.log('++ai content');
-        markdown = data;
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error('Error:', error);
-        prompting.set(false);
-      });
-  }
   
   function markdownChange(val){
     markdown = val;
   }
   
   
-  
+	import MagicTextarea from "./MagicTextarea.svelte";
   import { useCompletion } from 'ai/svelte'
-
+  
+  let grog = true
   const { completion, input, isLoading, handleSubmit, data:dt } = useCompletion({
-    api:"https://ai-bice.vercel.app/api/completion/google",
+    api:"https://aik-bice.vercel.app/api/completion",
     onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
   });
-	import MagicTextarea from "./MagicTextarea.svelte";
+  const { completion:googleCompletion, input:googleInput, isLoading:googleIsLoading, handleSubmit:googleHandleSubmit, data:googleData } = useCompletion({
+    api:"https://aik-bice.vercel.app/api/completion/google",
+    onFinish: (prompt, completion) => $googleInput="",
+		onError: (error) => console.log(error.message),
+  });
   let options = {
     textareaClass: "my-textarea-class",
     inputClass: "my-input-class",
@@ -82,32 +45,9 @@
     divFooterClass: "my-footer-class",
   };
   $:if($completion) markdown = $completion
+  $:if($googleCompletion) markdown = $googleCompletion
 </script>
 
-<!--form class="m-4" on:submit|preventDefault={onSubmit}>
-  <span>Prompt the palm AI</span>
-  <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-    <div>
-      {#if $prompting}
-        <button class="btn variant-filled" type="button">
-          <ProgressRadial width="w-8" stroke={150} />prompting...
-        </button>
-      {:else}
-        <button class="btn variant-filled" type="submit">Send</button>
-      {/if}
-    </div>
-
-    <textarea
-      class="textarea"
-      name="prompt"
-      bind:value={prompt}
-      rows="4"
-      minlength="2"
-      required
-      placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-    />
-  </div>
-</form-->
 
 <form
   class="form m-4 space-y-6 card"
@@ -183,30 +123,20 @@
   </label>
 
   <div class="flex gap-4">
-    <SlideToggle name="slider-label" on:change={() => (preview = !preview)} checked={preview}
-      >Preview</SlideToggle
+    <SlideToggle name="slider-label" on:change={() => (grog = !grog)} checked={grog}
+      ></SlideToggle
     >
     <StackEdit {markdown} {markdownChange} />
   </div>
-  {#if !preview}
-    <!-- content here -->
-    <label class="label">
-      <span>Article Content :: Markdown Editor</span>
-      <!--div class="flex">
-        <div class="w-full h-96">
-          <textarea
-            name="content"
-            class="textarea h-auto min-h-full w-full p-2"
-            bind:value={markdown}
-            placeholder="Enter markdown here"
-          />
-        </div>
-      </div-->
+
+  <div class="label">
+    <span>Article Content :: Markdown Editor</span>
+    {#if grog}
       <MagicTextarea bind:value={markdown} bind:inputText={$input} isLoading={$isLoading} {handleSubmit} {...options} />
-    </label>
-  {:else}
-    <Preview {markdown} />
-  {/if}
+    {:else}
+      <MagicTextarea bind:value={markdown} bind:inputText={$googleInput} isLoading={$googleIsLoading} {googleHandleSubmit} {...options} />
+    {/if}
+  </div>
 
   <div class="items-center">
     {#if $saving}
