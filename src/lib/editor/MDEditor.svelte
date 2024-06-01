@@ -27,15 +27,11 @@
   
   let grog = true
   const { completion, input, isLoading, handleSubmit, data:dt } = useCompletion({
-    api:"https://aik-bice.vercel.app/api/completion",
+    api:grog?"https://aik-bice.vercel.app/api/completion":"https://aik-bice.vercel.app/api/completion/google",
     onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
   });
-  const { completion:googleCompletion, input:googleInput, isLoading:googleIsLoading, handleSubmit:googleHandleSubmit, data:googleData } = useCompletion({
-    api:"https://aik-bice.vercel.app/api/completion/google",
-    onFinish: (prompt, completion) => $googleInput="",
-		onError: (error) => console.log(error.message),
-  });
+  
   let options = {
     textareaClass: "my-textarea-class",
     inputClass: "my-input-class",
@@ -45,7 +41,6 @@
     divFooterClass: "my-footer-class",
   };
   $:if($completion) markdown = $completion
-  $:if($googleCompletion) markdown = $googleCompletion
 </script>
 
 
@@ -124,18 +119,14 @@
 
   <div class="flex gap-4">
     <SlideToggle name="slider-label" on:change={() => (grog = !grog)} checked={grog}
-      ></SlideToggle
+      >{grog ? "Use gemini":"Use grog"}</SlideToggle
     >
     <StackEdit {markdown} {markdownChange} />
   </div>
 
   <div class="label">
     <span>Article Content :: Markdown Editor</span>
-    {#if grog}
       <MagicTextarea bind:value={markdown} bind:inputText={$input} isLoading={$isLoading} {handleSubmit} {...options} />
-    {:else}
-      <MagicTextarea bind:value={markdown} bind:inputText={$googleInput} isLoading={$googleIsLoading} {googleHandleSubmit} {...options} />
-    {/if}
   </div>
 
   <div class="items-center">
