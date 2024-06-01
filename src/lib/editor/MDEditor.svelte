@@ -26,8 +26,9 @@
   import { useCompletion } from 'ai/svelte'
   
   let grog = true
+  let url = grog?"https://aik-bice.vercel.app/api/completion":"https://aik-bice.vercel.app/api/completion/google";
   const { completion, input, isLoading, handleSubmit, data:dt } = useCompletion({
-    api:()=>grog?"https://aik-bice.vercel.app/api/completion":"https://aik-bice.vercel.app/api/completion/google",
+    api:url,
     onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
   });
