@@ -9,7 +9,7 @@ import katex from "katex";
 import hljs from "highlight.js"
 
 
-const tailwindObj =  {
+export const tailwindObj =  {
     h1: "h1 text-3xl mb-4",
     h2: "h2 text-2xl mb-4",
     h3: "h3 text-xl mb-4",
@@ -122,44 +122,35 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
 
   // Override renderer methods for HTML elements with Tailwind CSS classes
   function addClassAndSpanUl(listString) {
-    let modifiedString = listString.replace(/<li>/g, '<p class="new-class ul"><span>• </span>').replace(/<\/li>/g, '</p>');
-    return modifiedString;
-}
-
-function addClassAndSpanOl(listString) {
-    let orderedListRegex = /<li>([\s\S]*?)<\/li>/g;
-    let index = 1;
-    let modifiedString = listString.replace(orderedListRegex, function(match) {
-        let listItem = match.substring(4, match.length - 5).trim();
-        let newListItem = `<p class="new-class li"><span>${index}. </span>${listItem}</p>`;
-        index++;
-        return newListItem;
-    });
-    return modifiedString;
-}
-
-
-	
+      let modifiedString = listString.replace(/<li>/g, '<p class="new-class ul"><span>• </span>').replace(/<\/li>/g, '</p>');
+      return modifiedString;
+  }
+  
+  function addClassAndSpanOl(listString) {
+      let orderedListRegex = /<li>([\s\S]*?)<\/li>/g;
+      let index = 1;
+      let modifiedString = listString.replace(orderedListRegex, function(match) {
+          let listItem = match.substring(4, match.length - 5).trim();
+          let newListItem = `<p class="new-class li"><span>${index}. </span>${listItem}</p>`;
+          index++;
+          return newListItem;
+      });
+      return modifiedString;
+  }
+  	
 	renderer.list = function(body, ordered, start){
-    
     if(ordered){
 			body = addClassAndSpanOl(body)
-			
       return `
 			  <div style="padding-left: 20px;">
-        <oll class="ordered">
           ${body}
-        </oll>
 				</div>
       `;
     }else{
       body = addClassAndSpanUl(body)
-			// console.log(body)
       return `
 			  <div style="padding-left: 20px;">
-        <ull class="un-ordered">
         	${body}
-        </ull>
 				</div>
       `;
     }
@@ -168,7 +159,7 @@ function addClassAndSpanOl(listString) {
 	renderer.listitem = function(text, task, checked){
 		if (task) {
 			text = text.replace(`type="checkbox"`,"hidden")
-			console.log(text)
+			
 			if (checked) {
 				return `<li>✔️ ${text}</li>`
 			} else {

@@ -62,9 +62,29 @@
   function markdownChange(val){
     markdown = val;
   }
+  
+  
+  
+  import { useCompletion } from 'ai/svelte'
+
+  const { completion, input, isLoading, handleSubmit, data:dt } = useCompletion({
+    api:"https://ai-bice.vercel.app/api/completion/google",
+    onFinish: (prompt, completion) => $input="",
+		onError: (error) => console.log(error.message),
+  });
+	import MagicTextarea from "./MagicTextarea.svelte";
+  let options = {
+    textareaClass: "my-textarea-class",
+    inputClass: "my-input-class",
+    submitButtonClass: "my-submit-button-class",
+    divContainerClass: "my-container-class",
+    divHeaderClass: "my-header-class",
+    divFooterClass: "my-footer-class",
+  };
+  $:if($completion) markdown = $completion
 </script>
 
-<form class="m-4" on:submit|preventDefault={onSubmit}>
+<!--form class="m-4" on:submit|preventDefault={onSubmit}>
   <span>Prompt the palm AI</span>
   <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
     <div>
@@ -76,7 +96,7 @@
         <button class="btn variant-filled" type="submit">Send</button>
       {/if}
     </div>
-    <!-- <div class="input-group-shim" /> -->
+
     <textarea
       class="textarea"
       name="prompt"
@@ -87,7 +107,7 @@
       placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
     />
   </div>
-</form>
+</form-->
 
 <form
   class="form m-4 space-y-6 card"
@@ -172,9 +192,8 @@
     <!-- content here -->
     <label class="label">
       <span>Article Content :: Markdown Editor</span>
-      <div class="flex">
+      <!--div class="flex">
         <div class="w-full h-96">
-          <!-- Declare a textarea where the user can enter markdown, and bind it to the variable `markdown` -->
           <textarea
             name="content"
             class="textarea h-auto min-h-full w-full p-2"
@@ -182,7 +201,8 @@
             placeholder="Enter markdown here"
           />
         </div>
-      </div>
+      </div-->
+      <MagicTextarea bind:value={markdown} bind:inputText={$input} isLoading={$isLoading} {handleSubmit} {...options} />
     </label>
   {:else}
     <Preview {markdown} />

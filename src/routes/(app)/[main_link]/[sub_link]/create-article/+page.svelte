@@ -1,7 +1,5 @@
 <script>
   import { page } from '$app/stores';
-
-  // import Editor from "$lib/editor/Editor.svelte";
   import MdEditor from '$lib/editor/MDEditor.svelte';
 </script>
 
