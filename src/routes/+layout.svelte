@@ -1,8 +1,10 @@
 <script lang="ts">
   import '../app.postcss';
-  import "https://cdn.jsdelivr.net/gh/deniskipeles/static@master/js/pagepilot.js"
+  //import "//cdn.jsdelivr.net/gh/deniskipeles/static@master/js/pagepilot.js"
+  
 
   import { page } from '$app/stores';
+  import { onMount } from 'svelte';
 
   let currentTile = 0;
 
@@ -33,6 +35,16 @@
   
   import MathJax from '$lib/editor/MathJax.svelte';
   import MermaidDiagram from '$lib/editor/MermaidDiagram.svelte';
+  
+  const loadPagepilot = () => {
+		let script = document.createElement('script');
+    script.src = "//cdn.jsdelivr.net/gh/deniskipeles/static@master/js/pagepilot.js"
+    document.head.append(script);
+		script.onload = () => {
+      console.log("pagepilot initialized")
+		};
+	};
+	onMount(()=>loadPagepilot())
 
   storeHighlightJs.set(hljs);
 
