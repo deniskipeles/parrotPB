@@ -1,5 +1,7 @@
 <script lang="ts">
   import '../app.postcss';
+  import "https://cdn.jsdelivr.net/gh/deniskipeles/static@master/js/pagepilot.js"
+
   import { page } from '$app/stores';
 
   let currentTile = 0;
