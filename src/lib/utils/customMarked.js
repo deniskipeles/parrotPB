@@ -122,7 +122,15 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
 
   // Override renderer methods for HTML elements with Tailwind CSS classes
   function addClassAndSpanUl(listString) {
-      let modifiedString = listString.replace(/<li>/g, '<p class="new-class ul"><span>• </span>').replace(/<\/li>/g, '</p>');
+      //let modifiedString = listString.replace(/<li>/g, '<p class="new-class ul"><span>• </span>').replace(/<\/li>/g, '</p>');
+      let orderedListRegex = /<li>([\s\S]*?)<\/li>/g;
+      let index = 1;
+      let modifiedString = listString.replace(orderedListRegex, function(match) {
+          let listItem = match.substring(4, match.length - 5).trim();
+          let newListItem = `<p class="new-class li"><span>• </span>${listItem}</p>`;
+          index++;
+          return newListItem;
+      });
       return modifiedString;
   }
   
