@@ -193,10 +193,8 @@
     <!-- Blog List -->
     <section class="blog-list space-y-8">
       {#each data?.meta?.items as post}
-        <a
-          class="block card hover:variant-soft rounded-container-token"
-          href={`${$page.url.origin}?article=${post.id}`}
-          data-sveltekit-preload-data="hover"
+        <div
+          class="block hover:card variant-soft p-4 rounded-container-token"
         >
           <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
             <!-- Featured Image -->
@@ -225,10 +223,15 @@
                   <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>
                 {/each}
               </div>
-              <button class="btn variant-ghost-surface">Read Article &rarr;</button>
+              <a
+                href={`${$page.url.origin}?article=${post.id}`}
+                data-sveltekit-preload-data="hover"
+              >
+                <button class="btn variant-ghost-surface">Read Article &rarr;</button>
+              </a>
             </div>
           </article>
-        </a>
+        </div>
       {/each}
     </section>
     <hr />

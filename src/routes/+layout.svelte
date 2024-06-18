@@ -36,6 +36,7 @@
   import MathJax from '$lib/editor/MathJax.svelte';
   import MermaidDiagram from '$lib/editor/MermaidDiagram.svelte';
   
+  //ai page assistant
   const loadPagepilot = () => {
 		let script = document.createElement('script');
     script.src = "//cdn.jsdelivr.net/gh/deniskipeles/static@master/js/pagepilot.js"
