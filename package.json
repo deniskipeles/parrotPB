@@ -20,7 +20,7 @@
     "dompurify": "^2.4.3",
     "google-auth-library": "^9.0.0",
     "highlight.js": "^11.8.0",
-    "marked": "latest",
+    "marked": "^12.0.0",
     "katex": "^0.16.10",
     "pocketbase": "^0.18.0"
   },
