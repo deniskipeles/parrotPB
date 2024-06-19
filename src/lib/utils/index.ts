@@ -107,7 +107,7 @@ export function blogDateFormatter(date: string): string {
     hour12: true
   };
   const d: Date = new Date(date);
-  return d.toLocaleTimeString('en-US', options) + ' ' + d.toLocaleDateString('en-US', options);
+  return d.toLocaleTimeString('en-US', options);
 }
 
 export function mdToText(md: string) {

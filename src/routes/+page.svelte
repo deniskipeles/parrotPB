@@ -142,7 +142,7 @@
               >{data?.article?.title}</strong
             >
           </p>
-          <div class="flex items-center space-x-4 overflow-x">
+          <div class="flex items-center space-x-4 overflow-auto">
             {#each data?.article?.tags ?? [] as tag}
               <span class="text-sm font-bold opacity-50 capitalize">{tag}</span>
             {/each}
@@ -151,7 +151,7 @@
 
         {#each data?.recommended ?? [] as post}
           <a
-            class="block hover:card hover:variant-soft p-4 rounded-container-token"
+            class="block hover:card variant-soft p-4 rounded-container-token"
             href={`${$page?.url?.origin}?article=${post.id}`}
             data-sveltekit-preload-data="hover"
           >
@@ -169,9 +169,9 @@
                 <time class="block">{blogDateFormatter(post.updated)}</time>
                 <h2 class="h2">{post.title}</h2>
                 <!-- <p>{post.excerpt}</p> -->
-                <p>{@html post.content}</p>
+                <p>{@html post?.excerpt ?? post.content}</p>
                 <!-- <Preview markdown={post?.content} /> -->
-                <div class="flex items-center space-x-4 overflow-x">
+                <div class="flex items-center space-x-4 overflow-auto">
                   {#each post.tags as tag}
                     <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>
                   {/each}
