@@ -101,10 +101,13 @@ export function blogDateFormatter(date: string): string {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
   };
   const d: Date = new Date(date);
-  return d.toLocaleDateString('en-US', options);
+  return d.toLocaleTimeString('en-US', options) + ' ' + d.toLocaleDateString('en-US', options);
 }
 
 export function mdToText(md: string) {

@@ -4,6 +4,7 @@
   const pageNumber = $page.url.searchParams.get('page') || 1;
   
   import Preview from '$lib/editor/Preview.svelte';
+  import Gallery from '$lib/components/images/Gallery.svelte';
   import { onMount } from 'svelte';
   import { Avatar } from '@skeletonlabs/skeleton';
   import { Error, LayoutPage } from '$lib/components';
@@ -121,6 +122,7 @@
         </header>
         <!-- Article -->
         <Preview markdown={data?.article?.content} />
+        <Gallery images={data?.article?.image_links??[]} />
         <!-- Footer -->
         <footer class="card p-4 variant-glass-surface flex justify-between items-center mb-28">
           <!-- Tags -->
@@ -218,7 +220,7 @@
               <h2 class="h2">{post.title}</h2>
               <!-- <p>{mdToText(post.content)}</p> -->
               <p>{@html post.content}</p>
-              <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-4 overflow-auto">
                 {#each post.tags as tag}
                   <span class="text-xs font-bold opacity-50 capitalize">{tag}</span>
                 {/each}
