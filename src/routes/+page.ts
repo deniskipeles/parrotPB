@@ -43,7 +43,7 @@ export const actions: Actions = {
     return { theme };
   },
 
-  createLinks: async ({ request parent }) => {
+  createLinks: async ({ request, parent }) => {
     const formData = await request.formData();
 
     const res = await create_links(formData);
