@@ -1,4 +1,4 @@
-import { create_links, fetchLinks, pb } from '$lib/pocketbase';
+import { create_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -6,9 +6,10 @@ import type { Actions } from './$types';
 import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
 const marked = markedFxn()
 
-/** @type {import('./$types').PageLoad} */
-export const load = async ({ url }) => {
+/** @type {import('./$types').PageServerLoad} */
+export const load = async ({ locals, url }) => {
   try {
+    const { pb, ...rest } = locals;
     const article = url.searchParams.get('article');
     if(article){
       const res = await getArticle(article);
@@ -27,7 +28,7 @@ export const load = async ({ url }) => {
       i.content = marked.parse(content);
       return i;
     });
-    return { meta: resultList };
+    return { ...rest, meta: resultList };
   } catch (err) {
     error(404, { message: `${err}` });
   }
@@ -43,14 +44,14 @@ export const actions: Actions = {
     return { theme };
   },
 
-  createLinks: async ({ request, parent }) => {
+  createLinks: async ({ request, locals }) => {
     const formData = await request.formData();
 
     const res = await create_links(formData);
     // console.log(JSON.stringify(res))
     const links = await fetchLinks();
-    const dt = await parent();
-    return { ...res, links, dt };
+    locals.links = links;
+    return { ...res, links };
   }
 };
 
@@ -61,7 +62,7 @@ export const actions: Actions = {
 
 async function getArticle(article_id='') {
   try {
-    let article = await pb.collection('articles').getOne(article_id, {
+    let article = await pb_.collection('articles').getOne(article_id, {
       expand: 'developer_id'
     });
 
@@ -75,7 +76,7 @@ async function getArticle(article_id='') {
     }
     const tags_filter = tags.map((i) => `tags ?~ "${i}"`)?.join(' || ');
     let recommended = (
-      await pb.collection('view_articles_list').getList(1, 5, {
+      await pb_.collection('view_articles_list').getList(1, 5, {
         filter: `(${tags_filter}) && id != "${article?.id}"`,
         sort: '-created',
         "fields":`*:excerpt(${400},${true})`
