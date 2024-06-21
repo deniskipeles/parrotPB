@@ -63,11 +63,11 @@
     <hr />
     <!-- Blog List -->
     <section class="blog-list space-y-8">
-      {#if $page.params?.sub_menu_list_id}
+      {#if $page.params?.sub_menu_list_id && $page.data?.user}
         <a
           href={`${$page.url.pathname}/create-article`}
           >
-          <button type="button" class="btn m-4 w-full variant-filled">Create Article</button>
+          <button type="button" class="btn mr-4 mt-4 mb-4 w-full variant-filled">Create Article</button>
         </a>
       {/if}
       {#each data?.meta?.items as post}

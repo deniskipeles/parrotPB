@@ -131,7 +131,7 @@
         {#each data?.recommended ?? [] as post}
           <a
             class="block hover:card variant-soft p-4 rounded-container-token"
-            href={`${$page.url.pathname}?article=${post.id}`}
+            href={`${$page.url.origin}?article=${post.id}`}
             data-sveltekit-preload-data="hover"
           >
             <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
