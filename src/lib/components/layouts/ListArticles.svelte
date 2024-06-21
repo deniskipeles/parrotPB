@@ -65,7 +65,7 @@
     <section class="blog-list space-y-8">
       {#if $page.params?.sub_menu_list_id}
         <a
-          class="href={`${$page.url.pathname}/create-article`}
+          href={`${$page.url.pathname}/create-article`}
           >
           <button type="button" class="btn m-4 w-full variant-filled">Create Article</button>
         </a>
