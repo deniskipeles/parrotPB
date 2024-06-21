@@ -7,7 +7,7 @@ import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
 const marked = markedFxn()
 
 /** @type {import('./$types').PageServerLoad} */
-export const load = async ({ locals, url }) => {
+export const load = async ({ locals, url, params }) => {
   try {
     const { pb, ...rest } = locals;
     const article = url.searchParams.get('article');
@@ -18,7 +18,8 @@ export const load = async ({ locals, url }) => {
     // fetch a paginated records list
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const page = Number(url.searchParams.get('page') ?? 1);
-    const filter = `sub_menu_list_id ?~ "${params?.sub_menu_list_id ?? url.searchParams.get('sub_menu_list_id') ?? ''}"`;
+    const menu_filter = params?.sub_menu_list_id ?? url.searchParams.get('sub_menu_list_id') ?? ''
+    const filter = `sub_menu_list_id ?~ "${menu_filter}"`;
     const resultList = await pb.collection('view_articles_list').getList(Number(page), perPage, {
       filter,
       sort: '-created',
