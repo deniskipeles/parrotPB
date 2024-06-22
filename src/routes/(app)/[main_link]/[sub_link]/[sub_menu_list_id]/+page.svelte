@@ -5,4 +5,4 @@
 </script>
 
 <ListArticles {data}/>
-{JSON.stringify(data)}
+

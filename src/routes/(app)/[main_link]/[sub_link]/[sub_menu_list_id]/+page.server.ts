@@ -1,16 +1,33 @@
-import { create_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
-import { getSubText, serializeNonPOJOs } from '$lib/utils';
-import { error } from '@sveltejs/kit';
+import {
+  create_links,
+  fetchLinks,
+  pb as pb_
+} from '$lib/pocketbase';
+import {
+  getSubText,
+  serializeNonPOJOs
+} from '$lib/utils';
+import {
+  error
+} from '@sveltejs/kit';
 
-import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
+import {
+  markedFxn,
+  replaceMarkdownHeaders
+} from "$lib/utils/customMarked"
 const marked = markedFxn()
 
 /** @type {import('./$types').PageServerLoad} */
-export const load = async ({ locals, url, params }) => {
+export const load = async ({
+  locals, url, params
+}) => {
   try {
-    const { pb, ...rest } = locals;
+    const {
+      pb,
+      ...rest
+    } = locals;
     const article = url.searchParams.get('article');
-    if(article){
+    if (article) {
       const res = await getArticle(article);
       return res;
     }
@@ -30,9 +47,14 @@ export const load = async ({ locals, url, params }) => {
       i.content = marked.parse(content);
       return i;
     });
-    return { ...rest, meta: resultList };
+    return {
+      ...rest,
+      meta: resultList
+    };
   } catch (err) {
-    error(404, { message: `${err}` });
+    error(404, {
+      message: `${err}`
+    });
   }
 };
 
@@ -40,7 +62,7 @@ export const load = async ({ locals, url, params }) => {
 
 
 
-async function getArticle(article_id='') {
+async function getArticle(article_id = '') {
   try {
     let article = await pb_.collection('articles').getOne(article_id, {
       expand: 'developer_id'
@@ -59,7 +81,7 @@ async function getArticle(article_id='') {
       await pb_.collection('view_articles_list').getList(1, 5, {
         filter: `(${tags_filter}) && id != "${article?.id}"`,
         sort: '-created',
-        "fields":`*:excerpt(${400},${true})`
+        "fields": `*:excerpt(${400},${true})`
       })
     ).items;
     recommended = recommended.map((i) => {
@@ -68,10 +90,13 @@ async function getArticle(article_id='') {
       return i;
     });
     article = serializeNonPOJOs(article)
-    return { article , recommended };
+    return {
+      article,
+      recommended
+    };
   } catch (error) {
-    return { error: serializeNonPOJOs(error) };
+    return {
+      error: serializeNonPOJOs(error)
+    };
   }
 }
-
-

@@ -28,8 +28,9 @@
     // drawerStore.close()
   })
 
-  page.subscribe(($page) => {
-    let basePath: string = $page.url.pathname;
+  page.subscribe((page_) => {
+    if (page_.url.pathname == '/') currentRailCategory = '/';
+    let basePath: string = page_.url.pathname.split('/')[1];
     if (!basePath) return;
 
     for (var k in $page.data?.links ?? []) {
