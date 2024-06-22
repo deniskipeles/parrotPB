@@ -1,7 +1,6 @@
 import { create_links, fetchLinks, pb as pb_ } from '$lib/pocketbase';
 import { getSubText, serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
-import type { Actions } from './$types';
 
 import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
 const marked = markedFxn()

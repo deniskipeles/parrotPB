@@ -1,7 +1,5 @@
-<script lang="ts">
-  // +page.ts
-  import type { PageData } from '../[page]/$types';
-  export let data: PageData
+<script>
+  export let data
   
   import ListArticles from '$lib/components/layouts/ListArticles.svelte';
 </script>

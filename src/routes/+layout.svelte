@@ -45,7 +45,18 @@
       console.log("pagepilot initialized")
 		};
 	};
-	onMount(()=>loadPagepilot())
+	const loadEruda = () => {
+		let script = document.createElement('script');
+    script.src = "//cdn.jsdelivr.net/npm/eruda"
+    document.head.append(script);
+		script.onload = () => {
+      window.eruda.init();
+		};
+	};
+	onMount(()=>{
+	  loadEruda()
+	  loadPagepilot()
+	})
 
   storeHighlightJs.set(hljs);
 
