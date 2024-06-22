@@ -29,8 +29,8 @@
   })
 
   page.subscribe((page_) => {
-    if (page_.url.pathname == '/') currentRailCategory = '/';
-    let basePath: string = page_.url.pathname.split('/')[1];
+    if (page_.url.pathname == '/') return//currentRailCategory = '/';
+    let basePath: string = page_.url.pathname;
     if (!basePath) return;
 
     for (var k in $page.data?.links ?? []) {
