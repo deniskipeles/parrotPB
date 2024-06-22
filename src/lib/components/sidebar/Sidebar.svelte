@@ -30,12 +30,13 @@
 
   page.subscribe((page_) => {
     if (page_.url.pathname == '/') return//currentRailCategory = '/';
-    let basePath: string = page_.url.pathname;
+    const basePath: string = page_.url.pathname;
     if (!basePath) return;
 
-    for (var k in $page.data?.links ?? []) {
+    for (var k of $page.data?.links ?? []) {
       if (basePath?.includes(k?.id)) {
         currentRailCategory = k?.id;
+        mainMenu = $page?.data?.links?.find((l) => k?.id == l?.id);
       }
     }
   });
