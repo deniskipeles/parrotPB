@@ -24,7 +24,8 @@
   import { Sidebar, Footer, CustomAppBar, Drawer, PageSearch } from '$lib/components';
   // Types
   import type { ModalComponent } from '@skeletonlabs/skeleton';
-  import { afterNavigate } from '$app/navigation';
+  import { writable, get } from 'svelte/store';
+  import { beforeNavigate, afterNavigate } from '$app/navigation';
   import { storePreview, storeTheme } from '$lib/stores';
   import { browser } from '$app/environment';
 
@@ -84,7 +85,7 @@
   }
 
   // Lifecycle
-  afterNavigate((params: any) => {
+  /*afterNavigate((params: any) => {
     // Scroll to top
     const isNewPage: boolean =
       params.from && params.to && params.from.route.id !== params.to.route.id;
@@ -94,7 +95,7 @@
     }
     // Scroll heading into view
     scrollHeadingIntoView();
-  });
+  });*/
   // Reactive
   // Disable left sidebar on homepage
   // $: slotSidebarLeft = matchPathWhitelist($page.url.pathname) ? 'w-0' : 'bg-surface-50-900-token lg:w-auto';
@@ -102,7 +103,31 @@
   $: allyPageSmoothScroll = !$prefersReducedMotionStore ? 'scroll-smooth' : '';
 
   export let data;
+
+
+  
+
+  const scrollPositionStore = writable({});
+
+  beforeNavigate(({ to, from }) => {
+    // Store the scroll position of the current page
+    if (from) {
+      const scrollPosition = window.scrollY;
+      scrollPositionStore.update((prev) => ({ ...prev, [from.route.id]: scrollPosition }));
+    }
+  });
+
+  afterNavigate(({ to }) => {
+    // Restore the scroll position of the previous page
+    if (to) {
+      const storedScrollPosition = get(scrollPositionStore)[to.route.id];
+      if (storedScrollPosition !== undefined) {
+        window.scrollTo(0, storedScrollPosition);
+      }
+    }
+  });
 </script>
+
 
 <svelte:head>
   <title>{$page.data?.wapp?.data?.title ?? "ktechs documentation page"}</title>
@@ -126,13 +151,7 @@
   </svelte:fragment>
 
   <!-- Page Content -->
-  {#if ($page?.data?.roots?.find(obj=>obj?.name=="controls"))?.data?.allow_mathjax}
-    <MathJax>
-      <slot />
-    </MathJax>
-  {:else}
     <slot />
-  {/if}
   
 
   <!-- Page Footer -->
