@@ -355,9 +355,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     name: 'latexMath',
     level: 'inline',
     start(src) {
-      if (src.match(/\$\$/)) {
-        return src.match(/\$\$/).index;
-      } else if (src.match(/\\\[/)) {
+      if (src.match(/\\\[/)) {
         return src.match(/\\\[/).index;
       } else if (src.match(/\\\(/)) {
         return src.match(/\\\(/).index;
@@ -365,7 +363,7 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
       return;
     },
     tokenizer(src, tokens) {
-      const rule = /^(\$|\\\(|\\\[)(.*?)(\$|\\\)|\\\])/;
+      const rule = /^(\\\(|\\\[)(.*?)(\\\)|\\\])/;
       const match = rule.exec(src);
       if (match) {
         return {
@@ -377,12 +375,13 @@ export const markedFxn = (tailwindClasses = tailwindObj)=> {
     },
     renderer(token) {
       let displayMode = false;
-      if (token.raw.startsWith('$$')) {
+      if (token.raw.startsWith('\\[')) {
         displayMode = true;
       }
       return `<span class="latex-math">${katex.renderToString(token.text, { ...options, displayMode })}</span>`;
     }
   };
+
 
   const latexText = {
     name: 'latexText',
