@@ -25,7 +25,7 @@
   // Types
   import type { ModalComponent } from '@skeletonlabs/skeleton';
   import { writable, get } from 'svelte/store';
-  import { beforeNavigate, afterNavigate } from '$app/navigation';
+  import { beforeNavigate, afterNavigate, disableScrollHandling } from '$app/navigation';
   import { storePreview, storeTheme } from '$lib/stores';
   import { browser } from '$app/environment';
 
@@ -57,6 +57,7 @@
 	onMount(()=>{
 	  loadEruda()
 	  loadPagepilot()
+	  disableScrollHandling()
 	})
 
   storeHighlightJs.set(hljs);
