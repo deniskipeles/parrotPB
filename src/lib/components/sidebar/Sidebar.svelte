@@ -2,6 +2,7 @@
   import { applyAction, enhance } from '$app/forms';
   import { goto, invalidateAll, afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
+  import { getPbImageUrl } from '$lib/utils';
 
   import {
     AppRail,
@@ -86,10 +87,20 @@
     
     {#each $page.data?.links ?? [] as record}
       <AppRailTile bind:group={currentRailCategory} name={record?.id} value={record?.id}>
-        <svelte:fragment slot="lead"
-          ><i class={`fa ${record?.icon_font_awesome?.includes("fa-") ? record?.icon_font_awesome  : "fa-"+record?.icon_font_awesome } text-2xl`} aria-hidden="true" /></svelte:fragment
-        >
-        <span class="capitalize">{record?.label}</span>
+        <svelte:fragment slot="lead">
+          {#if record?.icon_font_awesome}
+            <i class={`fa ${record?.icon_font_awesome?.includes("fa-") ? record?.icon_font_awesome  : "fa-"+record?.icon_font_awesome } text-2xl`} aria-hidden="true" />
+          {:else if record?.icon}
+            <span class ="text-2xl">
+              <img
+              src={getPbImageUrl(record, record.icon, '100x100')}
+              alt={record.label}
+              class="w-full rounded-container-token shadow-xl"
+              />
+            </span>
+          {/if}
+        </svelte:fragment>
+        <span class ="capitalize">{record?.label}</span>
       </AppRailTile>
       <hr class="opacity-30" />
     {/each}
