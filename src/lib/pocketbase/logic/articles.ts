@@ -42,6 +42,7 @@ export async function getArticlesList(menu_link, page, perPage,param="/") {
       return i;
     });
     await redis.set(cacheKey, JSON.stringify({ meta: resultList }), 'EX', 180);
+    await redis.disconnect();
     return resultList;
   }
 }
@@ -84,6 +85,7 @@ export async function getArticleById(article_id='') {
         const res = { article , recommended };
         
         await redis.set(`article:${article_id}`, JSON.stringify(res), 'EX', 18000);
+        await redis.disconnect();
         return res;
       }
   } catch (error) {

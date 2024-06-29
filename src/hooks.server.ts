@@ -27,6 +27,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.links = links;
       event.locals.tables = tables;
       event.locals.roots = roots;
+      await redis.disconnect();
     } else {
       // If not, fetch the data and cache the combined object in Redis
       const [links, tables, roots] = await Promise.all([
@@ -36,6 +37,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       ]);
       const data = { links, tables, roots };
       await redis.set('data', JSON.stringify(data), 'EX', 180);
+      await redis.disconnect();
       event.locals.links = links;
       event.locals.tables = tables;
       event.locals.roots = roots;
@@ -44,6 +46,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.wapp = event.locals.roots.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
   } catch (err) {
     error(404, { message: `${err}` });
+    try{
+      await redis.disconnect();
+    }catch(e){}
   }
 
   let theme = 'vintage';
