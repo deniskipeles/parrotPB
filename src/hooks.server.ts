@@ -1,29 +1,46 @@
-import { fetchLinks, loadCompany, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
+import { fetchLinks, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
-//import { getRelatedCollections } from '$lib/utils';
+import { redis } from '$lib/utils/redis'
 
 
 export const handle: Handle = async ({ event, resolve }) => {
   pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
   try {
-    // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-    const collectionName = pb.authStore?.model?.collectionName;
+    const collectionName = pb.authStore?.model?.collectionId ?? pb.authStore?.model?.collectionName;
     if (pb.authStore.isValid && collectionName) {
       await pb.collection(collectionName)?.authRefresh();
     }
   } catch (_) {
-    // clear the auth store on failed refresh
     pb.authStore.clear();
   }
 
   event.locals.pb = pb;
   event.locals.user = structuredClone(pb.authStore.model);
+
   try {
-    	// this are page builders and are necessary else it return an error page
-    	event.locals.links = await fetchLinks()
-    	event.locals.tables = await listTablesRecords();
-    	event.locals.roots = await listRootsRecords();
-    	event.locals.wapp = event.locals.roots.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
+    // Check if the combined object is already cached in Redis
+    const cachedData = await redis.get('data');
+    if (cachedData) {
+      // If it is, use the cached response
+      const { links, tables, roots } = JSON.parse(cachedData);
+      event.locals.links = links;
+      event.locals.tables = tables;
+      event.locals.roots = roots;
+    } else {
+      // If not, fetch the data and cache the combined object in Redis
+      const [links, tables, roots] = await Promise.all([
+        fetchLinks(),
+        listTablesRecords(),
+        listRootsRecords()
+      ]);
+      const data = { links, tables, roots };
+      await redis.set('data', JSON.stringify(data), 'EX', 180);
+      event.locals.links = links;
+      event.locals.tables = tables;
+      event.locals.roots = roots;
+    }
+
+    event.locals.wapp = event.locals.roots.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
   } catch (err) {
     error(404, { message: `${err}` });
   }
@@ -36,20 +53,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.cookies.set('theme', 'skeleton', { path: '/', httpOnly: false });
   }
 
-  // Apply CORS header for API routes
-  if (event.url.pathname.startsWith('/api/ai')) {
-    // Required for CORS to work
-    if(event.request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Methods': 'GET, OPTIONS',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-        }
-      });
-    }
-  }
-
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => html.replace('data-theme=""', `data-theme="${theme}"`)
   });
@@ -57,9 +60,5 @@ export const handle: Handle = async ({ event, resolve }) => {
     'set-cookie',
     event.locals.pb.authStore.exportToCookie({ httpOnly: false })
   );
-
-  if (event.url.pathname.startsWith('/api/ai')) {
-      response.headers.append('Access-Control-Allow-Origin', `*`);
-  }
   return response;
 };

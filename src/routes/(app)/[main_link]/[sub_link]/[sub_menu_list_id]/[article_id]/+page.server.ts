@@ -1,40 +1,19 @@
-import { pb } from '$lib/pocketbase';
-import { getSubText, serializeNonPOJOs } from '$lib/utils';
 
-import { markedFxn,replaceMarkdownHeaders } from "$lib/utils/customMarked"
-const marked = markedFxn()
+import { error } from '@sveltejs/kit';
+import { getArticleById } from '$lib/pocketbase';
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ params }) {
+
+/** @type {import('./$types').PageServerLoad} */
+export const load = async ({ locals, url, params }) => {
   try {
-    let article = await pb.collection('articles').getOne(params.article_id, {
-      expand: 'developer_id'
-    });
-
-    let tags: string[] = [];
-    if (Array.isArray(article?.tags)) {
-      tags = article?.tags;
-    } else if (typeof article?.tags == 'string') {
-      tags = [article?.tags];
-    } else {
-      tags = [JSON.stringify(article?.tags)];
+    const article = url.searchParams.get('article') ?? url.searchParams.get('article_id') ?? params.article_id;
+    if (article) {
+      // Check if the article is already cached in Redis
+      return await getArticleById(article);
     }
-    const tags_filter = tags.map((i) => `tags ?~ "${i}"`)?.join(' || ');
-    let recommended = (
-      await pb.collection('view_articles_list').getList(1, 5, {
-        filter: `(${tags_filter}) && id != "${article?.id}"`,
-        sort: '-created',
-        "fields":`*:excerpt(${400},${true})`
-      })
-    ).items;
-    recommended = recommended.map((i) => {
-      const content = replaceMarkdownHeaders(i.content)
-      i.content = marked.parse(content);
-      return i;
-    });
-    article = serializeNonPOJOs(article)
-    return { article , recommended };
-  } catch (error) {
-    return { error: serializeNonPOJOs(error) };
+
+    return {};
+  } catch (err) {
+    error(404, { message: `${err}` });
   }
-}
+};

@@ -58,27 +58,27 @@
           <div class="flex items-center space-x-4 py-4">
             <Avatar
               src={getPbImageUrl(
-                data?.article?.expand?.developer_id,
-                data?.article?.expand?.developer_id?.avatar,
+                data?.article?.expand?.author_id,
+                data?.article?.expand?.author_id?.avatar,
                 undefined
               ) ?? ''}
-              alt={data?.article?.expand?.developer_id?.username}
+              alt={data?.article?.expand?.author_id?.username}
             />
             <div>
               <div class="flex">
                 <span class="badge">BY</span>:
                 <span class="block"
-                  >{data?.article?.expand?.developer_id?.name?.length > 0
-                    ? data?.article?.expand?.developer_id?.name
-                    : data?.article?.expand?.developer_id?.username}</span
+                  >{data?.article?.expand?.author_id?.name?.length > 0
+                    ? data?.article?.expand?.author_id?.name
+                    : data?.article?.expand?.author_id?.username}</span
                 >
               </div>
               <a
                 target="_blank"
                 class="anchor text-secondary-500 text-xs"
-                href={data?.article?.expand?.developer_id?.website ??
+                href={data?.article?.expand?.author_id?.website ??
                   `https://twitter.com/KipelesKemboi`}
-                >{data?.article?.expand?.developer_id?.username}</a
+                >{data?.article?.expand?.author_id?.username}</a
               >
             </div>
           </div>
