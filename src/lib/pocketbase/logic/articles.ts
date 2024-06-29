@@ -8,7 +8,7 @@ const marked = markedFxn();
 
 export async function getArticlesList(menu_link, page, perPage,param="/") {
   // Include the menu_link parameter in the cache key
-  await redis.connect()
+  if (!redis.isOpen) await redis.connect()
   const cacheKey = `articles:menu_link:${menu_link}:page:${page}:perPage:${perPage}`;
 
   // Check if the list of articles is already cached in Redis
@@ -42,14 +42,14 @@ export async function getArticlesList(menu_link, page, perPage,param="/") {
       return i;
     });
     await redis.set(cacheKey, JSON.stringify({ meta: resultList }), 'EX', 180);
-    await redis.disconnect();
+    if (redis.isOpen) await redis.disconnect();
     return resultList;
   }
 }
 
 
 export async function getArticleById(article_id='') {
-  await redis.connect()
+  if (!redis.isOpen) await redis.connect()
   try {
     const cachedArticle = await redis.get(`article:${article_id}`);
     if (cachedArticle) {
@@ -85,7 +85,7 @@ export async function getArticleById(article_id='') {
         const res = { article , recommended };
         
         await redis.set(`article:${article_id}`, JSON.stringify(res), 'EX', 18000);
-        await redis.disconnect();
+        if (redis.isOpen) await redis.disconnect();
         return res;
       }
   } catch (error) {
