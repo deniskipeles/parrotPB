@@ -50,8 +50,11 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.tables = tables;
       event.locals.roots = roots;
     }
-
-    event.locals.wapp = event.locals?.roots?.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
+    try{
+      event.locals.wapp = event.locals?.roots?.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
+    }catch(e){
+      
+    }
   } catch (err) {
     error(404, { message: `${err}` });
     try{

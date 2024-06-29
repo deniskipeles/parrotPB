@@ -5,13 +5,12 @@ import { getArticleById,getArticlesList } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ locals, url, params }) => {
-  const { pb:PB, ...rest } = locals;
   try {
     const article = url.searchParams.get('article') ?? url.searchParams.get('article_id');
     if (article) {
       // Check if the article is already cached in Redis
       const res = await getArticleById(article);
-      return {...res,...rest}
+      return {...res};
     }
 
     // Fetch the list of articles
