@@ -24,18 +24,24 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (cachedData) {
       // If it is, use the cached response
       const appData = JSON.parse(cachedData);
-      event.locals.links = appData.links ?? [];
-      event.locals.tables = appData.tables ?? [];
-      event.locals.roots = appData.roots ?? [];
+      event.locals.links = appData?.links ?? [];
+      event.locals.tables = appData?.tables ?? [];
+      event.locals.roots = appData?.roots ?? [];
       if (redis.isOpen) await redis.disconnect();
     } else {
       // If not, fetch the data and cache the combined object in Redis
       let links=[]
       let tables = [] 
-      lwt roots = []
-      try{links=await fetchLinks()}catch(e){console.log('links error')}
-      try{tables=await listTablesRecords()}catch(e){console.log('tables error')}
-      try{roots=await listRootsRecords()}catch(e){console.log('roots error')}
+      let roots = []
+      try{
+        links=await fetchLinks()
+      }catch(e){console.log('links error')}
+      try{
+        tables=await listTablesRecords()
+      }catch(e){console.log('tables error')}
+      try{
+        roots=await listRootsRecords()
+      }catch(e){console.log('roots error')}
         
       const data = { links, tables, roots };
       await redis.set('app-data', JSON.stringify(data), {'EX': 180});
@@ -45,7 +51,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.roots = roots;
     }
 
-    event.locals.wapp = event.locals.roots.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
+    event.locals.wapp = event.locals?.roots?.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
   } catch (err) {
     error(404, { message: `${err}` });
     try{
