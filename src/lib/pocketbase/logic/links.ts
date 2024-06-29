@@ -33,6 +33,6 @@ export const fetchLinks = async () => {
     records = serializeNonPOJOs(records);
     return records;
   } catch (error) {
-    return { error: serializeNonPOJOs(error) };
+    return [];
   }
 };

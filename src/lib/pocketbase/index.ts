@@ -37,7 +37,7 @@ export const listTablesRecords = async () => {
 	// let records: RecordModel[] = [table];
 	try {
 		// you can also fetch all records at once via getFullList
-		records = await pb.collection('view_tables').getFullList({
+		records = await pb.collection('clientPB_view_tables').getFullList({
 			sort: 'name'
 		});
 		records = serializeNonPOJOs(records);
