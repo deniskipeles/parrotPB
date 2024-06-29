@@ -4,6 +4,7 @@ import { redis } from '$lib/utils/redis'
 
 
 export const handle: Handle = async ({ event, resolve }) => {
+  await redis.connect()
   pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
   try {
     const collectionName = pb.authStore?.model?.collectionId ?? pb.authStore?.model?.collectionName;

@@ -8,6 +8,7 @@ const marked = markedFxn();
 
 export async function getArticlesList(menu_link, page, perPage,param="/") {
   // Include the menu_link parameter in the cache key
+  await redis.connect()
   const cacheKey = `articles:menu_link:${menu_link}:page:${page}:perPage:${perPage}`;
 
   // Check if the list of articles is already cached in Redis
@@ -47,6 +48,7 @@ export async function getArticlesList(menu_link, page, perPage,param="/") {
 
 
 export async function getArticleById(article_id='') {
+  await redis.connect()
   try {
     const cachedArticle = await redis.get(`article:${article_id}`);
     if (cachedArticle) {
