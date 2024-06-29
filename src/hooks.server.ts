@@ -4,7 +4,6 @@ import { redis } from '$lib/utils/redis'
 
 
 export const handle: Handle = async ({ event, resolve }) => {
-  if (!redis.isOpen) await redis.connect()
   pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
   try {
     const collectionName = pb.authStore?.model?.collectionId ?? pb.authStore?.model?.collectionName;
@@ -19,22 +18,25 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.user = structuredClone(pb.authStore.model);
 
   try {
+    if (!redis.isOpen) await redis.connect()
     // Check if the combined object is already cached in Redis
     const cachedData = await redis.get('app-data');
     if (cachedData) {
       // If it is, use the cached response
-      const { links, tables, roots } = JSON.parse(cachedData);
-      event.locals.links = links;
-      event.locals.tables = tables;
-      event.locals.roots = roots;
+      const appData = JSON.parse(cachedData);
+      event.locals.links = appData.links ?? [];
+      event.locals.tables = appData.tables ?? [];
+      event.locals.roots = appData.roots ?? [];
       if (redis.isOpen) await redis.disconnect();
     } else {
       // If not, fetch the data and cache the combined object in Redis
-      const [links, tables, roots] = await Promise.all([
-        fetchLinks(),
-        listTablesRecords(),
-        listRootsRecords()
-      ]);
+      let links=[]
+      let tables = [] 
+      lwt roots = []
+      try{links=await fetchLinks()}catch(e){console.log('links error')}
+      try{tables=await listTablesRecords()}catch(e){console.log('tables error')}
+      try{roots=await listRootsRecords()}catch(e){console.log('roots error')}
+        
       const data = { links, tables, roots };
       await redis.set('app-data', JSON.stringify(data), {'EX': 180});
       if (redis.isOpen) await redis.disconnect();
