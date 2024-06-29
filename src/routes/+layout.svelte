@@ -31,8 +31,6 @@
   import 'highlight.js/styles/github-dark.css';
   import { storeHighlightJs } from '@skeletonlabs/skeleton';
   import { getSubText } from '$lib/utils';
-  
-  import MathJax from '$lib/editor/MathJax.svelte';
   import MermaidDiagram from '$lib/editor/MermaidDiagram.svelte';
   
   //ai page assistant
@@ -54,8 +52,8 @@
 	};
 	onMount(()=>{
 	  loadEruda()
-	  loadPagepilot()
-	  disableScrollHandling()
+	  //loadPagepilot()
+	  //disableScrollHandling()
 	})
 
   storeHighlightJs.set(hljs);
@@ -63,9 +61,6 @@
   // Registered list of Components for Modals
   const modalComponentRegistry: Record<string, ModalComponent> = {
     modalSearch: { ref: PageSearch }
-    // exampleList: { ref: ModalExampleList },
-    // exampleEmbed: { ref: ModalExampleEmbed },
-    // exampleImage: { ref: ModalExampleImage }
   };
   initializeStores();
 
