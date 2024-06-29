@@ -43,7 +43,7 @@ export async function getArticlesList(menu_link, page, perPage,param="/") {
     });
     await redis.set(cacheKey, JSON.stringify({ meta: resultList }), {'EX': 180});
     if (redis.isOpen) await redis.disconnect();
-    return resultList;
+    return {meta:resultList};
   }
 }
 

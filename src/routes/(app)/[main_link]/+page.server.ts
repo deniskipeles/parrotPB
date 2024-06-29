@@ -19,7 +19,7 @@ export const load = async ({ locals, url, params }) => {
     const page = Number(url.searchParams.get('page') ?? 1);
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const resultList = await getArticlesList(main_link, page, perPage, "main_menu");
-    return { ...rest, meta: resultList };
+    return { ...resultList };
   } catch (err) {
     error(404, { message: `${err}` });
   }
