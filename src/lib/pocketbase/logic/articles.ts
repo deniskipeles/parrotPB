@@ -41,7 +41,7 @@ export async function getArticlesList(menu_link, page, perPage,param="/") {
       i.content = marked.parse(content);
       return i;
     });
-    await redis.set(cacheKey, JSON.stringify({ meta: resultList }), 'EX', 180);
+    await redis.set(cacheKey, JSON.stringify({ meta: resultList }), {'EX': 180});
     if (redis.isOpen) await redis.disconnect();
     return resultList;
   }
@@ -84,7 +84,7 @@ export async function getArticleById(article_id='') {
         article = serializeNonPOJOs(article)
         const res = { article , recommended };
         
-        await redis.set(`article:${article_id}`, JSON.stringify(res), 'EX', 18000);
+        await redis.set(`article:${article_id}`, JSON.stringify(res), {'EX': 18000});
         if (redis.isOpen) await redis.disconnect();
         return res;
       }

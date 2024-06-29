@@ -3,4 +3,5 @@ import { PUBLIC_REDIS_URL } from '$env/static/public';
 import { createClient } from 'redis'
 
 export const redis = createClient({ url: PUBLIC_REDIS_URL })
+client.on('error', err => console.log('Redis Client Error', err));
 

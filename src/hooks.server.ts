@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   try {
     // Check if the combined object is already cached in Redis
-    const cachedData = await redis.get('data');
+    const cachedData = await redis.get('app-data');
     if (cachedData) {
       // If it is, use the cached response
       const { links, tables, roots } = JSON.parse(cachedData);
@@ -36,7 +36,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         listRootsRecords()
       ]);
       const data = { links, tables, roots };
-      await redis.set('data', JSON.stringify(data), 'EX', 180);
+      await redis.set('app-data', JSON.stringify(data), {'EX': 180});
       if (redis.isOpen) await redis.disconnect();
       event.locals.links = links;
       event.locals.tables = tables;
@@ -47,8 +47,8 @@ export const handle: Handle = async ({ event, resolve }) => {
   } catch (err) {
     error(404, { message: `${err}` });
     try{
-      await redis.disconnect();
-    }catch(e){}
+      if (redis.isOpen) await redis.disconnect();
+    }catch(e){console.log(1)}
   }
 
   let theme = 'vintage';
@@ -66,5 +66,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     'set-cookie',
     event.locals.pb.authStore.exportToCookie({ httpOnly: false })
   );
+  if (redis.isOpen) await redis.quit();
   return response;
 };
