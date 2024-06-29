@@ -44,7 +44,7 @@
 <svelte:head>
   {#if data?.article}
   <title>{data?.article?.title}</title>
-  <meta name="description" content={data?.article?.excerpt ?? getSubText(100, data?.article?.content)} />
+  <meta name="description" content={data?.article?.excerpt ?? getSubText(100, data?.article?.content??'none')} />
   <link rel="apple-touch-icon" sizes="76x76" href={logo} />
   <link rel="icon" type="image/svg+xml" href={logo} />
   <link rel="icon" type="image/png" href={logo} />
@@ -70,7 +70,7 @@
           <button type="button" class="btn mr-4 mt-4 mb-4 w-full variant-filled">Create Article</button>
         </a>
       {/if}
-      {#each data?.meta?.items as post}
+      {#each data?.meta?.items ?? [] as post}
         <div
           class="block hover:card variant-soft p-4 rounded-container-token"
         >

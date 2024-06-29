@@ -53,7 +53,7 @@
       // Prevent default browser behavior of focusing URL bar
       e.preventDefault();
       // If modal currently open, close modal (allows to open/close search with CTRL/⌘+K)
-      $modalStore.length ? modalStore.close() : triggerSearch();
+      $modalStore?.length ? modalStore.close() : triggerSearch();
     }
   }
 

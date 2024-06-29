@@ -40,7 +40,7 @@
 
     {#if data?.error}
       <Error error={data?.error} />
-    {:else if data.article}
+    {:else if data?.article}
       <!-- blog-post -->
       <div class="max-w-5xl mx-auto space-y-8">
         <!-- Header -->
@@ -83,8 +83,8 @@
             </div>
           </div>
           <!-- Featured Image -->
-          {#if data?.article.cover_image}<img
-              src={getPbImageUrl(data?.article, data?.article.cover_image, '0x0')}
+          {#if data?.article?.cover_image}<img
+              src={getPbImageUrl(data?.article, data?.article?.cover_image, '0x0')}
               alt={data?.article.title}
               class="w-full rounded-container-token shadow-xl"
             />{/if}
@@ -136,10 +136,10 @@
           >
             <article class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 lg:gap-8">
               <!-- Featured Image -->
-              {#if post.cover_image}
+              {#if post?.cover_image}
                 <img
                   class="bg-black/50 w-full lg:max-w-sm rounded-container-token shadow-xl bg-cover bg-center"
-                  src={getPbImageUrl(post, post.cover_image, '100x100')}
+                  src={getPbImageUrl(post, post?.cover_image, '100x100')}
                   alt="thumbnail"
                 />
               {/if}
