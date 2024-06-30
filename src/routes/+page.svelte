@@ -5,6 +5,6 @@
   import ListArticles from '$lib/components/layouts/ListArticles.svelte';
 </script>
 
-<!--ListArticles {data}/-->
+<ListArticles {data}/>
 
 
