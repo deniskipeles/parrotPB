@@ -137,15 +137,15 @@
 
 <AppShell {slotSidebarLeft} regionPage={allyPageSmoothScroll} slotFooter="bg-black p-4">
   <svelte:fragment slot="header">
-    <CustomAppBar />
+    <!--CustomAppBar /-->
   </svelte:fragment>
-  <!-- Sidebar (Left) 
+  <!-- Sidebar (Left) -->
   <svelte:fragment slot="sidebarLeft">
     <Sidebar class="hidden lg:grid w-[360px] overflow-hidden" />
   </svelte:fragment>
 
-   Page Content -->
-    <slot />
+  <!-- Page Content -->
+  <slot />
   
 
   <!-- Page Footer -->
