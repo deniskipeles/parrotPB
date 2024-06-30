@@ -6,5 +6,5 @@
 </script>
 
 <ListArticles {data}/>
-{JSON.stringify(data.links)}
+
 {JSON.stringify($page.data.links)}
