@@ -4,7 +4,7 @@
   
   const loadEruda = () => {
 		let script = document.createElement('script');
-    script.src = "//cdn.jsdelivr.net/npm/eruda"
+    script.src = "https://cdn.jsdelivr.net/npm/eruda"
     document.head.append(script);
 		script.onload = () => {
       window.eruda.init();

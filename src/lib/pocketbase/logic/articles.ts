@@ -1,4 +1,4 @@
-import { groupByKey, serializeNonPOJOs } from '$lib/utils';
+import { serializeNonPOJOs } from '$lib/utils';
 import { pb } from '../pb';
 import { markedFxn, replaceMarkdownHeaders } from "$lib/utils/customMarked";
 import { redis } from '$lib/utils/redis';
@@ -6,7 +6,7 @@ import { redis } from '$lib/utils/redis';
 const marked = markedFxn();
 
 
-export async function getArticlesList(menu_link, page, perPage,param="/") {
+export async function getArticlesList(menu_link, page, perPage, param="home") {
   // Include the menu_link parameter in the cache key
   if (!redis.isOpen) await redis.connect()
   const cacheKey = `articles:menu_link:${menu_link}:page:${page}:perPage:${perPage}`;
