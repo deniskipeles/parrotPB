@@ -25,9 +25,9 @@
 		drawerStore.close();
 	}
   
-  afterNavigate(()=>{
+  /*afterNavigate(()=>{
     // drawerStore.close()
-  })
+  })*/
 
   page.subscribe((page_) => {
     if (page_.url.pathname == '/') return//currentRailCategory = '/';
@@ -42,7 +42,7 @@
     }
   });
 
-  $: mainMenu = $page?.data?.links?.find((l) => currentRailCategory == l?.id);
+  $: mainMenu = $page?.data?.links?.find((l) => currentRailCategory == l?.id)??{};
 
   $: listboxItemActive = (href: string) => $page.url.pathname?.includes(href) ? 'bg-primary-active-token' : '';
 

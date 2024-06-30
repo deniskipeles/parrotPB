@@ -27,10 +27,10 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.links = appData?.links ?? [];
       event.locals.tables = appData?.tables ?? [];
       event.locals.roots = appData?.roots ?? [];
-      if (redis.isOpen) await redis.disconnect();
+      
     } else {
       // If not, fetch the data and cache the combined object in Redis
-      let links=[]
+      let links = []
       let tables = [] 
       let roots = []
       try{
@@ -45,21 +45,16 @@ export const handle: Handle = async ({ event, resolve }) => {
         
       const data = { links, tables, roots };
       await redis.set('app-data', JSON.stringify(data), {'EX': 180});
-      if (redis.isOpen) await redis.disconnect();
+      
       event.locals.links = links;
       event.locals.tables = tables;
       event.locals.roots = roots;
     }
     try{
       event.locals.wapp = event.locals?.roots?.length > 0 ? (event.locals.roots.find((obj)=>(obj?.name=="app" || obj?.name=="website" || obj?.name=="home page" || obj?.name=="home" || obj?.name=="page"))) : {};
-    }catch(e){
-      
-    }
+    }catch(e){}
   } catch (err) {
     error(404, { message: `${err}` });
-    try{
-      if (redis.isOpen) await redis.disconnect();
-    }catch(e){console.log(1)}
   }
 
   let theme = 'vintage';
@@ -77,6 +72,5 @@ export const handle: Handle = async ({ event, resolve }) => {
     'set-cookie',
     event.locals.pb.authStore.exportToCookie({ httpOnly: false })
   );
-  if (redis.isOpen) await redis.quit();
   return response;
 };

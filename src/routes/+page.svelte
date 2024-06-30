@@ -1,10 +1,10 @@
 <script>
-  import { page } from '$app/stores';
+  //import { page } from '$app/stores';
   export let data
   
   import ListArticles from '$lib/components/layouts/ListArticles.svelte';
 </script>
 
-<ListArticles {data}/>
+<!--ListArticles {data}/-->
 
-{JSON.stringify($page.data.links)}
+
