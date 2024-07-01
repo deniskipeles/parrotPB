@@ -43,7 +43,7 @@
     		{#each authTables as item}
     			<label class="flex items-center space-x-2">
           <input value={item} class="radio" type="radio" bind:group name="auth_table" />
-          <p>{$page?.wapp?.data?.auth_collection[item] ?? item}</p>
+          <p>{$page.data?.wapp?.data?.auth_collection[item] ?? item}</p>
           </label>
     		{/each}
   		{/if}

@@ -4,11 +4,18 @@
   import { Error, LayoutPage } from '$lib/components';
   import { pb } from '$lib/pocketbase';
   import { ProgressRadial } from '@skeletonlabs/skeleton';
+  
+  import { page } from '$app/stores';
+  import Auth2 from '$lib/components/auth/Auth2.svelte';
+  
   let pass_text = 'password';
 
   /** @type {import('./$types').ActionData} */
   export let form: any;
   let loading = false;
+  
+  const authTables = ($page.data?.tables?.filter(i=>i?.type == 'auth'))?.map(i=>i.name)
+  let group = authTables.length ? authTables[0] :"";
 </script>
 
 <LayoutPage>
@@ -32,18 +39,21 @@
   >
     <div class="card p-4 w-full text-token space-y-4">
       <label class="label">
-        <span>User Type</span>
-        <div class="space-y-2 flex gap-4">
-          <label class="flex items-center space-x-2">
-            <input value="clients" class="radio" type="radio" checked name="auth_table" />
-            <p>Client</p>
+      <span>
+        <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign up to our platform{authTables.length > 1 ?" As:":":"}</h3>
+      </span>
+      <div class="space-y-2 flex gap-4">
+			{#if authTables.length >1}
+    		{#each authTables as item}
+    			<label class="flex items-center space-x-2">
+          <input value={item} class="radio" type="radio" bind:group name="auth_table" />
+          <p>{$page.data?.wapp?.data?.auth_collection[item] ?? item}</p>
           </label>
-          <label class="flex items-center space-x-2">
-            <input value="developers" class="radio" type="radio" name="auth_table" />
-            <p>Developer</p>
-          </label>
-        </div>
-      </label>
+    		{/each}
+  		{/if}
+      </div>
+    </label>
+    <Auth2 display_sign="Register" auth_collection={group}/>
 
       <label class="label">
         <span>Email</span>
