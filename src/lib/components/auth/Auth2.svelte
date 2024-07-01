@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { pb } from "$lib/pocketbase";
   import { goto } from '$app/navigation';
+  import { writable } from "svelte/store";
   
   let isLoading = false;
 	const authData1 = {
