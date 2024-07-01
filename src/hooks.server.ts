@@ -1,7 +1,7 @@
 import { fetchLinks, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
 import {createClient} from "redis"
-
+import { env } from '$env/dynamic/private';
 
 const redis = createClient({ url: env.REDIS_URL });
 redis.on('error', (err) => console.log('Redis Client Error', err));
