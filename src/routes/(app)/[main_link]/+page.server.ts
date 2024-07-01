@@ -16,7 +16,7 @@ export const load = async ({ locals, url, params, fetch }) => {
     const mainLink = params?.main_link ?? url.searchParams.get('main_link') ?? '';
     const page = Number(url.searchParams.get('page') ?? 1);
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
-     resultList = await fetch(`/api/articles?main_link=${mainLink}&page=${page}&perPage=${perPage}&param=main_menu`).then((res) => res.json());
+     resultList = await fetch(`/api/articles?menu_link=${mainLink}&page=${page}&perPage=${perPage}&param=main_menu`).then((res) => res.json());
     //console.log(resultList);
     return { ...resultList };
   } catch (err) {
