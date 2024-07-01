@@ -5,6 +5,8 @@
   import { Error } from '$lib/components';
   import { pb } from '$lib/pocketbase';
   import { ProgressRadial } from '@skeletonlabs/skeleton';
+  import Auth2 from '$lib/components/auth';
+  
   let pass_text = 'password';
 
   let loading = false;
