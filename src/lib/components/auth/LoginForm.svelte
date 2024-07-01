@@ -10,8 +10,8 @@
   let pass_text = 'password';
 
   let loading = false;
-  const authTables = ($page.tables?.filter(i=>i?.type == 'auth'))?.map(i=>i.name)
-  let group = authTables[0];
+  const authTables = ($page.data?.tables?.filter(i=>i?.type == 'auth'))?.map(i=>i.name)
+  let group = authTables.length ? authTables[0] :"";
 	
 </script>
 
