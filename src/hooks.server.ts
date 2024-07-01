@@ -47,7 +47,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       }catch(e){console.log('roots error')}
         
       const data = { links, tables, roots };
-      await redis.set('app-data', JSON.stringify(data), {'EX': 180});
+      await redis.set('app-data', JSON.stringify(data), {'EX': 300});
       
       event.locals.links = links;
       event.locals.tables = tables;

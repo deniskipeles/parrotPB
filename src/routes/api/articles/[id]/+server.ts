@@ -66,7 +66,7 @@ async function getArticleById(article_id='') {
         article = serializeNonPOJOs(article)
         const res = { article , recommended };
 
-        await redis.set(`article:${article_id}`, JSON.stringify(res), {'EX': 180});
+        await redis.set(`article:${article_id}`, JSON.stringify(res), {'EX': 1800});
 
         return res;
       }

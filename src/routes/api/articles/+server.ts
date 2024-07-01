@@ -63,7 +63,7 @@ async function getArticlesList(menuLink, page, perPage, param = 'home') {
       return i;
     });
 
-    await redis.set(cacheKey, JSON.stringify({ meta: resultList }), { EX: 18000 });
+    await redis.set(cacheKey, JSON.stringify({ meta: resultList }), { EX: 180 });
 
     return { meta: resultList };
   }

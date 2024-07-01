@@ -8,6 +8,9 @@
   let pass_text = 'password';
 
   let loading = false;
+  const authTables = ($page.tables?.filter(i=>i?.type == 'auth'))?.map(i=>i.name)
+  let group = authTables[0];
+	
 </script>
 
 {#if $page.form?.error}
@@ -30,18 +33,21 @@
 >
   <div class="card p-4 w-full text-token space-y-4">
     <label class="label">
-      <span>User Type</span>
+      <span>
+        <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to our platform{authTables.length > 1 ?" As:":":"}</h3>
+      </span>
       <div class="space-y-2 flex gap-4">
-        <label class="flex items-center space-x-2">
-          <input value="clients" class="radio" type="radio" checked name="auth_table" />
-          <p>Client</p>
-        </label>
-        <label class="flex items-center space-x-2">
-          <input value="developers" class="radio" type="radio" name="auth_table" />
-          <p>Developer</p>
-        </label>
+			{#if authTables.length >1}
+    		{#each authTables as item}
+    			<label class="flex items-center space-x-2">
+          <input value={item} class="radio" type="radio" bind:group name="auth_table" />
+          <p>{$page?.wapp?.data?.auth_collection[item] ?? item}</p>
+          </label>
+    		{/each}
+  		{/if}
       </div>
     </label>
+    <Auth2 auth_collection={group}/>
 
     <label class="label">
       <span>Email/Username</span>
