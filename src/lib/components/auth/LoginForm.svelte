@@ -5,7 +5,7 @@
   import { Error } from '$lib/components';
   import { pb } from '$lib/pocketbase';
   import { ProgressRadial } from '@skeletonlabs/skeleton';
-  import Auth2 from '$lib/components/auth';
+  import Auth2 from '$lib/components/auth/Auth2.svelte';
   
   let pass_text = 'password';
 
