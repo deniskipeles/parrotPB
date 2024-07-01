@@ -1,15 +1,14 @@
 
 import { error } from '@sveltejs/kit';
-import { getArticleById } from '$lib/pocketbase';
 
 
 /** @type {import('./$types').PageServerLoad} */
-export const load = async ({ locals, url, params }) => {
+export const load = async ({ locals, url, params, fetch }) => {
   try {
     const article = url.searchParams.get('article') ?? url.searchParams.get('article_id') ?? params.article_id;
     if (article) {
-      // Check if the article is already cached in Redis
-      return await getArticleById(article);
+      const articleData = await fetch(`/api/articles/${article}`).then((res) => res.json());
+      return articleData
     }
 
     return {};

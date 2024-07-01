@@ -1,7 +1,10 @@
 import { fetchLinks, pb, listTablesRecords, listRootsRecords } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
-import { redis } from '$lib/utils/redis'
+import {createClient} from "redis"
 
+
+const redis = createClient({ url: env.REDIS_URL });
+redis.on('error', (err) => console.log('Redis Client Error', err));
 
 export const handle: Handle = async ({ event, resolve }) => {
   pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');

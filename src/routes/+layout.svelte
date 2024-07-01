@@ -53,7 +53,7 @@
 		};
 	};
 	onMount(()=>{
-	  loadEruda()
+	  //loadEruda()
 	  loadPagepilot()
 	  disableScrollHandling()
 	})

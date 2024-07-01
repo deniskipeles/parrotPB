@@ -1,14 +1,12 @@
 import { serializeNonPOJOs } from '$lib/utils';
 import type { RecordModel } from 'pocketbase';
-import { getArticleById, getArticlesList, createArticles, fetchArticles } from './logic/articles';
+import { createArticles, fetchArticles } from './logic/articles';
 import { create_links, fetchLinks, create_sub_links } from './logic/links';
 import { pb, currentUser } from './pb';
 
 export {
   pb,
   currentUser,
-  getArticleById,
-  getArticlesList,
   create_links,
   fetchLinks,
   createArticles,
