@@ -52,7 +52,7 @@
   <h2 class="text-lg font-bold mb-4">{display_sign} with:</h2>
   <div class="mb-4">
     {#each $authData?.authProviders ?? [] as provider}
-    <button class="bg-white border border-black text-black font-bold py-2 px-4 rounded mr-2 mb-2" on:click={() => handleOAuthLogin(provider)}>
+    <button type="button" class="bg-white border border-black text-black font-bold py-2 px-4 rounded mr-2 mb-2" on:click={() => handleOAuthLogin(provider)}>
       {provider.displayName}
     </button>
     {/each}
