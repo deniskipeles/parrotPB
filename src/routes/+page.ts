@@ -12,13 +12,13 @@ export const load = async ({ url, params, fetch }) => {
     
     if (article) {
       const articleData = await fetch(`/api/articles/${article}`).then((res) => res.json());
-      if(!articleData.allowed){
-        throw redirect(
-          301,
-          `/login?alert_danger=${encodeURIComponent('you are not allowed to access that page')}&redirect_to=${encodeURIComponent(url.href)}`
-        );
+      if(articleData.allowed){
+        return articleData
       }
-      return articleData
+      throw redirect(
+        301,
+        `/login?alert_danger=${encodeURIComponent('you are not allowed to access that page')}&redirect_to=${encodeURIComponent(url.href)}`
+      );
     }
     
     // Fetch the list of articles

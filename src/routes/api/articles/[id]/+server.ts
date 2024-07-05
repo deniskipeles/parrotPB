@@ -11,7 +11,7 @@ const redis = createClient({ url: env.REDIS_URL });
 redis.on('error', (err) => console.log('Redis Client Error', err));
 
 export async function GET({ url,params,locals }) {
-  const {pb,user,...rest}=locals;
+  const {pb,...rest}=locals;
   const id = params.id ?? url.searchParams.get('id');
 
   let p = `Page: ${id}`;
@@ -26,10 +26,10 @@ export async function GET({ url,params,locals }) {
     await redis.disconnect();
   }
   //check article field premium and user is not logined in then return empty article,rest and login is true else return article,rest and login false
-  if(article.premium && !user){
-    return json({ ...rest,user,allowed:false });
+  if(article.premium && !rest.user){
+    return json({ ...rest,allowed:false });
   }else{
-    return json({ ...rest,user,allowed:true,...article });
+    return json({ ...rest,allowed:true,...article });
   }
 }
 

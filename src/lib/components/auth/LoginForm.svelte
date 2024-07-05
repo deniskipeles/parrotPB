@@ -11,7 +11,7 @@
 
   let loading = false;
   const authTables = ($page.data?.tables?.filter(i=>i?.type == 'auth'))?.map(i=>i.name)
-  let group = authTables.length ? authTables[0] :"";
+  let group = authTables?.length ? authTables[0] :"";
 	
 </script>
 
@@ -36,10 +36,10 @@
   <div class="card p-4 w-full text-token space-y-4">
     <label class="label">
       <span>
-        <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to our platform{authTables.length > 1 ?" As:":":"}</h3>
+        <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to our platform{authTables?.length > 1 ?" As:":":"}</h3>
       </span>
       <div class="space-y-2 flex gap-4">
-			{#if authTables.length >1}
+			{#if authTables?.length >1}
     		{#each authTables ?? [] as item}
     			<label class="flex items-center space-x-2">
           <input value={item} class="radio" type="radio" bind:group name="auth_table" />
