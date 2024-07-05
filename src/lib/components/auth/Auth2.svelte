@@ -3,6 +3,7 @@
   import { pb } from "$lib/pocketbase";
   import { goto } from '$app/navigation';
   import { writable } from "svelte/store";
+  import { page } from '$app/stores';
   
   let isLoading = false;
 	const authData1 = {
@@ -10,7 +11,7 @@
         name: "github",
         displayName: "GitHub",
         state: "u2AEZvgHLVadBgK95KhvVdXeIAwLj1",
-        authUrl: "https://github.com/login/oauth/authorize?client_id=Secret+\u0026code_challenge=1bu9pxli5UTeK2UDyZKpX4-SxvIDjNZTceAnRgSZ5p8\u0026code_challenge_method=S256\u0026response_type=code\u0026scope=read%3Auser+user%3Aemail\u0026state=u2AEZvgHLVadBgK95KhvVdXeIAwLj1\u0026redirect_uri=",
+        authUrl: "",
         codeVerifier: "BxLXvsoAQAau4iY3iQMgLHO4VYKkuFZg4AvZAHSN7h8",
         codeChallenge: "1bu9pxli5UTeK2UDyZKpX4-SxvIDjNZTceAnRgSZ5p8",
         codeChallengeMethod: "S256"

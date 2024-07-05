@@ -40,7 +40,7 @@
       </span>
       <div class="space-y-2 flex gap-4">
 			{#if authTables.length >1}
-    		{#each authTables as item}
+    		{#each authTables ?? [] as item}
     			<label class="flex items-center space-x-2">
           <input value={item} class="radio" type="radio" bind:group name="auth_table" />
           <p>{$page.data?.wapp?.data?.auth_collection[item] ?? item}</p>
