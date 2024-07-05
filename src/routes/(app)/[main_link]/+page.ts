@@ -1,4 +1,4 @@
-
+import { goto } from '$app/navigation';
 import { error, redirect } from '@sveltejs/kit';
 
 export const csr = true;
@@ -13,10 +13,7 @@ export const load = async ({ url, params, fetch }) => {
     if (article) {
       const articleData = await fetch(`/api/articles/${article}`).then((res) => res.json());
       if(!articleData.allowed){
-        throw redirect(
-          301,
-          `/login?alert_danger=${encodeURIComponent('you are not allowed to access that page')}&redirect_to=${encodeURIComponent(url.href)}`
-        );
+        return goto(`/login?alert_danger=${encodeURIComponent('you are not allowed to access that page')}&redirect_to=${encodeURIComponent(url.href)}`,{});
       }
       return articleData
     }
