@@ -1,17 +1,26 @@
 
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export const load = async ({ locals, url, params, fetch }) => {
+export const csr = true;
+export const ssr = true;
+
+/** @type {import('./$types').PageLoad} */
+export const load = async ({ url, params, fetch }) => {
   let resultList = {};
   try {
     const article = url.searchParams.get('article') ?? url.searchParams.get('article_id');
     
     if (article) {
       const articleData = await fetch(`/api/articles/${article}`).then((res) => res.json());
+      if(!articleData.allowed){
+        throw redirect(
+          301,
+          `/login?alert_danger=${encodeURIComponent('you are not allowed to access that page')}&redirect_to=${encodeURIComponent(url.href)}`
+        );
+      }
       return articleData
     }
-
+    
     // Fetch the list of articles
     const mainLink = 'home';
     const page = Number(url.searchParams.get('page') ?? 1);

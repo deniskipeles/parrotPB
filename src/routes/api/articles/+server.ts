@@ -10,7 +10,8 @@ import {createClient} from "redis"
 const redis = createClient({ url: env.REDIS_URL });
 redis.on('error', (err) => console.log('Redis Client Error', err));
 
-export async function GET({ url }) {
+export async function GET({ url,locals }) {
+  const {pb,...rest}=locals;
   const page = url.searchParams.get('page');
   const perPage = url.searchParams.get('perPage');
   const menuLink = url.searchParams.get('menu_link');
@@ -28,8 +29,9 @@ export async function GET({ url }) {
     await redis.disconnect();
   }
 
-  return json({ ...articles });
+  return json({ ...rest,...articles });
 }
+
 
 const marked = markedFxn();
 

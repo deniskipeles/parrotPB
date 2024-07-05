@@ -25,7 +25,12 @@ export const actions: Actions = {
 
     try {
       await locals.pb.collection(auth_table).create(data)
-    //   await locals.pb.collection(auth_table).requestVerification(data?.email);
+      
+      try{
+       await locals.pb.collection(auth_table).requestVerification(data?.email);
+       console.log("request Verification")
+      }catch{}
+      
       const res = await locals.pb
         .collection(auth_table)
         .authWithPassword(data.email, data.password)

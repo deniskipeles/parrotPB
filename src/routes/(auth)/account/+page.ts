@@ -1,10 +1,10 @@
 
 import { error } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export const load = async ({ locals }) => {
+/** @type {import('./$types').PageLoad} */
+export const load = async ({ parent }) => {
   try {
-    const { pb, ...rest } = locals;
+    const { ...rest } = await parent();
 
     return {
       ...rest

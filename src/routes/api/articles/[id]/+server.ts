@@ -10,8 +10,9 @@ import {createClient} from "redis"
 const redis = createClient({ url: env.REDIS_URL });
 redis.on('error', (err) => console.log('Redis Client Error', err));
 
-export async function GET({ url,params }) {
-  const id = params.id
+export async function GET({ url,params,locals }) {
+  const {pb,user,...rest}=locals;
+  const id = params.id ?? url.searchParams.get('id');
 
   let p = `Page: ${id}`;
 
@@ -24,8 +25,12 @@ export async function GET({ url,params }) {
   }finally{
     await redis.disconnect();
   }
-
-  return json({ ...article });
+  //check article field premium and user is not logined in then return empty article,rest and login is true else return article,rest and login false
+  if(article.premium && !user){
+    return json({ ...rest,user,allowed:false });
+  }else{
+    return json({ ...rest,user,allowed:true,...article });
+  }
 }
 
 const marked = markedFxn();
@@ -38,7 +43,7 @@ async function getArticleById(article_id='') {
         // If it is, use the cached response
         return JSON.parse(cachedArticle);
       } else {
-        let article = await pb.collection('articles').getOne(article_id, {
+        let article = await pb.collection('view_articles_list').getOne(article_id, {
           expand: 'author_id'
         });
 

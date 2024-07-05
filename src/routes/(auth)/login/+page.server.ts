@@ -26,6 +26,13 @@ export const actions: Actions = {
       const authData = await pb.collection(auth_table).authWithPassword(data.email, data.password);
       
       currentUser.set(authData.record);
+      const redirect_to = url.searchParams.get('redirect_to') ?? url.searchParams.get('redirect');
+      if(redirect_to){
+        throw redirect(
+          301,
+          redirect_to
+        );
+      }
     } catch (e: any) {
       return { incorrect: true, error: serializeNonPOJOs(e) };
     }
