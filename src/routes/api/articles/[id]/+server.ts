@@ -26,7 +26,7 @@ export async function GET({ url,params,locals }) {
     await redis.disconnect();
   }
   //check article field premium and user is not logined in then return empty article,rest and login is true else return article,rest and login false
-  if(article.premium && !rest.user){
+  if(article?.article?.premium && !rest?.user){
     return json({ ...rest,allowed:false });
   }else{
     return json({ ...rest,allowed:true,...article });
