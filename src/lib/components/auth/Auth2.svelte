@@ -30,7 +30,7 @@
       const authData = await pb.collection(auth_collection).authWithOAuth2({ provider: provider?.name });
       if(authData.token){
         isLoading=false;
-        const redirect_to = url.searchParams.get('redirect_to') ?? url.searchParams.get('redirect') ?? "/";
+        const redirect_to = $page.url.searchParams.get('redirect_to') ?? $page.url.searchParams.get('redirect') ?? "/";
         goto(redirect_to,{invalidateAll:true})
       }else{
         isLoading=false;
